@@ -38,9 +38,8 @@ class EquipmentFragment : Fragment() {
         mColumnCount = 2
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.fragment_equipment_list, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_equipment_list, container, false)
         if (view is RecyclerView) { // Set the adapter
             val context = view.getContext()
             view.layoutManager = GridLayoutManager(context, mColumnCount)

@@ -28,9 +28,9 @@ class NavActivity : AppCompatActivity(), EquipmentFragment.OnListFragmentInterac
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_nav)
+        setContentView(R.layout.loading_hud)//activity_nav
 
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        //navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
 
     override fun onListFragmentInteraction(item: DummyContent.DummyItem){

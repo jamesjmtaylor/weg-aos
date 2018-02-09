@@ -27,8 +27,9 @@ class WeaponRecyclerViewAdapter(private val mValues: List<DummyItem>, private va
         holder.mIdView.text = mValues[position].id
         holder.mContentView.text = mValues[position].content
 
+        val item = holder.mItem ?: return
         holder.mView.setOnClickListener {
-            mListener?.onListFragmentInteraction(holder.mItem)
+            mListener?.onListFragmentInteraction(item)
         }
     }
 
