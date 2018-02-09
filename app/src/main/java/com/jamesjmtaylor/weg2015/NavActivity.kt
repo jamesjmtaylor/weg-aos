@@ -10,16 +10,24 @@ class NavActivity : AppCompatActivity(), EquipmentFragment.OnListFragmentInterac
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
-            R.id.navigation_home -> {
-                message.setText(R.string.title_home)
+            R.id.navigation_land -> {
+                message.setText(R.string.title_land)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_dashboard -> {
-                message.setText(R.string.title_dashboard)
+            R.id.navigation_air -> {
+                message.setText(R.string.title_air)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_notifications -> {
-                message.setText(R.string.title_notifications)
+            R.id.navigation_sea -> {
+                message.setText(R.string.title_sea)
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.navigation_card -> {
+                message.setText(R.string.title_card)
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.navigation_calculator -> {
+                message.setText(R.string.title_calculator)
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -28,9 +36,9 @@ class NavActivity : AppCompatActivity(), EquipmentFragment.OnListFragmentInterac
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.loading_hud)//activity_nav
+        setContentView(R.layout.activity_nav)
 
-        //navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
 
     override fun onListFragmentInteraction(item: DummyContent.DummyItem){

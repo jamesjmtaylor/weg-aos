@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">WEG 2017</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="app_name">WEG 2015</string>
+    <string name="title_land">Land</string>
+    <string name="title_air">Air</string>
+    <string name="title_sea">Sea</string>
+    <string name="title_card">Cards</string>
+    <string name="title_calculator">Calculator</string>
 </resources>
