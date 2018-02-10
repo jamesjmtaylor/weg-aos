@@ -10,5 +10,5 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context="com.jamesjmtaylor.weg2015.tabBar.EquipmentFragment"
+    tools:context="com.jamesjmtaylor.weg2015.tabBar.EquipmentRecyclerViewFragment"
     tools:listitem="@layout/fragment_equipment"/>

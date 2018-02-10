@@ -17,4 +17,8 @@ data class Gun(@ColumnInfo(name = "description") val description: String = "",
                @ColumnInfo(name = "range") var range: Int = 0) {
     @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = true) var id: Long = 0
+
+    override fun equals(other: Any?): Boolean { //needed for DiffUtil
+        return id == (other as Gun).id
+    }
 }

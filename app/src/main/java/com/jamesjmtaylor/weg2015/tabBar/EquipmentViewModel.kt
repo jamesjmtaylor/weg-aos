@@ -9,9 +9,7 @@ import java.io.File
 /**
  * Created by jtaylor on 2/10/18.
  */
-class EquipmentViewModel: ViewModel(), LifecycleObserver {
-    // You probably have something more complicated
-    // than just a String. Roll with me
+class EquipmentViewModel: AndroidViewModel(Application()), LifecycleObserver {
     var guns = MutableLiveData<List<Gun>>()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)

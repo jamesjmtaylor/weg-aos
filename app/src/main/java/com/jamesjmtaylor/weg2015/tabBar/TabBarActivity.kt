@@ -8,7 +8,7 @@ import com.jamesjmtaylor.weg2015.R
 import com.jamesjmtaylor.weg2015.dummy.DummyContent
 import kotlinx.android.synthetic.main.activity_nav.*
 
-class TabBarActivity : AppCompatActivity(), LifecycleOwner, EquipmentFragment.OnListFragmentInteractionListener {
+class TabBarActivity : AppCompatActivity(), LifecycleOwner, EquipmentRecyclerViewFragment.OnListFragmentInteractionListener {
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
