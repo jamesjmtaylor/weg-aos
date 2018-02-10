@@ -1,12 +1,14 @@
-package com.jamesjmtaylor.weg2015
+package com.jamesjmtaylor.weg2015.tabBar
 
+import android.arch.lifecycle.LifecycleOwner
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
+import com.jamesjmtaylor.weg2015.R
 import com.jamesjmtaylor.weg2015.dummy.DummyContent
 import kotlinx.android.synthetic.main.activity_nav.*
 
-class NavActivity : AppCompatActivity(), EquipmentFragment.OnListFragmentInteractionListener {
+class TabBarActivity : AppCompatActivity(), LifecycleOwner, EquipmentFragment.OnListFragmentInteractionListener {
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -41,7 +43,7 @@ class NavActivity : AppCompatActivity(), EquipmentFragment.OnListFragmentInterac
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
 
-    override fun onListFragmentInteraction(item: DummyContent.DummyItem){
+    override fun onListFragmentInteraction(item: DummyContent.Gun){
 
     } //TODO: Update item name
 }

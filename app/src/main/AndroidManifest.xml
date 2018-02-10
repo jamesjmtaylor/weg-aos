@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.jamesjmtaylor.weg2015.NavActivity"
+            android:name="com.jamesjmtaylor.weg2015.tabBar.TabBarActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

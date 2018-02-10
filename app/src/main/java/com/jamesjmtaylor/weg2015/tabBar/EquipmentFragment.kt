@@ -1,5 +1,7 @@
-package com.jamesjmtaylor.weg2015
+package com.jamesjmtaylor.weg2015.tabBar
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -8,9 +10,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.jamesjmtaylor.weg2015.R
 
-import com.jamesjmtaylor.weg2015.dummy.DummyContent
-import com.jamesjmtaylor.weg2015.dummy.DummyContent.DummyItem
+import com.jamesjmtaylor.weg2015.Models.Gun
 
 /**
  * A fragment representing a list of Items.
@@ -26,6 +28,7 @@ import com.jamesjmtaylor.weg2015.dummy.DummyContent.DummyItem
 class EquipmentFragment : Fragment() {
     // TODO: Customize parameters
     private var mColumnCount = 2
+    private var eVM : EquipmentViewModel? = null
     private var mListener: OnListFragmentInteractionListener? = null
 
     override fun onAttach(context: Context?) {
@@ -36,6 +39,13 @@ class EquipmentFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mColumnCount = 2
+        initViewModel()
+    }
+
+    private fun initViewModel() {
+        eVM = ViewModelProviders.of(this).get(EquipmentViewModel::class.java)
+        eVM?.let { lifecycle.addObserver(it) }
+        eVM?.initEquipment()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -43,7 +53,7 @@ class EquipmentFragment : Fragment() {
         if (view is RecyclerView) { // Set the adapter
             val context = view.getContext()
             view.layoutManager = GridLayoutManager(context, mColumnCount)
-            view.adapter = WeaponRecyclerViewAdapter(DummyContent.ITEMS, mListener)
+            view.adapter = WeaponRecyclerViewAdapter(eVM.guns, mListener)
         }
         return view
     }
@@ -54,6 +64,6 @@ class EquipmentFragment : Fragment() {
     }
 
     interface OnListFragmentInteractionListener {
-        fun onListFragmentInteraction(item: DummyItem) //TODO: Update item name
+        fun onListFragmentInteraction(item: Gun) //TODO: Update item name
     }
 }

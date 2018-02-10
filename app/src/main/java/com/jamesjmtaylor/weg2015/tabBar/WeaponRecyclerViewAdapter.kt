@@ -1,31 +1,27 @@
-package com.jamesjmtaylor.weg2015
+package com.jamesjmtaylor.weg2015.tabBar
 
+import android.arch.lifecycle.LiveData
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.jamesjmtaylor.weg2015.R
 
-import com.jamesjmtaylor.weg2015.EquipmentFragment.OnListFragmentInteractionListener
-import com.jamesjmtaylor.weg2015.dummy.DummyContent.DummyItem
+import com.jamesjmtaylor.weg2015.tabBar.EquipmentFragment.OnListFragmentInteractionListener
+import com.jamesjmtaylor.weg2015.Models.Gun
 
-/**
- * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
- * specified [OnListFragmentInteractionListener].
- * TODO: Replace the implementation with code for your data type.
- */
-class WeaponRecyclerViewAdapter(private val mValues: List<DummyItem>, private val mListener: OnListFragmentInteractionListener?) : RecyclerView.Adapter<WeaponRecyclerViewAdapter.ViewHolder>() {
+class WeaponRecyclerViewAdapter(private val mValues: LiveData<List<Gun>>, private val mListener: OnListFragmentInteractionListener?) : RecyclerView.Adapter<WeaponRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.fragment_equipment, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.fragment_equipment, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.mItem = mValues[position]
-        holder.mIdView.text = mValues[position].id
-        holder.mContentView.text = mValues[position].content
+        holder.mIdView.text = mValues[position].id.toString()
+        holder.mContentView.text = mValues[position].name
 
         val item = holder.mItem ?: return
         holder.mView.setOnClickListener {
@@ -40,7 +36,7 @@ class WeaponRecyclerViewAdapter(private val mValues: List<DummyItem>, private va
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
         val mIdView: TextView
         val mContentView: TextView
-        var mItem: DummyItem? = null
+        var mItem: Gun? = null
 
         init {
             mIdView = mView.findViewById<View>(R.id.id) as TextView
