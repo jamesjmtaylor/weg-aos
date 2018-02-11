@@ -1,14 +1,22 @@
 package com.jamesjmtaylor.weg2015.tabBar
 
 import android.arch.lifecycle.LifecycleOwner
+import android.content.Context
 import android.os.Bundle
+import android.os.Parcel
+
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
+import android.util.AttributeSet
+import android.view.View
+import android.widget.FrameLayout
+import com.jamesjmtaylor.weg2015.Models.Gun
 import com.jamesjmtaylor.weg2015.R
 import com.jamesjmtaylor.weg2015.dummy.DummyContent
 import kotlinx.android.synthetic.main.activity_nav.*
 
 class TabBarActivity : AppCompatActivity(), LifecycleOwner, EquipmentRecyclerViewFragment.OnListFragmentInteractionListener {
+
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -39,11 +47,15 @@ class TabBarActivity : AppCompatActivity(), LifecycleOwner, EquipmentRecyclerVie
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nav)
-
+        val equipmentRecyclerViewFragment = EquipmentRecyclerViewFragment()
+        supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.frameLayout, equipmentRecyclerViewFragment, "TAG goes here")
+                .commit()
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
 
-    override fun onListFragmentInteraction(item: DummyContent.Gun){
-
-    } //TODO: Update item name
+    override fun onListFragmentInteraction(item: Gun) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }

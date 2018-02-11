@@ -9,6 +9,7 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
+    android:background="@android:color/holo_blue_bright"
     app:layoutManager="LinearLayoutManager"
     tools:context="com.jamesjmtaylor.weg2015.tabBar.EquipmentRecyclerViewFragment"
     tools:listitem="@layout/fragment_equipment"/>

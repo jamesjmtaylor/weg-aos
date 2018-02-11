@@ -10,14 +10,14 @@ import com.jamesjmtaylor.weg2015.Models.AppDatabase
 class App : Application() {
     private var app : App? = null
     private var appDb : AppDatabase? = null
-    fun getApp(): App {
+    fun getInstance(): App {
         if (app == null) {
             app = App()
         }
         return app as App
     }
     fun getAppDb(): AppDatabase {
-        val app = getApp()
+        val app = getInstance()
         if (app.appDb == null){
             app.appDb = Room.databaseBuilder(
                     app.applicationContext,

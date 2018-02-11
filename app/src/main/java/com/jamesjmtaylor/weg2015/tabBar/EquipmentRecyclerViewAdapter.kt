@@ -10,7 +10,7 @@ import com.jamesjmtaylor.weg2015.R
 import com.jamesjmtaylor.weg2015.tabBar.EquipmentRecyclerViewFragment.OnListFragmentInteractionListener
 import com.jamesjmtaylor.weg2015.Models.Gun
 
-class EquipmentRecyclerViewAdapter(private val values: List<Gun>,
+class EquipmentRecyclerViewAdapter(private val fragment: EquipmentRecyclerViewFragment,
                                    private val listener: OnListFragmentInteractionListener?)
     : RecyclerView.Adapter<EquipmentRecyclerViewAdapter.ViewHolder>() {
 
@@ -20,9 +20,9 @@ class EquipmentRecyclerViewAdapter(private val values: List<Gun>,
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.mItem = values[position]
-        holder.mIdView.text = values[position].id.toString()
-        holder.mContentView.text = values[position].name
+        holder.mItem = fragment.guns?.get(position)
+        holder.mIdView.text = fragment.guns?.get(position)?.id.toString()
+        holder.mContentView.text = fragment.guns?.get(position)?.name
 
         val item = holder.mItem ?: return
         holder.mView.setOnClickListener {
@@ -31,7 +31,7 @@ class EquipmentRecyclerViewAdapter(private val values: List<Gun>,
     }
 
     override fun getItemCount(): Int {
-        return values.size
+        return fragment.guns?.size ?: 0
     }
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
