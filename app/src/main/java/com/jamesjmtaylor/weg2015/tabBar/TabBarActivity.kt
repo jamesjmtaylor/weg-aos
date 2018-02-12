@@ -1,23 +1,16 @@
 package com.jamesjmtaylor.weg2015.tabBar
 
 import android.arch.lifecycle.LifecycleOwner
-import android.content.Context
 import android.os.Bundle
-import android.os.Parcel
 
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
-import android.util.AttributeSet
-import android.view.View
-import android.widget.FrameLayout
 import com.jamesjmtaylor.weg2015.Models.Gun
 import com.jamesjmtaylor.weg2015.R
-import com.jamesjmtaylor.weg2015.dummy.DummyContent
+import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentRecyclerViewFragment
 import kotlinx.android.synthetic.main.activity_nav.*
 
 class TabBarActivity : AppCompatActivity(), LifecycleOwner, EquipmentRecyclerViewFragment.OnListFragmentInteractionListener {
-
-
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_land -> {

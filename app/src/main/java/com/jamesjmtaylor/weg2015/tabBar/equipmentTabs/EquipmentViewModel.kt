@@ -1,4 +1,4 @@
-package com.jamesjmtaylor.weg2015.tabBar
+package com.jamesjmtaylor.weg2015.tabBar.equipmentTabs
 
 import android.app.Application
 import android.arch.lifecycle.*
@@ -16,12 +16,13 @@ class EquipmentViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun initEquipment() {
 
-        var gunList = ArrayList<Gun>()
-        for (i in 0..100){
-            gunList.add(Gun("Gun "+i.toString()))
+        thread { Thread.sleep(5000) //Simulates async network call
+            var gunList = ArrayList<Gun>()
+            for (i in 0..100){
+                gunList.add(Gun("Gun "+i.toString()))
+            }
+            guns.postValue(gunList)
         }
-        guns.postValue(gunList)
-
     }
 
 }

@@ -1,4 +1,4 @@
-package com.jamesjmtaylor.weg2015.tabBar
+package com.jamesjmtaylor.weg2015.tabBar.equipmentTabs
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.jamesjmtaylor.weg2015.R
 
-import com.jamesjmtaylor.weg2015.tabBar.EquipmentRecyclerViewFragment.OnListFragmentInteractionListener
+import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentRecyclerViewFragment.OnListFragmentInteractionListener
 import com.jamesjmtaylor.weg2015.Models.Gun
 
 class EquipmentRecyclerViewAdapter(private val fragment: EquipmentRecyclerViewFragment,

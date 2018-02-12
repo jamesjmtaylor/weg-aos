@@ -6,6 +6,7 @@ package com.jamesjmtaylor.weg2015.Models
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
+import com.google.gson.GsonBuilder
 
 @Entity(tableName = "gun")
 data class Gun(@ColumnInfo(name = "name") val name: String = "",
@@ -21,4 +22,9 @@ data class Gun(@ColumnInfo(name = "name") val name: String = "",
     override fun equals(other: Any?): Boolean { //needed for DiffUtil
         return id == (other as Gun).id
     }
+}
+fun parseEquipmentResponseString(response: String): List<Gun> {
+    val gson = GsonBuilder().create()
+    val guns = gson.fromJson<List<Gun>>(response, Gun::class.java!!)
+    return guns
 }

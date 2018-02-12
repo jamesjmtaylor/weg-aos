@@ -1,4 +1,4 @@
-package com.jamesjmtaylor.weg2015.tabBar
+package com.jamesjmtaylor.weg2015.tabBar.equipmentTabs
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -19,6 +19,7 @@ import android.support.v7.util.DiffUtil
 
 class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
     private var columnCount = 2
+    var guns: List<Gun>? = null
     var eVM : EquipmentViewModel? = null
     private var listener: OnListFragmentInteractionListener? = null
     private var adapter : EquipmentRecyclerViewAdapter? = null
@@ -53,7 +54,6 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
         fun onListFragmentInteraction(item: Gun) //TODO: Update item name
     }
     //MARK: ViewModel Methods
-    var guns: List<Gun>? = null //Minimizes changes by allowing updates only to the ∆'s
     private fun initViewModel() {
         eVM = ViewModelProviders.of(this).get(EquipmentViewModel::class.java)
         eVM?.let { lifecycle.addObserver(it) } //Add ViewModel as an observer of this fragment's lifecycle
@@ -62,6 +62,7 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
     }
 
     val equipmentObserver = Observer<List<Gun>> { newGuns ->
+        //DifUtil below keeps shifts in the new loaded list to a minimum
         val result = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
             override fun getOldListSize(): Int {return guns?.size ?: 0}
             override fun getNewListSize(): Int {return newGuns?.size ?: 0}
