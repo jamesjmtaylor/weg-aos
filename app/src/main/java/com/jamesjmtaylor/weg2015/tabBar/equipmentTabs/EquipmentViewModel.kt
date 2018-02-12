@@ -13,7 +13,7 @@ class EquipmentViewModel(application: Application) : AndroidViewModel(applicatio
     var isLoading = MutableLiveData<Boolean>()
 
     fun initData() {
-        isLoading.setValue(true)
+        isLoading.postValue(true)
         thread { Thread.sleep(5000) //Simulates async network call
             var gunList = ArrayList<Gun>()
             for (i in 0..100){

@@ -63,20 +63,19 @@ class TabBarActivity : AppCompatActivity(),
     private fun initVM() {
         eVM = ViewModelProviders.of(this).get(EquipmentViewModel::class.java)
         eVM?.let { lifecycle.addObserver(it) } //Add ViewModel as an observer of this fragment's lifecycle
-        eVM?.equipment?.observe(this, loadingObserver)
-//        eVM?.initData() //TODO: Not calling this causes Activity to never receive the observed ∆
+        eVM?.isLoading?.observe(this, loadingObserver)
     }
-    val loadingObserver = Observer<List<Gun>> { equipment ->
-        val isLoading = true
+    val loadingObserver = Observer<Boolean> { isLoading ->
         val topBackstackIndex = supportFragmentManager.getBackStackEntryCount() - 1
         val backstackEmpty = topBackstackIndex < 0
         val hudVisible = !backstackEmpty
-                && supportFragmentManager.getBackStackEntryAt(topBackstackIndex).equals("loadingHudFrag")
+                && supportFragmentManager.getBackStackEntryAt(0).name.equals("loadingHudFrag")
         if (isLoading ?: false && !hudVisible){//started loading
             val loadingHudFragment = LoadingHudFragment()
             supportFragmentManager
                     .beginTransaction()
                     .add(R.id.frameLayout, loadingHudFragment, loadingHudFragment.TAG)
+                    .addToBackStack(loadingHudFragment.TAG)
                     .commit()
         } else if (hudVisible) {//finished loading
             supportFragmentManager.popBackStack()

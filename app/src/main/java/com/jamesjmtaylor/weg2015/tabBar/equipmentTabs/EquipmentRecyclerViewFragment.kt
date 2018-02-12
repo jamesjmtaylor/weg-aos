@@ -40,7 +40,8 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
 
     //MARK: ViewModel Methods
     private fun initVM() {
-        eVM = ViewModelProviders.of(this).get(EquipmentViewModel::class.java)
+        val a = activity ?: return
+        eVM = ViewModelProviders.of(a).get(EquipmentViewModel::class.java)
         eVM?.let { lifecycle.addObserver(it) } //Add ViewModel as an observer of this fragment's lifecycle
         eVM?.equipment?.observe(this, equipmentObserver)
         eVM?.initData()
