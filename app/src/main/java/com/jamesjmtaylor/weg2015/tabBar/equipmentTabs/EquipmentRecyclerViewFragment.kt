@@ -18,9 +18,10 @@ import com.jamesjmtaylor.weg2015.Models.Gun
 import android.support.v7.util.DiffUtil
 
 class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
-    private var columnCount = 2
     var guns: List<Gun>? = null
     var eVM : EquipmentViewModel? = null
+    val TAG = "equipmentRecyclerFrag"
+    private var columnCount = 2
     private var listener: OnListFragmentInteractionListener? = null
     private var adapter : EquipmentRecyclerViewAdapter? = null
     //MARK: Lifecycle Methods
@@ -34,7 +35,15 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         columnCount = 2
-        initViewModel()
+        initVM()
+    }
+
+    //MARK: ViewModel Methods
+    private fun initVM() {
+        eVM = ViewModelProviders.of(this).get(EquipmentViewModel::class.java)
+        eVM?.let { lifecycle.addObserver(it) } //Add ViewModel as an observer of this fragment's lifecycle
+        eVM?.equipment?.observe(this, equipmentObserver)
+        eVM?.initData()
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_equipment_list, container, false)
@@ -48,17 +57,6 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
     override fun onDetach() {
         super.onDetach()
         listener = null
-    }
-
-    interface OnListFragmentInteractionListener {
-        fun onListFragmentInteraction(item: Gun) //TODO: Update item name
-    }
-    //MARK: ViewModel Methods
-    private fun initViewModel() {
-        eVM = ViewModelProviders.of(this).get(EquipmentViewModel::class.java)
-        eVM?.let { lifecycle.addObserver(it) } //Add ViewModel as an observer of this fragment's lifecycle
-        eVM?.guns?.observe(this, equipmentObserver) //
-        eVM?.initEquipment()
     }
 
     val equipmentObserver = Observer<List<Gun>> { newGuns ->
@@ -81,5 +79,8 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
 
         adapter?.notifyDataSetChanged()
         guns = newGuns
+    }
+    interface OnListFragmentInteractionListener {
+        fun onListFragmentInteraction(item: Gun) //TODO: Update item name
     }
 }

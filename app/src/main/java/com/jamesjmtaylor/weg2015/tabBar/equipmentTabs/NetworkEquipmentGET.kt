@@ -1,7 +1,6 @@
 package com.jamesjmtaylor.weg2015.tabBar.equipmentTabs
 
 import android.os.AsyncTask
-import com.google.gson.GsonBuilder
 import com.jamesjmtaylor.weg2015.Models.Gun
 import com.jamesjmtaylor.weg2015.Models.parseEquipmentResponseString
 import okhttp3.OkHttpClient
@@ -31,7 +30,7 @@ class NetworkEquipmentGET(val vm : EquipmentViewModel) : AsyncTask<String, Int, 
         if (error != null){
 
         } else {
-            vm.guns.setValue(guns)
+            vm.equipment.setValue(guns)
         }
     }
 }

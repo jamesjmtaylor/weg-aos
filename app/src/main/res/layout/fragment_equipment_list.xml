@@ -7,8 +7,6 @@
     android:name="com.jamesjmtaylor.weg2017.EquipmentFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
     android:background="@android:color/holo_blue_bright"
     app:layoutManager="LinearLayoutManager"
     tools:context="com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentRecyclerViewFragment"

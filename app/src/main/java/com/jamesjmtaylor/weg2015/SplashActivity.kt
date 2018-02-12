@@ -15,7 +15,6 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         val intent = Intent(this, TabBarActivity::class.java)
         startActivity(intent)
         finish()
