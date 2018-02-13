@@ -21,23 +21,18 @@ class TabBarActivity : AppCompatActivity(),
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_land -> {
-                message.setText(R.string.title_land)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_air -> {
-                message.setText(R.string.title_air)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_sea -> {
-                message.setText(R.string.title_sea)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_card -> {
-                message.setText(R.string.title_card)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_calculator -> {
-                message.setText(R.string.title_calculator)
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -51,7 +46,7 @@ class TabBarActivity : AppCompatActivity(),
         val equipmentRecyclerViewFragment = EquipmentRecyclerViewFragment()
         supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.frameLayout, equipmentRecyclerViewFragment, equipmentRecyclerViewFragment.TAG)
+                .replace(R.id.tabFrameLayout, equipmentRecyclerViewFragment, equipmentRecyclerViewFragment.TAG)
                 .commit()
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
@@ -74,7 +69,7 @@ class TabBarActivity : AppCompatActivity(),
             val loadingHudFragment = LoadingHudFragment()
             supportFragmentManager
                     .beginTransaction()
-                    .add(R.id.frameLayout, loadingHudFragment, loadingHudFragment.TAG)
+                    .add(R.id.hudFrameLayout, loadingHudFragment, loadingHudFragment.TAG)
                     .addToBackStack(loadingHudFragment.TAG)
                     .commit()
         } else if (hudVisible) {//finished loading

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#000000</color>
+    <color name="clear">#00000000</color>
     <color name="sixtyAlpa">#99000000</color>
     <color name="fiftyAlpa">#80000000</color>
     <color name="fortyAlpa">#66000000</color>
