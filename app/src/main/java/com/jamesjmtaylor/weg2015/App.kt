@@ -1,30 +1,21 @@
 package com.jamesjmtaylor.weg2015
 
 import android.app.Application
-import android.arch.persistence.room.Room
-import com.jamesjmtaylor.weg2015.Models.AppDatabase
+import android.content.Context
+import okhttp3.OkHttpClient
 
 /**
- * Created by jtaylor on 2/10/18.
+ * Created by jtaylor on 2/14/18.
  */
 class App : Application() {
-    private var app : App? = null
-    private var appDb : AppDatabase? = null
-    fun getInstance(): App {
-        if (app == null) {
-            app = App()
-        }
-        return app as App
+    override fun onCreate() {
+        super.onCreate()
+        instance = this
     }
-    fun getAppDb(): AppDatabase {
-        val app = getInstance()
-        if (app.appDb == null){
-            app.appDb = Room.databaseBuilder(
-                    app.applicationContext,
-                    AppDatabase::class.java, "app.db")
-                    .fallbackToDestructiveMigration()
-                    .build()
-        }
-        return app.appDb as AppDatabase
+
+    companion object {
+
+        lateinit var instance: App
+            private set
     }
 }

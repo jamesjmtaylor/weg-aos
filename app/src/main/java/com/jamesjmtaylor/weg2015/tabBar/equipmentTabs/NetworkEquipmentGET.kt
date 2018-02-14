@@ -30,7 +30,7 @@ class NetworkEquipmentGET(val vm : EquipmentViewModel) : AsyncTask<String, Int, 
         if (error != null){
 
         } else {
-            vm.equipment.setValue(guns)
+            //vm.equipment.setValue(guns)
         }
     }
 }
