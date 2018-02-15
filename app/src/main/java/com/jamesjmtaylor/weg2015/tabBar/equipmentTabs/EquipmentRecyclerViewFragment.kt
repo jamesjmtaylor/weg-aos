@@ -59,7 +59,6 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
         super.onDetach()
         listener = null
     }
-
     val equipmentObserver = Observer<List<Gun>> { newGuns ->
         //DifUtil below keeps shifts in the new loaded list to a minimum
         val result = DiffUtil.calculateDiff(object : DiffUtil.Callback() {

@@ -12,7 +12,7 @@ import com.jamesjmtaylor.weg2015.Models.GunDao
 /**
  * Created by jtaylor on 2/10/18.
  */
-@Database(entities = arrayOf(Gun::class), version = 1, exportSchema = false)
+@Database(entities = arrayOf(Gun::class), version = 2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun GunDao(): GunDao
     companion object {

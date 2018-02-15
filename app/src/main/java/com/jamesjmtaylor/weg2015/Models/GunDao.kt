@@ -4,15 +4,25 @@ import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import android.arch.persistence.room.OnConflictStrategy.REPLACE
 
+
+
 /**
  * Created by jtaylor on 2/10/18.
  */
 
 @Dao
 interface GunDao {
+    @Insert(onConflict = REPLACE)
+    fun save(gun: Gun)
+
+    @Query("SELECT * FROM gun WHERE id = :gunId")
+    fun load(gunId: String): LiveData<Gun>
 
     @Query("select * from Gun")
-    fun getAllGuns(): LiveData<List<Gun>>
+    fun getAllGunsLiveData(): LiveData<List<Gun>>
+
+    @Query("select * from Gun")
+    fun getAllGuns(): List<Gun>
 //
 //    @Query("select * from Gun where id = :p0")
 //    fun findGunById(id: Long): LiveData<Gun>
