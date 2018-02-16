@@ -7,6 +7,7 @@ import android.os.Bundle
 
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.SearchView
 import com.jamesjmtaylor.weg2015.Models.Gun
 import com.jamesjmtaylor.weg2015.R
 import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentRecyclerViewFragment
@@ -17,8 +18,23 @@ import kotlinx.android.synthetic.main.activity_nav.*
 class TabBarActivity : AppCompatActivity(),
         LifecycleOwner,
         EquipmentRecyclerViewFragment.OnListFragmentInteractionListener {
-
-    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+    //MARK: - Lifecycle methods
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initVM()
+        setContentView(R.layout.activity_nav)
+        val equipmentRecyclerViewFragment = EquipmentRecyclerViewFragment()
+        supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.recyclerFrameLayout, equipmentRecyclerViewFragment, equipmentRecyclerViewFragment.TAG)
+                .commit()
+        navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+    }
+    override fun onListFragmentInteraction(item: Gun) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+    //MARK: - Listener methods
+    private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_land -> {
                 return@OnNavigationItemSelectedListener true
@@ -39,21 +55,7 @@ class TabBarActivity : AppCompatActivity(),
         false
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initVM()
-        setContentView(R.layout.activity_nav)
-        val equipmentRecyclerViewFragment = EquipmentRecyclerViewFragment()
-        supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.tabFrameLayout, equipmentRecyclerViewFragment, equipmentRecyclerViewFragment.TAG)
-                .commit()
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-
-    }
-    override fun onListFragmentInteraction(item: Gun) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    //MARK: - VM methods
     var eVM : EquipmentViewModel? = null
     private fun initVM() {
         eVM = ViewModelProviders.of(this).get(EquipmentViewModel::class.java)

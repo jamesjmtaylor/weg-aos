@@ -16,6 +16,9 @@ import com.jamesjmtaylor.weg2015.R
 import com.jamesjmtaylor.weg2015.Models.Gun
 
 import android.support.v7.util.DiffUtil
+import android.support.v7.widget.SearchView
+import kotlinx.android.synthetic.main.fragment_equipment_list.*
+import kotlinx.android.synthetic.main.fragment_equipment_list.view.*
 
 class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
     var guns: List<Gun>? = null
@@ -24,6 +27,7 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
     private var columnCount = 2
     private var listener: OnListFragmentInteractionListener? = null
     private var adapter : EquipmentRecyclerViewAdapter? = null
+    private var searchView: SearchView? = null
     //MARK: Lifecycle Methods
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -48,11 +52,14 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_equipment_list, container, false)
-        if (view is RecyclerView) { // Set the adapter
+        val recyclerView = view.recyclerList
+        if (recyclerView is RecyclerView) { // Set the adapter
             val context = view.getContext()
-            view.layoutManager = GridLayoutManager(context, columnCount)
-            view.adapter = adapter
+            recyclerView.layoutManager = GridLayoutManager(context, columnCount)
+            recyclerView.adapter = adapter
         }
+        val searchView = view.searchView
+        searchView.setOnQueryTextListener(searchViewListener)
         return view
     }
     override fun onDetach() {
@@ -61,6 +68,7 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
     }
     val equipmentObserver = Observer<List<Gun>> { newGuns ->
         //DifUtil below keeps shifts in the new loaded list to a minimum
+        //TODO: Abstract this out so that searchView can use it.
         val result = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
             override fun getOldListSize(): Int {return guns?.size ?: 0}
             override fun getNewListSize(): Int {return newGuns?.size ?: 0}
@@ -79,6 +87,17 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
 
         adapter?.notifyDataSetChanged()
         guns = newGuns
+    }
+    //MARK: - Listener methods
+    private val searchViewListener: SearchView.OnQueryTextListener = object : SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String): Boolean {
+            searchView?.clearFocus()
+            return true//true=search query handled by this listener
+        }
+
+        override fun onQueryTextChange(newText: String): Boolean {
+            return true//true=search query handled by this listener
+        }
     }
     interface OnListFragmentInteractionListener {
         fun onListFragmentInteraction(item: Gun) //TODO: Update item name

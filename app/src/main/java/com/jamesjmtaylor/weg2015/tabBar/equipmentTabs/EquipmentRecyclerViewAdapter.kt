@@ -15,7 +15,7 @@ class EquipmentRecyclerViewAdapter(private val fragment: EquipmentRecyclerViewFr
     : RecyclerView.Adapter<EquipmentRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.fragment_equipment, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.cell_equipment, parent, false)
         return ViewHolder(view)
     }
 
