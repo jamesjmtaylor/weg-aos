@@ -5,7 +5,13 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestOptions
+import com.jamesjmtaylor.weg2015.App
 import com.jamesjmtaylor.weg2015.R
 
 import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentRecyclerViewFragment.OnListFragmentInteractionListener
@@ -21,12 +27,18 @@ class EquipmentRecyclerViewAdapter(private val fragment: EquipmentRecyclerViewFr
         return ViewHolder(view)
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.mItem =  equipment.get(position)
-        holder.mIdView.text = holder.mItem?.id.toString()
-        holder.mContentView.text = holder.mItem?.name
+        holder.item =  equipment.get(position)
+        holder.nameView.text = holder.item?.name
+        Glide.with(fragment)
+                .load(App.instance.getString(R.string.base_url) + holder.item?.photoUrl)
+                .apply(RequestOptions()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .centerCrop())
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(holder.photoView)
 
-        val item = holder.mItem ?: return
-        holder.mView.setOnClickListener {
+        val item = holder.item ?: return
+        holder.cellView.setOnClickListener {
             listener?.onListFragmentInteraction(item)
         }
     }
@@ -63,18 +75,18 @@ class EquipmentRecyclerViewAdapter(private val fragment: EquipmentRecyclerViewFr
         diffResult.dispatchUpdatesTo(this)
     }
     //MARK: - ViewHolder class
-    inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        val mIdView: TextView
-        val mContentView: TextView
-        var mItem: Gun? = null
+    inner class ViewHolder(val cellView: View) : RecyclerView.ViewHolder(cellView) {
+        var nameView : TextView
+        var photoView : ImageView
+        var item: Gun? = null
 
         init {
-            mIdView = mView.findViewById<View>(R.id.id) as TextView
-            mContentView = mView.findViewById<View>(R.id.content) as TextView
+            nameView = cellView.findViewById<View>(R.id.nameTextView) as TextView
+            photoView = cellView.findViewById<View>(R.id.photoImageView) as ImageView
         }
 
         override fun toString(): String {
-            return super.toString() + " '" + mContentView.text + "'"
+            return super.toString() + " '" + nameView.text + "'"
         }
     }
 }
