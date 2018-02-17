@@ -10,13 +10,16 @@ import com.jamesjmtaylor.weg2015.Models.Gun
 class EquipmentViewModel(application: Application) : AndroidViewModel(application), LifecycleObserver {
     val equipment = MediatorLiveData<List<Gun>>() //Mediator allows this class to pass the RoomLiveData from the repo class to the View
     val isLoading = MediatorLiveData<Boolean>()
+
     val repo = EquipmentRepository()
     fun initData() {
-        equipment.addSource(repo.getGuns()) {
-            equipment.value = it
-        }
-        isLoading.addSource(repo.isLoading){
-            isLoading.value = it
+        if (!equipment.hasActiveObservers()){
+            equipment.addSource(repo.getGuns()) {
+                equipment.value = it
+            }
+            isLoading.addSource(repo.isLoading){
+                isLoading.value = it
+            }
         }
     }
 }

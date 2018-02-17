@@ -15,13 +15,12 @@ import com.jamesjmtaylor.weg2015.R
 
 import com.jamesjmtaylor.weg2015.Models.Gun
 
-import android.support.v7.util.DiffUtil
 import android.support.v7.widget.SearchView
 import kotlinx.android.synthetic.main.fragment_equipment_list.*
 import kotlinx.android.synthetic.main.fragment_equipment_list.view.*
 
 class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
-    var guns: List<Gun>? = null
+    val QUERY_STRING_KEY = "QueryString"
     var eVM : EquipmentViewModel? = null
     val TAG = "equipmentRecyclerFrag"
     private var columnCount = 2
@@ -50,6 +49,7 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
         eVM?.equipment?.observe(this, equipmentObserver)
         eVM?.initData()
     }
+    //MARK: - Lifecycle Methods
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_equipment_list, container, false)
         val recyclerView = view.recyclerList
@@ -59,47 +59,45 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
             recyclerView.adapter = adapter
         }
         val searchView = view.searchView
+        val lastSearch = savedInstanceState?.get(QUERY_STRING_KEY) as? String
         searchView.setOnQueryTextListener(searchViewListener)
+        if (lastSearch?.isNotBlank() ?: false) searchView.setQuery(lastSearch,false)
         return view
     }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        if (searchView?.query?.isNotBlank() ?: false)
+        outState.putString(QUERY_STRING_KEY,searchView?.query.toString())
+    }
+
     override fun onDetach() {
         super.onDetach()
         listener = null
     }
+    //MARK: - Observers
     val equipmentObserver = Observer<List<Gun>> { newGuns ->
-        //DifUtil below keeps shifts in the new loaded list to a minimum
-        //TODO: Abstract this out so that searchView can use it.
-        val result = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-            override fun getOldListSize(): Int {return guns?.size ?: 0}
-            override fun getNewListSize(): Int {return newGuns?.size ?: 0}
-            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                val oldId = guns?.let { it.get(oldItemPosition).id } ?: return false
-                val newId = newGuns?.let { it.get(oldItemPosition).id } ?: return false
-                return oldId == newId
-            }
-            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                val oldTodo = guns?.get(oldItemPosition)  ?: return false
-                val newTodo = newGuns?.get(newItemPosition)  ?: return false
-                return oldTodo == newTodo
-            }
-        })
-        result.dispatchUpdatesTo(adapter)
-
-        adapter?.notifyDataSetChanged()
-        guns = newGuns
+        adapter?.updateAdapterWithNewList(newGuns)
     }
+
     //MARK: - Listener methods
     private val searchViewListener: SearchView.OnQueryTextListener = object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String): Boolean {
+            filterEquipment(query)
             searchView?.clearFocus()
-            return true//true=search query handled by this listener
+            return false
         }
-
         override fun onQueryTextChange(newText: String): Boolean {
-            return true//true=search query handled by this listener
+            filterEquipment(newText)
+            return true
+        }
+        private fun filterEquipment(query: String) {
+            val filteredEquipment = eVM?.equipment?.value?.filter {
+                it.name?.contains(query) == true
+            } ?: ArrayList<Gun>()
+            adapter?.updateAdapterWithNewList(filteredEquipment)
         }
     }
     interface OnListFragmentInteractionListener {
-        fun onListFragmentInteraction(item: Gun) //TODO: Update item name
+        fun onListFragmentInteraction(item: Gun)
     }
 }
