@@ -1,4 +1,4 @@
-package com.jamesjmtaylor.weg2015.Models
+package com.jamesjmtaylor.weg2015.models.entities
 
 /**
  * Created by jtaylor on 2/10/18.
@@ -7,7 +7,6 @@ import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
 
 @Entity(tableName = "gun")
 data class Gun(@ColumnInfo(name = "name") var name: String? = null,
@@ -26,7 +25,6 @@ data class Gun(@ColumnInfo(name = "name") var name: String? = null,
     class GunList : ArrayList<Gun>()//Used for GSON deserialization
 }
 fun parseEquipmentResponseString(response: String): List<Gun> {
-    //Throws "java.lang.IllegalStateException: Expected BEGIN_OBJECT but was BEGIN_ARRAY at line 1 column 2 path $"
     val gson = GsonBuilder().create()
     val guns = gson.fromJson<List<Gun>>(response, Gun.GunList::class.java)
     return guns

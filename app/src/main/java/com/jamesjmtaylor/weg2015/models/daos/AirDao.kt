@@ -1,9 +1,9 @@
-package com.jamesjmtaylor.weg2015.Models
+package com.jamesjmtaylor.weg2015.models.daos
 
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import android.arch.persistence.room.OnConflictStrategy.REPLACE
-
+import com.jamesjmtaylor.weg2015.models.entities.Air
 
 
 /**
@@ -11,18 +11,18 @@ import android.arch.persistence.room.OnConflictStrategy.REPLACE
  */
 
 @Dao
-interface GunDao {
+interface AirDao {
     @Insert(onConflict = REPLACE)
-    fun save(gun: Gun)
+    fun save(air: Air)
 
-    @Query("SELECT * FROM gun WHERE id = :gunId")
-    fun load(gunId: String): LiveData<Gun>
+    @Query("SELECT * FROM Air WHERE id = :airId")
+    fun load(airId: String): LiveData<Air>
 
-    @Query("select * from Gun")
-    fun getAllGunsLiveData(): LiveData<List<Gun>>
+    @Query("select * from Air")
+    fun getAllAirLiveData(): LiveData<List<Air>>
 
-    @Query("select * from Gun")
-    fun getAllGuns(): List<Gun>
+    @Query("select * from Air")
+    fun getAllAir(): List<Air>
 //
 //    @Query("select * from Gun where id = :p0")
 //    fun findGunById(id: Long): LiveData<Gun>
@@ -37,5 +37,5 @@ interface GunDao {
 //    fun deleteGun(Gun: Gun)
 //
     @Insert(onConflict = REPLACE)
-    fun insertGuns(gunList: List<Gun>)
+    fun insertAir(airList: List<Air>)
 }

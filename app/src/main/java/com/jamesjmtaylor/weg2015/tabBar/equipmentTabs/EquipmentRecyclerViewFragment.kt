@@ -13,10 +13,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.jamesjmtaylor.weg2015.R
 
-import com.jamesjmtaylor.weg2015.Models.Gun
+import com.jamesjmtaylor.weg2015.models.entities.Sea
 
 import android.support.v7.widget.SearchView
-import kotlinx.android.synthetic.main.fragment_equipment_list.*
 import kotlinx.android.synthetic.main.fragment_equipment_list.view.*
 
 class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
@@ -75,7 +74,7 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
         listener = null
     }
     //MARK: - Observers
-    val equipmentObserver = Observer<List<Gun>> { newGuns ->
+    val equipmentObserver = Observer<List<Sea>> { newGuns ->
         adapter?.updateAdapterWithNewList(newGuns)
     }
 
@@ -93,11 +92,11 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
         private fun filterEquipment(query: String) {
             val filteredEquipment = eVM?.equipment?.value?.filter {
                 it.name?.contains(query) == true
-            } ?: ArrayList<Gun>()
+            } ?: ArrayList<Sea>()
             adapter?.updateAdapterWithNewList(filteredEquipment)
         }
     }
     interface OnListFragmentInteractionListener {
-        fun onListFragmentInteraction(item: Gun)
+        fun onListFragmentInteraction(item: Sea)
     }
 }

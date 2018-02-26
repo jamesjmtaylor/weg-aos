@@ -1,4 +1,4 @@
-package com.jamesjmtaylor.weg2015.Models
+package com.jamesjmtaylor.weg2015.models
 
 /**
  * Created by jtaylor on 2/15/18.

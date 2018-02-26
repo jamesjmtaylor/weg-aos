@@ -18,4 +18,4 @@ class LoadingHudFragment : Fragment() {
         return v
     }
 
-}// Required empty public constructor
+}

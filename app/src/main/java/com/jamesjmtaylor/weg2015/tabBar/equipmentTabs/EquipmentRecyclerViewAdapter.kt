@@ -15,13 +15,13 @@ import com.jamesjmtaylor.weg2015.App
 import com.jamesjmtaylor.weg2015.R
 
 import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentRecyclerViewFragment.OnListFragmentInteractionListener
-import com.jamesjmtaylor.weg2015.Models.Gun
+import com.jamesjmtaylor.weg2015.models.entities.Sea
 
 class EquipmentRecyclerViewAdapter(private val fragment: EquipmentRecyclerViewFragment,
                                    private val listener: OnListFragmentInteractionListener?)
     : RecyclerView.Adapter<EquipmentRecyclerViewAdapter.ViewHolder>() {
     //MARK: - Adapter methods
-    private val equipment = mutableListOf<Gun>()
+    private val equipment = mutableListOf<Sea>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.cell_equipment, parent, false)
         return ViewHolder(view)
@@ -45,7 +45,7 @@ class EquipmentRecyclerViewAdapter(private val fragment: EquipmentRecyclerViewFr
     override fun getItemCount(): Int {
         return equipment.size
     }
-    fun updateAdapterWithNewList(newGuns: List<Gun>?) {
+    fun updateAdapterWithNewList(newGuns: List<Sea>?) {
         //DifUtil below keeps shifts in the new loaded list to a minimum
         val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
             override fun getOldListSize(): Int {
@@ -71,14 +71,14 @@ class EquipmentRecyclerViewAdapter(private val fragment: EquipmentRecyclerViewFr
             }
         })
         this.equipment.clear()
-        this.equipment.addAll(newGuns as List<Gun>)
+        this.equipment.addAll(newGuns as List<Sea>)
         diffResult.dispatchUpdatesTo(this)
     }
     //MARK: - ViewHolder class
     inner class ViewHolder(val cellView: View) : RecyclerView.ViewHolder(cellView) {
         var nameView : TextView
         var photoView : ImageView
-        var item: Gun? = null
+        var item: Sea? = null
 
         init {
             nameView = cellView.findViewById<View>(R.id.nameTextView) as TextView

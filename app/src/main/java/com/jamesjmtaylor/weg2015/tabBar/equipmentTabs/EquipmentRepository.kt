@@ -5,10 +5,8 @@ import android.arch.lifecycle.MutableLiveData
 import android.util.Log
 import com.jamesjmtaylor.weg2015.App
 import com.jamesjmtaylor.weg2015.AppDatabase
-import com.jamesjmtaylor.weg2015.Models.DataState
-import com.jamesjmtaylor.weg2015.Models.Gun
-import com.jamesjmtaylor.weg2015.Models.parseEquipmentResponseString
 import com.jamesjmtaylor.weg2015.WebClient
+import com.jamesjmtaylor.weg2015.models.entities.*
 import okhttp3.Request
 import kotlin.concurrent.thread
 
@@ -27,6 +25,10 @@ class EquipmentRepository {
         refreshGuns()
         return db.GunDao().getAllGunsLiveData()
     }
+    fun getSea(): LiveData<List<Sea>> {
+        refreshSea()
+        return db.SeaDao().getAllSeaLiveData()
+    }
     private fun refreshGuns() {
         //TODO: Implement condition on getting from network
         isLoading.postValue(true)
@@ -42,6 +44,31 @@ class EquipmentRepository {
                 if (response.isSuccessful) {
                     val fetchedGuns = parseEquipmentResponseString(responseBody)
                     db.GunDao().insertGuns(fetchedGuns)
+                } else {
+                    var error = response.message()
+                }
+            } catch (e: Exception){
+                Log.e(TAG,e.localizedMessage)
+            }
+            isLoading.postValue(false)
+        }
+    }
+
+    private fun refreshSea() {
+        //TODO: Implement condition on getting from network
+        isLoading.postValue(true)
+        thread {
+            val request = Request.Builder()
+                    .url("http://10.0.2.2:8080/getAllSeaCombined/")
+                    .get()
+                    .addHeader("Cache-Control", "no-cache")
+                    .build()
+            try {
+                val response = webservice.newCall(request).execute()
+                val responseBody = response.body()?.string() ?: ""
+                if (response.isSuccessful) {
+                    val fetchedSea = parseSeaResponseString(responseBody)
+                    db.SeaDao().insertSea(fetchedSea)
                 } else {
                     var error = response.message()
                 }

@@ -7,8 +7,7 @@ import android.os.Bundle
 
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.SearchView
-import com.jamesjmtaylor.weg2015.Models.Gun
+import com.jamesjmtaylor.weg2015.models.entities.Air
 import com.jamesjmtaylor.weg2015.R
 import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentRecyclerViewFragment
 import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentViewModel
@@ -30,7 +29,7 @@ class TabBarActivity : AppCompatActivity(),
                 .commit()
         navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
     }
-    override fun onListFragmentInteraction(item: Gun) {
+    override fun onListFragmentInteraction(item: Air) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
     //MARK: - Listener methods
