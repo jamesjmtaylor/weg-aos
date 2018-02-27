@@ -10,7 +10,8 @@ import com.google.gson.GsonBuilder
  * Created by jtaylor on 2/26/18.
  */
 @Entity(tableName = "sea")
-data class Sea(var name: String? = null, var description: String? = null,
+data class Sea(@PrimaryKey var id: Long = 0,
+               var name: String? = null, var description: String? = null,
                var individualIcon: String? = null, var photoUrl: String? = null,
 
                @Embedded(prefix = "gun") var gun: Gun? = null,
@@ -20,8 +21,8 @@ data class Sea(var name: String? = null, var description: String? = null,
 
                var transports: String? = null, var qty: Int? = null, var dive: Int? = null,
                var speed: Int? = null, var auto: Int? = null, var tonnage: Int? = null){
-    @ColumnInfo(name = "id")
-    @PrimaryKey(autoGenerate = true) var id: Long = 0
+//    @ColumnInfo(name = "id")
+//    @PrimaryKey(autoGenerate = true) var id: Long = 0
 
     override fun equals(other: Any?): Boolean { //needed for DiffUtil
         return id == (other as Sea).id

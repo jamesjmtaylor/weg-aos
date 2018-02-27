@@ -6,6 +6,8 @@ import android.util.Log
 import com.jamesjmtaylor.weg2015.App
 import com.jamesjmtaylor.weg2015.AppDatabase
 import com.jamesjmtaylor.weg2015.WebClient
+import com.jamesjmtaylor.weg2015.models.entities.Gun
+import com.jamesjmtaylor.weg2015.models.entities.parseEquipmentResponseString
 import com.jamesjmtaylor.weg2015.models.entities.*
 import okhttp3.Request
 import kotlin.concurrent.thread

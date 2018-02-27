@@ -9,6 +9,7 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import com.jamesjmtaylor.weg2015.models.entities.Air
 import com.jamesjmtaylor.weg2015.R
+import com.jamesjmtaylor.weg2015.models.entities.Sea
 import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentRecyclerViewFragment
 import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentViewModel
 import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.LoadingHudFragment
@@ -29,9 +30,11 @@ class TabBarActivity : AppCompatActivity(),
                 .commit()
         navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
     }
-    override fun onListFragmentInteraction(item: Air) {
+
+    override fun onListFragmentInteraction(item: Sea) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
     //MARK: - Listener methods
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {

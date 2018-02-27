@@ -14,13 +14,13 @@ class EquipmentViewModel(application: Application) : AndroidViewModel(applicatio
 
     val repo = EquipmentRepository()
     fun initData() {
-        if (!equipment.hasActiveObservers()){
-            equipment.addSource(repo.getSea()) {
-                equipment.value = it
-            }
+        if (isLoading.value == null){//Hasn't had a source added yet
             isLoading.addSource(repo.isLoading){
                 isLoading.value = it
             }
+        }
+        equipment.addSource(repo.getSea()) {
+            equipment.value = it
         }
     }
 }

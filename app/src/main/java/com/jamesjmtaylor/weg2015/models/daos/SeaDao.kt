@@ -23,19 +23,7 @@ interface SeaDao {
 
     @Query("select * from sea")
     fun getAllSea(): List<Sea>
-//
-//    @Query("select * from sea where id = :p0")
-//    fun findseaById(id: Long): LiveData<sea>
-//
-//    @Insert(onConflict = REPLACE)
-//    fun insertsea(sea: sea)
-//
-//    @Update(onConflict = REPLACE)
-//    fun updatesea(sea: sea)
-//
-//    @Delete
-//    fun deletesea(sea: sea)
-//
+
     @Insert(onConflict = REPLACE)
     fun insertSea(seaList: List<Sea>)
 }
