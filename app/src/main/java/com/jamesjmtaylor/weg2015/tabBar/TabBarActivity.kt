@@ -9,6 +9,7 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import com.jamesjmtaylor.weg2015.models.entities.Air
 import com.jamesjmtaylor.weg2015.R
+import com.jamesjmtaylor.weg2015.models.entities.Land
 import com.jamesjmtaylor.weg2015.models.entities.Sea
 import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentRecyclerViewFragment
 import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentViewModel
@@ -31,7 +32,7 @@ class TabBarActivity : AppCompatActivity(),
         navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
     }
 
-    override fun onListFragmentInteraction(item: Sea) {
+    override fun onListFragmentInteraction(item: Land) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

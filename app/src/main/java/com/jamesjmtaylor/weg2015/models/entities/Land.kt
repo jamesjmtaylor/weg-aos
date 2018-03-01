@@ -5,23 +5,25 @@ import android.arch.persistence.room.Embedded
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import com.google.gson.GsonBuilder
+import com.jamesjmtaylor.weg2015.models.Equipment
+import com.jamesjmtaylor.weg2015.models.EquipmentType
 
 /**
  * Created by jtaylor on 2/26/18.
  */
 @Entity(tableName = "land")
-data class Land(var name: String? = null, var description: String? = null,
-                var groupIconUrl: String? = null, var individualIcon: String? = null,
-                var photoUrl: String? = null,
+data class Land(override @PrimaryKey val id: Long = 0,
+                override val name: String, val description: String? = null,
+                val groupIconUrl: String? = null, val individualIcon: String? = null,
+                override val photoUrl: String? = null,
 
-                @Embedded(prefix = "primary") var primaryWeapon: Gun? = null,
-                @Embedded(prefix = "secondary") var secondaryWeapon: Gun? = null,
-                @Embedded(prefix = "atgm") var atgm: Gun? = null,
+                @Embedded(prefix = "primary") val primaryWeapon: Gun? = null,
+                @Embedded(prefix = "secondary") val secondaryWeapon: Gun? = null,
+                @Embedded(prefix = "atgm") val atgm: Gun? = null,
 
-                var armor: Int? = null, var speed: Int? = null, var auto: Int? = null,
-                var weight: Int? = null) {
-    @ColumnInfo(name = "id")
-    @PrimaryKey(autoGenerate = true) var id: Long = 0
+                val armor: Int? = null, val speed: Int? = null, val auto: Int? = null,
+                val weight: Int? = null): Equipment {
+    override val type = EquipmentType.LAND
 
     override fun equals(other: Any?): Boolean { //needed for DiffUtil
         return id == (other as Land).id

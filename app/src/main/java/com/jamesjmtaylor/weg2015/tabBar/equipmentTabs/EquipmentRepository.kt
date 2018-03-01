@@ -27,9 +27,9 @@ class EquipmentRepository {
         refreshGuns()
         return db.GunDao().getAllGunsLiveData()
     }
-    fun getSea(): LiveData<List<Sea>> {
+    fun getSea(): LiveData<List<Land>> {
         refreshSea()
-        return db.SeaDao().getAllSeaLiveData()
+        return db.LandDao().getAllLandLiveData();
     }
     private fun refreshGuns() {
         //TODO: Implement condition on getting from network
@@ -61,7 +61,7 @@ class EquipmentRepository {
         isLoading.postValue(true)
         thread {
             val request = Request.Builder()
-                    .url("http://10.0.2.2:8080/getAllSeaCombined/")
+                    .url("http://10.0.2.2:8080/getAllLandCombined/")
                     .get()
                     .addHeader("Cache-Control", "no-cache")
                     .build()
@@ -69,8 +69,8 @@ class EquipmentRepository {
                 val response = webservice.newCall(request).execute()
                 val responseBody = response.body()?.string() ?: ""
                 if (response.isSuccessful) {
-                    val fetchedSea = parseSeaResponseString(responseBody)
-                    db.SeaDao().insertSea(fetchedSea)
+                    val fetchedLand = parseLandResponseString(responseBody)
+                    db.LandDao().insertLand(fetchedLand)
                 } else {
                     var error = response.message()
                 }

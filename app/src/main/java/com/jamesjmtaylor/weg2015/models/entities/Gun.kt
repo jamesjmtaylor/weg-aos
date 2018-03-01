@@ -7,17 +7,19 @@ import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import com.google.gson.GsonBuilder
+import com.jamesjmtaylor.weg2015.models.Equipment
+import com.jamesjmtaylor.weg2015.models.EquipmentType
 
 @Entity(tableName = "gun")
-data class Gun(@ColumnInfo(name = "name") var name: String? = null,
-               @ColumnInfo(name = "description") var description: String? = null,
-               @ColumnInfo(name = "groupIconUrl") var groupIconUrl: String? = null,
-               @ColumnInfo(name = "individualIcon") var individualIcon: String? = null,
-               @ColumnInfo(name = "penetration") var penetration: Int? = null,
-               @ColumnInfo(name = "photoUrl") var photoUrl: String? = null,
-               @ColumnInfo(name = "range") var range: Int? = null) {
-    @ColumnInfo(name = "id")
-    @PrimaryKey(autoGenerate = true) var id: Long = 0
+data class Gun(override @PrimaryKey val id: Long = 0,
+               override val name: String,
+               val description: String? = null,
+               val groupIconUrl: String? = null,
+               val individualIcon: String? = null,
+               val penetration: Int? = null,
+               override val photoUrl: String? = null,
+               val range: Int? = null): Equipment {
+    override val type = EquipmentType.GUN
 
     override fun equals(other: Any?): Boolean { //needed for DiffUtil
         return id == (other as Gun).id

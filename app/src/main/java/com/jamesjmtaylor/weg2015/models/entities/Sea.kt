@@ -5,24 +5,25 @@ import android.arch.persistence.room.Embedded
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import com.google.gson.GsonBuilder
+import com.jamesjmtaylor.weg2015.models.Equipment
+import com.jamesjmtaylor.weg2015.models.EquipmentType
 
 /**
  * Created by jtaylor on 2/26/18.
  */
 @Entity(tableName = "sea")
-data class Sea(@PrimaryKey var id: Long = 0,
-               var name: String? = null, var description: String? = null,
-               var individualIcon: String? = null, var photoUrl: String? = null,
+data class Sea(override @PrimaryKey val id: Long = 0,
+               override val name: String, val description: String? = null,
+               val individualIcon: String? = null, override val photoUrl: String? = null,
 
-               @Embedded(prefix = "gun") var gun: Gun? = null,
-               @Embedded(prefix = "sam") var sam: Gun? = null,
-               @Embedded(prefix = "asm") var asm: Gun? = null,
-               @Embedded(prefix = "torpedo") var torpedo: Gun? = null,
+               @Embedded(prefix = "gun") val gun: Gun? = null,
+               @Embedded(prefix = "sam") val sam: Gun? = null,
+               @Embedded(prefix = "asm") val asm: Gun? = null,
+               @Embedded(prefix = "torpedo") val torpedo: Gun? = null,
 
-               var transports: String? = null, var qty: Int? = null, var dive: Int? = null,
-               var speed: Int? = null, var auto: Int? = null, var tonnage: Int? = null){
-//    @ColumnInfo(name = "id")
-//    @PrimaryKey(autoGenerate = true) var id: Long = 0
+               val transports: String? = null, val qty: Int? = null, val dive: Int? = null,
+               val speed: Int? = null, val auto: Int? = null, val tonnage: Int? = null):Equipment{
+    override val type = EquipmentType.SEA
 
     override fun equals(other: Any?): Boolean { //needed for DiffUtil
         return id == (other as Sea).id
