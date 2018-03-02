@@ -23,7 +23,8 @@ data class Land(override @PrimaryKey val id: Long = 0,
     @Ignore override val type = EquipmentType.LAND
 
     override fun equals(other: Any?): Boolean { //needed for DiffUtil
-        return id == (other as Land).id
+        val e = other as? Equipment
+        return id == e?.id && e.type == EquipmentType.LAND
     }
     class LandList : ArrayList<Land>()//Used for GSON deserialization
 }

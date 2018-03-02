@@ -23,7 +23,8 @@ data class Gun(override @PrimaryKey val id: Long = 0,
     @Ignore override val type = EquipmentType.GUN
 
     override fun equals(other: Any?): Boolean { //needed for DiffUtil
-        return id == (other as Gun).id
+        val e = other as? Equipment
+        return id == e?.id && e.type == EquipmentType.GUN
     }
     class GunList : ArrayList<Gun>()//Used for GSON deserialization
 }

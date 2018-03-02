@@ -23,7 +23,8 @@ data class Sea(override @PrimaryKey val id: Long = 0,
     @Ignore override val type = EquipmentType.SEA
 
     override fun equals(other: Any?): Boolean { //needed for DiffUtil
-        return id == (other as Sea).id
+        val e = other as? Equipment
+        return id == e?.id && e.type == EquipmentType.SEA
     }
     class SeaList : ArrayList<Sea>()//Used for GSON deserialization
 }

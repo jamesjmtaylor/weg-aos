@@ -27,7 +27,8 @@ data class Air(override @PrimaryKey val id: Long = 0,
     @Ignore override val type = EquipmentType.AIR
 
     override fun equals(other: Any?): Boolean { //needed for DiffUtil
-        return id == (other as Air).id
+        val e = other as? Equipment
+        return id == e?.id && e.type == EquipmentType.AIR
     }
     class AirList : ArrayList<Air>()//Used for GSON deserialization
 }
