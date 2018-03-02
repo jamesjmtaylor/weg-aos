@@ -20,16 +20,16 @@ enum class EquipmentType {
     LAND, SEA, AIR, GUN
 }
 
-class CombinedList(val gunList : List<Gun>,
-                   val landList : List<Land>,
-                   val seaList : List<Sea>,
-                   val airList : List<Air>) {
+class CombinedList(val guns: List<Gun>,
+                   val land: List<Land>,
+                   val sea: List<Sea>,
+                   val air: List<Air>) {
     fun getEquipment():List<Equipment>{
         var equipmentList = ArrayList<Equipment>()
-        equipmentList.addAll(gunList)
-        equipmentList.addAll(landList)
-        equipmentList.addAll(seaList)
-        equipmentList.addAll(airList)
+        equipmentList.addAll(guns)
+        equipmentList.addAll(land)
+        equipmentList.addAll(sea)
+        equipmentList.addAll(air)
         return equipmentList
     }
 }

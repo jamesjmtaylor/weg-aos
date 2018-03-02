@@ -7,10 +7,9 @@ import android.os.Bundle
 
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
-import com.jamesjmtaylor.weg2015.models.entities.Air
 import com.jamesjmtaylor.weg2015.R
-import com.jamesjmtaylor.weg2015.models.entities.Land
-import com.jamesjmtaylor.weg2015.models.entities.Sea
+import com.jamesjmtaylor.weg2015.models.Equipment
+import com.jamesjmtaylor.weg2015.models.EquipmentType
 import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentRecyclerViewFragment
 import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentViewModel
 import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.LoadingHudFragment
@@ -32,7 +31,7 @@ class TabBarActivity : AppCompatActivity(),
         navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
     }
 
-    override fun onListFragmentInteraction(item: Land) {
+    override fun onListFragmentInteraction(item: Equipment) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -40,12 +39,15 @@ class TabBarActivity : AppCompatActivity(),
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_land -> {
+                eVM?.selectType(EquipmentType.LAND)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_air -> {
+                eVM?.selectType(EquipmentType.AIR)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_sea -> {
+                eVM?.selectType(EquipmentType.SEA)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_card -> {

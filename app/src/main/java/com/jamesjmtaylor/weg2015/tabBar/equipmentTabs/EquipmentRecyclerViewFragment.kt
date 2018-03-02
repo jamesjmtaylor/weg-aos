@@ -16,6 +16,7 @@ import com.jamesjmtaylor.weg2015.R
 import com.jamesjmtaylor.weg2015.models.entities.Sea
 
 import android.support.v7.widget.SearchView
+import com.jamesjmtaylor.weg2015.models.Equipment
 import com.jamesjmtaylor.weg2015.models.entities.Land
 import kotlinx.android.synthetic.main.fragment_equipment_list.view.*
 
@@ -75,8 +76,8 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
         listener = null
     }
     //MARK: - Observers
-    val equipmentObserver = Observer<List<Land>> { newGuns ->
-        adapter?.updateAdapterWithNewList(newGuns)
+    val equipmentObserver = Observer<List<Equipment>> { newEquipment ->
+        adapter?.updateAdapterWithNewList(newEquipment)
     }
 
     //MARK: - Listener methods
@@ -98,6 +99,6 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
         }
     }
     interface OnListFragmentInteractionListener {
-        fun onListFragmentInteraction(item: Land)
+        fun onListFragmentInteraction(item: Equipment)
     }
 }

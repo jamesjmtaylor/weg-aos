@@ -17,7 +17,7 @@ import com.jamesjmtaylor.weg2015.models.entities.Sea
 /**
  * Created by jtaylor on 2/10/18.
  */
-@Database(entities = arrayOf(Gun::class, Land::class, Air::class, Sea::class), version = 4, exportSchema = false)
+@Database(entities = arrayOf(Gun::class, Land::class, Air::class, Sea::class), version = 5, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun GunDao(): GunDao
     abstract fun LandDao(): LandDao

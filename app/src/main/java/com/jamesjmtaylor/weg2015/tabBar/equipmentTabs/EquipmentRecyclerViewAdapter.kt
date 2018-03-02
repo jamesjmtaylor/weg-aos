@@ -13,16 +13,16 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.jamesjmtaylor.weg2015.App
 import com.jamesjmtaylor.weg2015.R
+import com.jamesjmtaylor.weg2015.models.Equipment
 import com.jamesjmtaylor.weg2015.models.entities.Land
 
 import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentRecyclerViewFragment.OnListFragmentInteractionListener
-import com.jamesjmtaylor.weg2015.models.entities.Sea
 
 class EquipmentRecyclerViewAdapter(private val fragment: EquipmentRecyclerViewFragment,
                                    private val listener: OnListFragmentInteractionListener?)
     : RecyclerView.Adapter<EquipmentRecyclerViewAdapter.ViewHolder>() {
     //MARK: - Adapter methods
-    private val equipment = mutableListOf<Land>()
+    private val equipment = mutableListOf<Equipment>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.cell_equipment, parent, false)
         return ViewHolder(view)
@@ -46,24 +46,24 @@ class EquipmentRecyclerViewAdapter(private val fragment: EquipmentRecyclerViewFr
     override fun getItemCount(): Int {
         return equipment.size
     }
-    fun updateAdapterWithNewList(newGuns: List<Land>?) {
+    fun updateAdapterWithNewList(newEquipment: List<Equipment>?) {
         //DifUtil below keeps shifts in the new loaded list to a minimum
         val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
             override fun getOldListSize(): Int {
                 return equipment.size
             }
             override fun getNewListSize(): Int {
-                return newGuns?.size ?: 0
+                return newEquipment?.size ?: 0
             }
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
                 val oldId = equipment.get(oldItemPosition).id ?: return false
-                val newId = newGuns?.get(newItemPosition)?.id ?: return false
+                val newId = newEquipment?.get(newItemPosition)?.id ?: return false
                 return oldId == newId
             }
             //Items may have the same id, but their contents may have been updated
             override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
                 val oldGun = equipment.get(oldItemPosition)
-                val newGun = newGuns?.get(newItemPosition) ?: return false
+                val newGun = newEquipment?.get(newItemPosition) ?: return false
                 return oldGun.equals(newGun)
             }
             //This allows you to introspect on what exactly changed and report it to the adapter as a bundle
@@ -72,14 +72,14 @@ class EquipmentRecyclerViewAdapter(private val fragment: EquipmentRecyclerViewFr
             }
         })
         this.equipment.clear()
-        this.equipment.addAll(newGuns as List<Land>)
+        this.equipment.addAll(newEquipment as List<Equipment>)
         diffResult.dispatchUpdatesTo(this)
     }
     //MARK: - ViewHolder class
     inner class ViewHolder(val cellView: View) : RecyclerView.ViewHolder(cellView) {
         var nameView : TextView
         var photoView : ImageView
-        var item: Land? = null
+        var item: Equipment? = null
 
         init {
             nameView = cellView.findViewById<View>(R.id.nameTextView) as TextView

@@ -2,6 +2,7 @@ package com.jamesjmtaylor.weg2015.models.entities
 
 import android.arch.persistence.room.Embedded
 import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
 import com.google.gson.GsonBuilder
 import com.jamesjmtaylor.weg2015.models.Equipment
@@ -23,7 +24,7 @@ data class Air(override @PrimaryKey val id: Long = 0,
 
                val speed: Int? = null, var auto: Int? = null, var ceiling: Int? = null,
                val weight: Int? = null): Equipment {
-    override val type = EquipmentType.AIR
+    @Ignore override val type = EquipmentType.AIR
 
     override fun equals(other: Any?): Boolean { //needed for DiffUtil
         return id == (other as Air).id

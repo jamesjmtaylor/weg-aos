@@ -1,9 +1,6 @@
 package com.jamesjmtaylor.weg2015.models.entities
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Embedded
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
+import android.arch.persistence.room.*
 import com.google.gson.GsonBuilder
 import com.jamesjmtaylor.weg2015.models.Equipment
 import com.jamesjmtaylor.weg2015.models.EquipmentType
@@ -23,7 +20,7 @@ data class Land(override @PrimaryKey val id: Long = 0,
 
                 val armor: Int? = null, val speed: Int? = null, val auto: Int? = null,
                 val weight: Int? = null): Equipment {
-    override val type = EquipmentType.LAND
+    @Ignore override val type = EquipmentType.LAND
 
     override fun equals(other: Any?): Boolean { //needed for DiffUtil
         return id == (other as Land).id

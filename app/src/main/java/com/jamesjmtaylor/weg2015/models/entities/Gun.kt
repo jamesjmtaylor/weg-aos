@@ -5,6 +5,7 @@ package com.jamesjmtaylor.weg2015.models.entities
  */
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
 import com.google.gson.GsonBuilder
 import com.jamesjmtaylor.weg2015.models.Equipment
@@ -19,14 +20,14 @@ data class Gun(override @PrimaryKey val id: Long = 0,
                val penetration: Int? = null,
                override val photoUrl: String? = null,
                val range: Int? = null): Equipment {
-    override val type = EquipmentType.GUN
+    @Ignore override val type = EquipmentType.GUN
 
     override fun equals(other: Any?): Boolean { //needed for DiffUtil
         return id == (other as Gun).id
     }
     class GunList : ArrayList<Gun>()//Used for GSON deserialization
 }
-fun parseEquipmentResponseString(response: String): List<Gun> {
+fun parseGunResponseString(response: String): List<Gun> {
     val gson = GsonBuilder().create()
     val guns = gson.fromJson<List<Gun>>(response, Gun.GunList::class.java)
     return guns
