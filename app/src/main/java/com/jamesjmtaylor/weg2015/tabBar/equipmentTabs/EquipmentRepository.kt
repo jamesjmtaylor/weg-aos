@@ -12,6 +12,7 @@ import com.jamesjmtaylor.weg2015.models.entities.Gun
 import com.jamesjmtaylor.weg2015.models.entities.*
 import com.jamesjmtaylor.weg2015.models.parseEquipmentResponseString
 import okhttp3.Request
+import java.lang.Thread.sleep
 import java.util.*
 import kotlin.concurrent.thread
 
@@ -70,6 +71,7 @@ class EquipmentRepository {
                 } catch (e: Exception){
                     Log.e(TAG,e.localizedMessage)
                 }
+                try {sleep(2000)} catch (e: Exception){}//So loading animation has a chance to show
                 isLoading.postValue(false)
             }}
     }

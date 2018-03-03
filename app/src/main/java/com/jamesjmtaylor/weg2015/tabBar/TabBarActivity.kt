@@ -3,6 +3,7 @@ package com.jamesjmtaylor.weg2015.tabBar
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 
 import android.support.design.widget.BottomNavigationView
@@ -10,6 +11,7 @@ import android.support.v7.app.AppCompatActivity
 import com.jamesjmtaylor.weg2015.R
 import com.jamesjmtaylor.weg2015.models.Equipment
 import com.jamesjmtaylor.weg2015.models.EquipmentType
+import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentActivity
 import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentRecyclerViewFragment
 import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentViewModel
 import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.LoadingHudFragment
@@ -32,7 +34,8 @@ class TabBarActivity : AppCompatActivity(),
     }
 
     override fun onListFragmentInteraction(item: Equipment) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val intent = Intent(applicationContext, EquipmentActivity::class.java)
+        startActivity(intent)
     }
 
     //MARK: - Listener methods
