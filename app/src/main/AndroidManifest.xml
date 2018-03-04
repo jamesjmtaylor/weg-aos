@@ -25,11 +25,23 @@
             android:name=".tabBar.TabBarActivity"
             android:label="@string/app_name">
         </activity>
-        <activity android:name=".tabBar.equipmentTabs.EquipmentActivity">
+        <activity
+            android:name=".tabBar.equipmentTabs.EquipmentActivity"
+            android:label="@string/title_activity_equipment"
+            android:parentActivityName=".tabBar.TabBarActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jamesjmtaylor.weg2015.tabBar.TabBarActivity"/>
         </activity>
         <activity android:name=".tabBar.calculatorTab.CalculatorActivity">
         </activity>
         <activity android:name=".tabBar.cardsTab.CardsActivity">
+        </activity>
+        <activity
+            android:name=".tabBar.equipmentTabs.ScrollingActivity"
+            android:label="@string/title_activity_scrolling"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 
