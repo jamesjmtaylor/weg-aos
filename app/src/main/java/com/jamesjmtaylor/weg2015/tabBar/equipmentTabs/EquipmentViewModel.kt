@@ -18,11 +18,8 @@ class EquipmentViewModel(application: Application) : AndroidViewModel(applicatio
 
     val repo = EquipmentRepository()
     fun initData() {
-        if (isLoading.value == null){//Hasn't had a source added yet
-            isLoading.addSource(repo.isLoading){
-                isLoading.value = it
-            }
-        }
+        isLoading.removeSource(repo.isLoading)
+        isLoading.addSource(repo.isLoading){isLoading.value=it}
         equipment.addSource(getCurrentSource() ?: return) {
             equipment.value = it
         }
