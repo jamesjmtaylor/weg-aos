@@ -4,6 +4,8 @@ import android.arch.persistence.room.Embedded
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
+import android.os.Parcel
+import android.os.Parcelable
 import com.google.gson.GsonBuilder
 import com.jamesjmtaylor.weg2015.models.Equipment
 import com.jamesjmtaylor.weg2015.models.EquipmentType
@@ -23,16 +25,64 @@ data class Air(override @PrimaryKey val id: Long = 0,
                @Embedded(prefix = "asm") var asm: Gun? = null,
 
                val speed: Int? = null, var auto: Int? = null, var ceiling: Int? = null,
-               val weight: Int? = null): Equipment {
+               val weight: Int? = null): Equipment, Parcelable {
     @Ignore override val type = EquipmentType.AIR
+
+    constructor(parcel: Parcel) : this(
+            parcel.readLong(),
+            parcel.readString(),
+            parcel.readString(),
+            parcel.readString(),
+            parcel.readString(),
+            parcel.readString(),
+            parcel.readParcelable(Gun::class.java.classLoader),
+            parcel.readParcelable(Gun::class.java.classLoader),
+            parcel.readParcelable(Gun::class.java.classLoader),
+            parcel.readParcelable(Gun::class.java.classLoader),
+            parcel.readValue(Int::class.java.classLoader) as? Int,
+            parcel.readValue(Int::class.java.classLoader) as? Int,
+            parcel.readValue(Int::class.java.classLoader) as? Int,
+            parcel.readValue(Int::class.java.classLoader) as? Int) {
+    }
 
     override fun equals(other: Any?): Boolean { //needed for DiffUtil
         val e = other as? Equipment
         return id == e?.id && e.type == EquipmentType.AIR
     }
     class AirList : ArrayList<Air>()//Used for GSON deserialization
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeLong(id)
+        parcel.writeString(name)
+        parcel.writeString(description)
+        parcel.writeString(groupIconUrl)
+        parcel.writeString(individualIcon)
+        parcel.writeString(photoUrl)
+        parcel.writeParcelable(gun, flags)
+        parcel.writeParcelable(agm, flags)
+        parcel.writeParcelable(aam, flags)
+        parcel.writeParcelable(asm, flags)
+        parcel.writeValue(speed)
+        parcel.writeValue(auto)
+        parcel.writeValue(ceiling)
+        parcel.writeValue(weight)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Air> {
+        override fun createFromParcel(parcel: Parcel): Air {
+            return Air(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Air?> {
+            return arrayOfNulls(size)
+        }
+    }
 }
-fun parseAirResponseString(response: String): List<Air> {
+fun deserializeAirResponseString(response: String): List<Air> {
     val gson = GsonBuilder().create()
     val guns = gson.fromJson<List<Air>>(response, Air.AirList::class.java)
     return guns

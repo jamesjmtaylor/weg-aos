@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity
 import com.jamesjmtaylor.weg2015.R
 import com.jamesjmtaylor.weg2015.models.Equipment
 import com.jamesjmtaylor.weg2015.models.EquipmentType
+import com.jamesjmtaylor.weg2015.models.parcelizeEquipment
 import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentActivity
 import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentRecyclerViewFragment
 import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentViewModel
@@ -35,6 +36,7 @@ class TabBarActivity : AppCompatActivity(),
 
     override fun onListFragmentInteraction(item: Equipment) {
         val intent = Intent(applicationContext, EquipmentActivity::class.java)
+        parcelizeEquipment(item,intent)
         startActivity(intent)
     }
 
