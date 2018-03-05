@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/toolbar_height_plus_offset"
             android:text="@string/equipment_name_placeholder"
             android:textColor="@color/black"
             android:textSize="20sp"
