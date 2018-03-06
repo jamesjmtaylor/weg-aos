@@ -53,15 +53,28 @@ class EquipmentActivityFragment : Fragment() {
         if (item is Gun){
             setImage(groupImageView, item.groupIconUrl)
             setImage(individualImageView, item.individualIcon)
+
         } else if (item is Land) {
             setImage(groupImageView, item.groupIconUrl)
             setImage(individualImageView, item.individualIcon)
+            setDetailViews(item)
         } else if (item is Sea) {
             setImage(individualImageView, item.individualIcon)
             groupImageView?.visibility = View.INVISIBLE
         } else if (item is Air) {
             setImage(groupImageView, item.groupIconUrl)
             setImage(individualImageView, item.individualIcon)
+        }
+    }
+    fun setDetailViews(land: Land){
+        val inflater = LayoutInflater.from(activity)
+        for (i in 0..4){
+            val detailRow = inflater.inflate(R.layout.row_detail,null, false)
+            val titleTextView = detailRow.findViewById<TextView>(R.id.titleTextView)
+            val valueTextView = detailRow.findViewById<TextView>(R.id.valueTextView)
+            titleTextView.text = "Primary Weapon"
+            valueTextView.text = land.primaryWeapon?.name
+            detailLinearLayout?.addView(detailRow)
         }
     }
     fun setImage(imageView: ImageView?, imageUrl: String?){
