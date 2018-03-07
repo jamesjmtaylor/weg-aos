@@ -13,7 +13,7 @@ import com.jamesjmtaylor.weg2015.models.EquipmentType
 @Entity(tableName = "land")
 data class Land(override @PrimaryKey val id: Long = 0,
                 override val name: String, val description: String? = null,
-                val groupIconUrl: String? = null, val individualIcon: String? = null,
+                val groupIconUrl: String? = null, val individualIconUrl: String? = null,
                 override val photoUrl: String? = null,
 
                 @Embedded(prefix = "primary") val primaryWeapon: Gun? = null,
@@ -51,7 +51,7 @@ data class Land(override @PrimaryKey val id: Long = 0,
         parcel.writeString(name)
         parcel.writeString(description)
         parcel.writeString(groupIconUrl)
-        parcel.writeString(individualIcon)
+        parcel.writeString(individualIconUrl)
         parcel.writeString(photoUrl)
         parcel.writeParcelable(primaryWeapon, flags)
         parcel.writeParcelable(secondaryWeapon, flags)

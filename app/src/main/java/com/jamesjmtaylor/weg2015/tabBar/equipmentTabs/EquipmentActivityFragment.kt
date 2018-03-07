@@ -56,7 +56,7 @@ class EquipmentActivityFragment : Fragment() {
 
         } else if (item is Land) {
             setImage(groupImageView, item.groupIconUrl)
-            setImage(individualImageView, item.individualIcon)
+            setImage(individualImageView, item.individualIconUrl)
             setDetailViews(item)
         } else if (item is Sea) {
             setImage(individualImageView, item.individualIcon)

@@ -76,6 +76,7 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
         listener = null
     }
     //MARK: - Observers
+    //TODO: Breakdown from specific object to equipment (data loss) occurs here.
     val equipmentObserver = Observer<List<Equipment>> { newEquipment ->
         adapter?.updateAdapterWithNewList(newEquipment)
     }
