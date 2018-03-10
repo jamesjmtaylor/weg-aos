@@ -3,7 +3,6 @@ package com.jamesjmtaylor.weg2015.models.entities
 /**
  * Created by jtaylor on 2/10/18.
  */
-import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
@@ -18,8 +17,9 @@ data class Gun(override @PrimaryKey val id: Long = 0,
                override val name: String,
                val description: String? = null,
                val groupIconUrl: String? = null,
-               val individualIcon: String? = null,
+               val individualIconUrl: String? = null,
                val penetration: Int? = null,
+               val altitude: Int? = null,
                override val photoUrl: String? = null,
                val range: Int? = null): Equipment, Parcelable {
     @Ignore override val type = EquipmentType.GUN
@@ -30,6 +30,7 @@ data class Gun(override @PrimaryKey val id: Long = 0,
             parcel.readString(),
             parcel.readString(),
             parcel.readString(),
+            parcel.readValue(Int::class.java.classLoader) as? Int,
             parcel.readValue(Int::class.java.classLoader) as? Int,
             parcel.readString(),
             parcel.readValue(Int::class.java.classLoader) as? Int) {
@@ -46,8 +47,9 @@ data class Gun(override @PrimaryKey val id: Long = 0,
         parcel.writeString(name)
         parcel.writeString(description)
         parcel.writeString(groupIconUrl)
-        parcel.writeString(individualIcon)
+        parcel.writeString(individualIconUrl)
         parcel.writeValue(penetration)
+        parcel.writeValue(altitude)
         parcel.writeString(photoUrl)
         parcel.writeValue(range)
     }

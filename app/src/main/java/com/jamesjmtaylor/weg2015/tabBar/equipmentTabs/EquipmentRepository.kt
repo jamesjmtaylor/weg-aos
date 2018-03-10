@@ -1,20 +1,26 @@
 package com.jamesjmtaylor.weg2015.tabBar.equipmentTabs
 
+
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.util.Log
-import com.jamesjmtaylor.weg2015.App
-import com.jamesjmtaylor.weg2015.AppDatabase
-import com.jamesjmtaylor.weg2015.R
-import com.jamesjmtaylor.weg2015.WebClient
+import com.bumptech.glide.Glide
+import com.jamesjmtaylor.weg2015.models.CombinedList
 import com.jamesjmtaylor.weg2015.models.entities.Gun
 import com.jamesjmtaylor.weg2015.models.entities.*
 import com.jamesjmtaylor.weg2015.models.parseEquipmentResponseString
 import okhttp3.Request
+
 import java.lang.Thread.sleep
 import java.util.*
 import kotlin.concurrent.thread
+
+import android.graphics.Bitmap
+
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
+import com.jamesjmtaylor.weg2015.*
 
 
 /**
@@ -51,7 +57,7 @@ class EquipmentRepository {
             isLoading.postValue(true)
             thread {
                 val request = Request.Builder()
-                        .url("http://10.0.2.2:8080/getAllCombined/")
+                        .url(getAll)
                         .get()
                         .addHeader("Cache-Control", "no-cache")
                         .build()
@@ -65,6 +71,7 @@ class EquipmentRepository {
                         db.SeaDao().insertSea(fetchedCombinedList.sea)
                         db.AirDao().insertAir(fetchedCombinedList.air)
                         saveFetchDate()
+
                     } else {
                         var error = response.message()
                     }

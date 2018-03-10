@@ -13,20 +13,24 @@ import android.view.View
 import android.view.ViewGroup
 import com.jamesjmtaylor.weg2015.R
 
-import com.jamesjmtaylor.weg2015.models.entities.Sea
-
 import android.support.v7.widget.SearchView
+import com.bumptech.glide.Glide
+import com.jamesjmtaylor.weg2015.App
+import com.jamesjmtaylor.weg2015.baseUrl
 import com.jamesjmtaylor.weg2015.models.Equipment
+import com.jamesjmtaylor.weg2015.models.entities.Air
+import com.jamesjmtaylor.weg2015.models.entities.Gun
 import com.jamesjmtaylor.weg2015.models.entities.Land
+import com.jamesjmtaylor.weg2015.models.entities.Sea
 import kotlinx.android.synthetic.main.fragment_equipment_list.view.*
 
 class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
     val QUERY_STRING_KEY = "QueryString"
-    var eVM : EquipmentViewModel? = null
+    var eVM: EquipmentViewModel? = null
     val TAG = "equipmentRecyclerFrag"
     private var columnCount = 2
     private var listener: OnListFragmentInteractionListener? = null
-    private var adapter : EquipmentRecyclerViewAdapter? = null
+    private var adapter: EquipmentRecyclerViewAdapter? = null
     private var searchView: SearchView? = null
     //MARK: Lifecycle Methods
     override fun onAttach(context: Context?) {
@@ -36,6 +40,7 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
             adapter = EquipmentRecyclerViewAdapter(this, listener)
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         columnCount = 2
@@ -50,6 +55,7 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
         eVM?.equipment?.observe(this, equipmentObserver)
         eVM?.initData()
     }
+
     //MARK: - Lifecycle Methods
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_equipment_list, container, false)
@@ -62,23 +68,49 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
         val searchView = view.searchView
         val lastSearch = savedInstanceState?.get(QUERY_STRING_KEY) as? String
         searchView.setOnQueryTextListener(searchViewListener)
-        if (lastSearch?.isNotBlank() ?: false) searchView.setQuery(lastSearch,false)
+        if (lastSearch?.isNotBlank() ?: false) searchView.setQuery(lastSearch, false)
         return view
     }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         if (searchView?.query?.isNotBlank() ?: false)
-        outState.putString(QUERY_STRING_KEY,searchView?.query.toString())
+            outState.putString(QUERY_STRING_KEY, searchView?.query.toString())
     }
 
     override fun onDetach() {
         super.onDetach()
         listener = null
     }
+
     //MARK: - Observers
     //TODO: Breakdown from specific object to equipment (data loss) occurs here.
     val equipmentObserver = Observer<List<Equipment>> { newEquipment ->
         adapter?.updateAdapterWithNewList(newEquipment)
+        newEquipment ?: return@Observer
+        for (equipment in newEquipment.iterator()) {
+            if (equipment is Gun) {
+                preLoadImage(equipment.individualIconUrl)
+                preLoadImage(equipment.groupIconUrl)
+            } else if (equipment is Land) {
+                preLoadImage(equipment.individualIconUrl)
+                preLoadImage(equipment.groupIconUrl)
+            } else if (equipment is Sea) {
+                preLoadImage(equipment.individualIconUrl)
+            } else if (equipment is Air) {
+                preLoadImage(equipment.groupIconUrl)
+                preLoadImage(equipment.individualIconUrl)
+            }
+        }
+
+    }
+
+    fun preLoadImage(url: String?) {
+        val target = Glide.with(App.instance)
+                .downloadOnly()
+                .load(baseUrl + url)
+                .preload()
+
     }
 
     //MARK: - Listener methods

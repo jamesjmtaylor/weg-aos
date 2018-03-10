@@ -13,7 +13,7 @@ import com.jamesjmtaylor.weg2015.models.EquipmentType
 @Entity(tableName = "sea")
 data class Sea(override @PrimaryKey val id: Long = 0,
                override val name: String, val description: String? = null,
-               val individualIcon: String? = null, override val photoUrl: String? = null,
+               val individualIconUrl: String? = null, override val photoUrl: String? = null,
 
                @Embedded(prefix = "gun") val gun: Gun? = null,
                @Embedded(prefix = "sam") val sam: Gun? = null,
@@ -52,7 +52,7 @@ data class Sea(override @PrimaryKey val id: Long = 0,
         parcel.writeLong(id)
         parcel.writeString(name)
         parcel.writeString(description)
-        parcel.writeString(individualIcon)
+        parcel.writeString(individualIconUrl)
         parcel.writeString(photoUrl)
         parcel.writeParcelable(gun, flags)
         parcel.writeParcelable(sam, flags)

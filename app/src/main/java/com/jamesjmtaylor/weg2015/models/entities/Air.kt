@@ -16,7 +16,7 @@ import com.jamesjmtaylor.weg2015.models.EquipmentType
 @Entity(tableName = "air")
 data class Air(override @PrimaryKey val id: Long = 0,
                override val name: String, val description: String? = null,
-               val groupIconUrl: String? = null, val individualIcon: String? = null,
+               val groupIconUrl: String? = null, val individualIconUrl: String? = null,
                override val photoUrl: String? = null,
 
                @Embedded(prefix = "gun") var gun: Gun? = null,
@@ -56,7 +56,7 @@ data class Air(override @PrimaryKey val id: Long = 0,
         parcel.writeString(name)
         parcel.writeString(description)
         parcel.writeString(groupIconUrl)
-        parcel.writeString(individualIcon)
+        parcel.writeString(individualIconUrl)
         parcel.writeString(photoUrl)
         parcel.writeParcelable(gun, flags)
         parcel.writeParcelable(agm, flags)
