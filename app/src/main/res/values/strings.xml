@@ -18,4 +18,5 @@
     <string name="individual_icon">individual icon</string>
     <string name="photograph">Photograph</string>
     <string name="equipment_name_placeholder">Equipment Name Placeholder</string>
+    <string name="placeholder_description">Description: The 2S19\'s gun crew can load the gun at any angle of elevation. The 2S19 can also produce a smokescreen by injecting diesel fuel into the exhaust outlet. The 21-hp gas turbine AP-18D Auxiliary Power Unit provides power for turret operations when the vehicle engine is shut down. The 2S19 can displace quickly even without a barrel lock immediately after completing a fire mission. After spades are lifted and area cleared, the vehicle can displace 200-300 m away, where the barrel is then locked. Remote-operated barrel/travel locks are especially useful for rapid emplacement, and to emplace/ displace for short fire missions from the move, without need for fully occupying a battery firing position.</string>
 </resources>

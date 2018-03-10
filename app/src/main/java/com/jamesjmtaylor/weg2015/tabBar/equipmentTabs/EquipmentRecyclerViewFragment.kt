@@ -31,7 +31,9 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
     private var columnCount = 2
     private var listener: OnListFragmentInteractionListener? = null
     private var adapter: EquipmentRecyclerViewAdapter? = null
+    private var recyclerView : RecyclerView? = null
     private var searchView: SearchView? = null
+    private var lastSearch : String? = null
     //MARK: Lifecycle Methods
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -58,18 +60,23 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
 
     //MARK: - Lifecycle Methods
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
         val view = inflater.inflate(R.layout.fragment_equipment_list, container, false)
-        val recyclerView = view.recyclerList
+        recyclerView = view.recyclerList
         if (recyclerView is RecyclerView) { // Set the adapter
             val context = view.getContext()
-            recyclerView.layoutManager = GridLayoutManager(context, columnCount)
-            recyclerView.adapter = adapter
+            recyclerView?.layoutManager = GridLayoutManager(context, columnCount)
+            recyclerView?.adapter = adapter
         }
-        val searchView = view.searchView
-        val lastSearch = savedInstanceState?.get(QUERY_STRING_KEY) as? String
-        searchView.setOnQueryTextListener(searchViewListener)
-        if (lastSearch?.isNotBlank() ?: false) searchView.setQuery(lastSearch, false)
+        searchView = view.searchView
+        lastSearch = savedInstanceState?.get(QUERY_STRING_KEY) as? String
+        searchView?.setOnQueryTextListener(searchViewListener)
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (lastSearch?.isNotBlank() ?: false) searchView?.setQuery(lastSearch, true)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -110,7 +117,6 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
                 .downloadOnly()
                 .load(baseUrl + url)
                 .preload()
-
     }
 
     //MARK: - Listener methods
@@ -126,7 +132,7 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
         }
         private fun filterEquipment(query: String) {
             val filteredEquipment = eVM?.equipment?.value?.filter {
-                it.name?.contains(query) == true
+                it.name.toLowerCase().contains(query.toLowerCase()) == true
             } ?: ArrayList<Land>()
             adapter?.updateAdapterWithNewList(filteredEquipment)
         }

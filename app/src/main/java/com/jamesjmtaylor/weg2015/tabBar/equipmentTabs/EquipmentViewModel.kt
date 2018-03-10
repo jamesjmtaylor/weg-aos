@@ -14,6 +14,7 @@ import com.jamesjmtaylor.weg2015.models.entities.Sea
 class EquipmentViewModel(application: Application) : AndroidViewModel(application), LifecycleObserver {
     val equipment = MediatorLiveData<List<Equipment>>() //Mediator allows this class to pass the RoomLiveData from the repo class to the View
     val isLoading = MediatorLiveData<Boolean>()
+    var selectedItemId: Int = 0
     private var selectedType : EquipmentType = EquipmentType.LAND
 
     val repo = EquipmentRepository()
@@ -41,4 +42,6 @@ class EquipmentViewModel(application: Application) : AndroidViewModel(applicatio
         }
         return data as? LiveData<List<Equipment>>
     }
+
+
 }

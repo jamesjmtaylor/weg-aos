@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
+import android.os.PersistableBundle
 
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
@@ -26,11 +27,20 @@ class TabBarActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         initVM()
         setContentView(R.layout.activity_nav)
-        val equipmentRecyclerViewFragment = EquipmentRecyclerViewFragment()
-        supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.recyclerFrameLayout, equipmentRecyclerViewFragment, equipmentRecyclerViewFragment.TAG)
-                .commit()
+        if (savedInstanceState == null) { //Prevents fragment from being instantiated twice
+
+            val equipmentRecyclerViewFragment = EquipmentRecyclerViewFragment()
+            supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.recyclerFrameLayout, equipmentRecyclerViewFragment, equipmentRecyclerViewFragment.TAG)
+                    .commit()
+            navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        navigation.selectedItemId = eVM?.selectedItemId ?: 0
         navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
     }
 
@@ -42,6 +52,7 @@ class TabBarActivity : AppCompatActivity(),
 
     //MARK: - Listener methods
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        eVM?.selectedItemId =item.itemId
         when (item.itemId) {
             R.id.navigation_land -> {
                 eVM?.selectType(EquipmentType.LAND)

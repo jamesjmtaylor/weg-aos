@@ -22,6 +22,8 @@ import com.jamesjmtaylor.weg2015.models.entities.Land
 import com.jamesjmtaylor.weg2015.models.entities.Sea
 import android.graphics.Paint.UNDERLINE_TEXT_FLAG
 import android.graphics.Typeface
+import android.text.SpannableString
+import com.jamesjmtaylor.weg2015.utils.boldString
 
 
 /**
@@ -33,6 +35,7 @@ class EquipmentActivityFragment : Fragment() {
     private var groupImageView : ImageView? = null
     private var individualImageView : ImageView? = null
     private var detailLinearLayout : LinearLayout? = null
+    private var descriptionTextView : TextView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -46,32 +49,47 @@ class EquipmentActivityFragment : Fragment() {
         individualImageView = view.findViewById(R.id.individualImageView)
         setImage(photoImageView, equipment?.photoUrl)
         detailLinearLayout = view.findViewById(R.id.detailLinearLayout)
+        descriptionTextView = view.findViewById(R.id.descriptionTextView)
 
         configureViewToEquipmentType(equipment)
         return view
     }
     fun configureViewToEquipmentType(item: Equipment?){
+        val description = boldString("Description:")
         if (item is Gun){
             setImage(groupImageView, item.groupIconUrl)
             setImage(individualImageView, item.individualIconUrl)
+            setDetailViews(item)
+            item.description?.let { descriptionTextView?.text = description.append(" $it") }
         } else if (item is Land) {
             setImage(groupImageView, item.groupIconUrl)
             setImage(individualImageView, item.individualIconUrl)
             setDetailViews(item)
+            item.description?.let { descriptionTextView?.text = description.append(" $it") }
         } else if (item is Sea) {
             setImage(individualImageView, item.individualIconUrl)
             groupImageView?.visibility = View.INVISIBLE
+            setDetailViews(item)
+            item.description?.let { descriptionTextView?.text = description.append(" $it") }
         } else if (item is Air) {
             setImage(groupImageView, item.groupIconUrl)
             setImage(individualImageView, item.individualIconUrl)
+            setDetailViews(item)
+            item.description?.let { descriptionTextView?.text = description.append(" $it") }
         }
+    }
+    fun setDetailViews(gun: Gun){
+            createDetailRow("Range",gun.range.toString()+" meters")
+        if (gun.penetration ?: 0 > 0 ) {createDetailRow("Range",gun.range.toString()+" meters")}
+        if (gun.altitude ?: 0 > 0 ) {createDetailRow("Altitude",gun.penetration.toString()+" meters")}
+        if (gun.penetration ?: 0 > 0 ) {createDetailRow("Penetration",gun.penetration.toString()+"mm")}
     }
     fun setDetailViews(land: Land){
         land.primaryWeapon?.let{
             createDetailRow("Primary Weapon",it.name, true,true)
             createDetailRow("Range",it.range.toString()+" meters")
-            if (it.penetration ?: 0 > 0){createDetailRow("Penetration",it.penetration.toString()+"mm") }
             if (it.altitude ?: 0 > 0){createDetailRow("Altitude",it.altitude.toString()+" meters") }
+            if (it.penetration ?: 0 > 0){createDetailRow("Penetration",it.penetration.toString()+"mm") }
         }
         land.secondaryWeapon?.let{
             createDetailRow("Secondary Weapon",it.name, true,true)
@@ -88,7 +106,6 @@ class EquipmentActivityFragment : Fragment() {
         land.auto?.let { createDetailRow("Autonomy",it.toString()+" km", true,true) }
         land.weight?.let { createDetailRow("Weight",it.toString()+" tons", true,true) }
     }
-    //TODO: Finish this
     fun setDetailViews(sea: Sea){
         sea.gun?.let{
             createDetailRow("Deck Gun",it.name, true,true)
@@ -103,12 +120,44 @@ class EquipmentActivityFragment : Fragment() {
         sea.sam?.let {
             createDetailRow("Surface-to-Air Missile",it.name, true,true)
             createDetailRow("Range",it.range.toString()+" meters")
-            createDetailRow("Penetration",it.altitude.toString()+"mm")
+            createDetailRow("Altitude",it.altitude.toString()+"mm")
         }
-//        sea.armor?.let { createDetailRow("Armor",it.toString()+"mm", true,true) }
-//        sea.speed?.let { createDetailRow("Speed",it.toString()+" kph", true,true) }
-//        sea.auto?.let { createDetailRow("Autonomy",it.toString()+" km", true,true) }
-//        sea.weight?.let { createDetailRow("Weight",it.toString()+" tons", true,true) }
+        sea.torpedo?.let {
+            createDetailRow("Torpedo",it.name, true,true)
+            createDetailRow("Range",it.range.toString()+" meters")
+        }
+        sea.transports?.let {
+            createDetailRow("Transports",it.toString(), true,true)
+            createDetailRow("Quantity",sea.qty.toString())
+        }
+        if (sea.dive ?: 0 > 0) {createDetailRow("Maximum Depth",sea.dive.toString()+" meters", true,true)}
+        sea.speed?.let { createDetailRow("Speed",it.toString()+" kph", true,true) }
+        sea.auto?.let { createDetailRow("Autonomy",it.toString()+" km", true,true) }
+        sea.tonnage?.let { createDetailRow("Tonnage",it.toString()+" tons", true,true) }
+    }
+    fun setDetailViews(air: Air){
+        air.gun?.let{
+            createDetailRow("Cannon",it.name, true,true)
+            createDetailRow("Range",it.range.toString()+" meters")
+            if (it.penetration ?: 0 > 0){createDetailRow("Penetration",it.penetration.toString()+"mm") }
+        }
+        air.agm?.let{
+            createDetailRow("Air-to-Ground Missile",it.name, true,true)
+            createDetailRow("Range",it.range.toString()+" meters")
+            createDetailRow("Penetration",it.penetration.toString()+"mm")
+        }
+        air.asm?.let {
+            createDetailRow("Air-to-Surface Missile",it.name, true,true)
+            createDetailRow("Range",it.range.toString()+" meters")
+        }
+        air.aam?.let {
+            createDetailRow("Air-to-Air Missile",it.name, true,true)
+            createDetailRow("Range",it.range.toString()+" meters")
+        }
+        air.speed?.let { createDetailRow("Speed",it.toString()+" kph", true,true) }
+        air.ceiling?.let { createDetailRow("Ceiling",it.toString()+" meters", true,true) }
+        air.auto?.let { createDetailRow("Autonomy",it.toString()+" km", true,true) }
+        air.weight?.let { createDetailRow("Weight",it.toString()+" kg", true,true) }
     }
     fun createDetailRow(title: String, value: String, underline: Boolean = false, bold: Boolean = false){
         val inflater = LayoutInflater.from(activity)
