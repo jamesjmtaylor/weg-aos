@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -20,62 +19,54 @@ import com.jamesjmtaylor.weg2015.models.entities.Air
 import com.jamesjmtaylor.weg2015.models.entities.Gun
 import com.jamesjmtaylor.weg2015.models.entities.Land
 import com.jamesjmtaylor.weg2015.models.entities.Sea
-import android.graphics.Paint.UNDERLINE_TEXT_FLAG
 import android.graphics.Typeface
-import android.text.SpannableString
 import com.jamesjmtaylor.weg2015.utils.boldString
+import kotlinx.android.synthetic.main.fragment_equipment.*
+import kotlinx.android.synthetic.main.row_detail.*
 
 
 /**
  * A placeholder fragment containing a simple view.
  */
 class EquipmentActivityFragment : Fragment() {
-    private var titleTextView : TextView? = null
-    private var photoImageView : ImageView? = null
-    private var groupImageView : ImageView? = null
-    private var individualImageView : ImageView? = null
-    private var detailLinearLayout : LinearLayout? = null
-    private var descriptionTextView : TextView? = null
-
+    var equipment : Equipment? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val equipment = deParcelizeEquipment(arguments)
+        equipment = deParcelizeEquipment(arguments)
         val view = inflater.inflate(R.layout.fragment_equipment, container, false)
 
-        titleTextView = view.findViewById(R.id.titleTextView)
-        titleTextView?.text = equipment?.name
-        photoImageView = view.findViewById(R.id.photoImageView)
-        groupImageView = view.findViewById(R.id.groupImageView)
-        individualImageView = view.findViewById(R.id.individualImageView)
-        setImage(photoImageView, equipment?.photoUrl)
-        detailLinearLayout = view.findViewById(R.id.detailLinearLayout)
-        descriptionTextView = view.findViewById(R.id.descriptionTextView)
-
-        configureViewToEquipmentType(equipment)
         return view
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        this.titleTextView.text = equipment?.name
+        setImage(this.photoImageView, equipment?.photoUrl)
+        configureViewToEquipmentType(equipment)
     }
     fun configureViewToEquipmentType(item: Equipment?){
         val description = boldString("Description:")
         if (item is Gun){
-            setImage(groupImageView, item.groupIconUrl)
-            setImage(individualImageView, item.individualIconUrl)
+            setImage(this.groupImageView, item.groupIconUrl)
+            setImage(this.individualImageView, item.individualIconUrl)
             setDetailViews(item)
-            item.description?.let { descriptionTextView?.text = description.append(" $it") }
+            item.description?.let { this.descriptionTextView?.text = description.append(" $it") }
         } else if (item is Land) {
-            setImage(groupImageView, item.groupIconUrl)
-            setImage(individualImageView, item.individualIconUrl)
+            setImage(this.groupImageView, item.groupIconUrl)
+            setImage(this.individualImageView, item.individualIconUrl)
             setDetailViews(item)
-            item.description?.let { descriptionTextView?.text = description.append(" $it") }
+            item.description?.let { this.descriptionTextView?.text = description.append(" $it") }
         } else if (item is Sea) {
-            setImage(individualImageView, item.individualIconUrl)
+            setImage(this.individualImageView, item.individualIconUrl)
             groupImageView?.visibility = View.INVISIBLE
             setDetailViews(item)
-            item.description?.let { descriptionTextView?.text = description.append(" $it") }
+            item.description?.let { this.descriptionTextView?.text = description.append(" $it") }
         } else if (item is Air) {
-            setImage(groupImageView, item.groupIconUrl)
-            setImage(individualImageView, item.individualIconUrl)
+            setImage(this.groupImageView, item.groupIconUrl)
+            setImage(this.individualImageView, item.individualIconUrl)
             setDetailViews(item)
-            item.description?.let { descriptionTextView?.text = description.append(" $it") }
+            item.description?.let { this.descriptionTextView?.text = description.append(" $it") }
         }
     }
     fun setDetailViews(gun: Gun){
@@ -162,14 +153,14 @@ class EquipmentActivityFragment : Fragment() {
     fun createDetailRow(title: String, value: String, underline: Boolean = false, bold: Boolean = false){
         val inflater = LayoutInflater.from(activity)
         val detailRow = inflater.inflate(R.layout.row_detail,null, false)
-        val titleTextView = detailRow.findViewById<TextView>(R.id.titleTextView)
-        val valueTextView = detailRow.findViewById<TextView>(R.id.valueTextView)
+        val titleTextView = detailRow.findViewById<TextView>(R.id.rowTitleTextView)
+        val valueTextView = detailRow.findViewById<TextView>(R.id.rowValueTextView)
         if (underline) {
             titleTextView.setPaintFlags(titleTextView.getPaintFlags() or Paint.UNDERLINE_TEXT_FLAG)
             valueTextView.setPaintFlags(valueTextView.getPaintFlags() or Paint.UNDERLINE_TEXT_FLAG)
         }
         if (bold) {
-            valueTextView.setTypeface(null, Typeface.BOLD);
+            valueTextView.setTypeface(null, Typeface.BOLD)
         }
         titleTextView.text = title
         valueTextView.text = value

@@ -12,24 +12,28 @@ import com.jamesjmtaylor.weg2015.models.entities.Sea
  * Created by jtaylor on 2/10/18.
  */
 class EquipmentViewModel(application: Application) : AndroidViewModel(application), LifecycleObserver {
+    val repo = EquipmentRepository()
     val equipment = MediatorLiveData<List<Equipment>>() //Mediator allows this class to pass the RoomLiveData from the repo class to the View
     val isLoading = MediatorLiveData<Boolean>()
-    var selectedItemId: Int = 0
+    var filterResults = ArrayList<Equipment>()
     private var selectedType : EquipmentType = EquipmentType.LAND
 
-    val repo = EquipmentRepository()
-    fun initData() {
-        isLoading.removeSource(repo.isLoading)
+    init {
         isLoading.addSource(repo.isLoading){isLoading.value=it}
-        equipment.addSource(getCurrentSource() ?: return) {
-            equipment.value = it
+        val source = getCurrentSource()
+        if (source != null){
+            equipment.addSource(source) {
+                equipment.value = it
+            }
         }
     }
+
     fun selectType(type:EquipmentType) {
         equipment.removeSource(getCurrentSource() ?: return)
         selectedType = type
         equipment.addSource(getCurrentSource() ?: return){
             equipment.value = it
+            filterResults = it as ArrayList<Equipment>
         }
     }
     fun getCurrentSource(): LiveData<List<Equipment>>? {
@@ -42,6 +46,7 @@ class EquipmentViewModel(application: Application) : AndroidViewModel(applicatio
         }
         return data as? LiveData<List<Equipment>>
     }
+    fun resetSearch() {
 
-
+    }
 }

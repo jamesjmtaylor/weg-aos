@@ -22,17 +22,17 @@ import com.jamesjmtaylor.weg2015.models.entities.Air
 import com.jamesjmtaylor.weg2015.models.entities.Gun
 import com.jamesjmtaylor.weg2015.models.entities.Land
 import com.jamesjmtaylor.weg2015.models.entities.Sea
+import kotlinx.android.synthetic.main.fragment_equipment_list.*
 import kotlinx.android.synthetic.main.fragment_equipment_list.view.*
 
 class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
+    val TAG = "equipmentRecyclerFrag"
     val QUERY_STRING_KEY = "QueryString"
     var eVM: EquipmentViewModel? = null
-    val TAG = "equipmentRecyclerFrag"
     private var columnCount = 2
     private var listener: OnListFragmentInteractionListener? = null
     private var adapter: EquipmentRecyclerViewAdapter? = null
     private var recyclerView : RecyclerView? = null
-    private var searchView: SearchView? = null
     private var lastSearch : String? = null
     //MARK: Lifecycle Methods
     override fun onAttach(context: Context?) {
@@ -51,11 +51,9 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
 
     //MARK: ViewModel Methods
     private fun initVM() {
-        val a = activity ?: return
-        eVM = ViewModelProviders.of(a).get(EquipmentViewModel::class.java)
+        eVM = activity?.let {ViewModelProviders.of(it).get(EquipmentViewModel::class.java)}
         eVM?.let { lifecycle.addObserver(it) } //Add ViewModel as an observer of this fragment's lifecycle
         eVM?.equipment?.observe(this, equipmentObserver)
-        eVM?.initData()
     }
 
     //MARK: - Lifecycle Methods
@@ -68,15 +66,17 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
             recyclerView?.layoutManager = GridLayoutManager(context, columnCount)
             recyclerView?.adapter = adapter
         }
-        searchView = view.searchView
         lastSearch = savedInstanceState?.get(QUERY_STRING_KEY) as? String
-        searchView?.setOnQueryTextListener(searchViewListener)
         return view
     }
 
     override fun onResume() {
+        this.searchView.setOnQueryTextListener(searchViewListener)
         super.onResume()
-        if (lastSearch?.isNotBlank() ?: false) searchView?.setQuery(lastSearch, true)
+        if (lastSearch?.isNotBlank() ?: false) {
+            searchView?.setQuery(lastSearch, false)
+            adapter?.updateAdapterWithNewList(eVM?.filterResults)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -134,6 +134,7 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
             val filteredEquipment = eVM?.equipment?.value?.filter {
                 it.name.toLowerCase().contains(query.toLowerCase()) == true
             } ?: ArrayList<Land>()
+            eVM?.filterResults = filteredEquipment as ArrayList<Equipment>
             adapter?.updateAdapterWithNewList(filteredEquipment)
         }
     }

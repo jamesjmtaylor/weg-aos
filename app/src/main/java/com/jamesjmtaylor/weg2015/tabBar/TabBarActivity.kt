@@ -1,5 +1,6 @@
 package com.jamesjmtaylor.weg2015.tabBar
 
+import android.app.Fragment
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -9,6 +10,7 @@ import android.os.PersistableBundle
 
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.SearchView
 import com.jamesjmtaylor.weg2015.R
 import com.jamesjmtaylor.weg2015.models.Equipment
 import com.jamesjmtaylor.weg2015.models.EquipmentType
@@ -22,25 +24,23 @@ import kotlinx.android.synthetic.main.activity_nav.*
 class TabBarActivity : AppCompatActivity(),
         LifecycleOwner,
         EquipmentRecyclerViewFragment.OnListFragmentInteractionListener {
+    var equipmentRecyclerViewFragment : EquipmentRecyclerViewFragment? = null
     //MARK: - Lifecycle methods
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initVM()
         setContentView(R.layout.activity_nav)
-        if (savedInstanceState == null) { //Prevents fragment from being instantiated twice
-
-            val equipmentRecyclerViewFragment = EquipmentRecyclerViewFragment()
+        if (savedInstanceState == null) { //Prevents fragment from being instantiated when it already exists
+            equipmentRecyclerViewFragment = EquipmentRecyclerViewFragment()
             supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.recyclerFrameLayout, equipmentRecyclerViewFragment, equipmentRecyclerViewFragment.TAG)
+                    .replace(R.id.recyclerFrameLayout, equipmentRecyclerViewFragment, equipmentRecyclerViewFragment?.TAG)
                     .commit()
-            navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        navigation.selectedItemId = eVM?.selectedItemId ?: 0
         navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
     }
 
@@ -52,7 +52,8 @@ class TabBarActivity : AppCompatActivity(),
 
     //MARK: - Listener methods
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        eVM?.selectedItemId =item.itemId
+        val searchView = equipmentRecyclerViewFragment?.view?.findViewById<SearchView>(R.id.searchView)
+        searchView?.setQuery("",false)
         when (item.itemId) {
             R.id.navigation_land -> {
                 eVM?.selectType(EquipmentType.LAND)
