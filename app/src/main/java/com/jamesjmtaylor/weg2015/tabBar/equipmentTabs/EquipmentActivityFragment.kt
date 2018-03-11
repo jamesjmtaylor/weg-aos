@@ -85,7 +85,8 @@ class EquipmentActivityFragment : Fragment() {
         land.secondaryWeapon?.let{
             createDetailRow("Secondary Weapon",it.name, true,true)
             createDetailRow("Range",it.range.toString()+" meters")
-            createDetailRow("Penetration",it.penetration.toString()+"mm")
+            if (it.altitude ?: 0 > 0){createDetailRow("Altitude",it.altitude.toString()+" meters") }
+            if (it.penetration ?: 0 > 0){createDetailRow("Penetration",it.penetration.toString()+"mm") }
         }
         land.atgm?.let {
             createDetailRow("ATGM",it.name, true,true)
@@ -101,30 +102,33 @@ class EquipmentActivityFragment : Fragment() {
         sea.gun?.let{
             createDetailRow("Deck Gun",it.name, true,true)
             createDetailRow("Range",it.range.toString()+" meters")
-            createDetailRow("Penetration",it.penetration.toString()+"mm")
+            if (it.altitude ?: 0 > 0){createDetailRow("Altitude",it.altitude.toString()+" meters") }
+            if (it.penetration ?: 0 > 0){createDetailRow("Penetration",it.penetration.toString()+"mm") }
         }
         sea.asm?.let{
             createDetailRow("Anti-Ship Missile",it.name, true,true)
             createDetailRow("Range",it.range.toString()+" meters")
-            createDetailRow("Penetration",it.penetration.toString()+"mm")
+            if (it.altitude ?: 0 > 0){createDetailRow("Altitude",it.altitude.toString()+" meters") }
+            if (it.penetration ?: 0 > 0){createDetailRow("Penetration",it.penetration.toString()+"mm") }
         }
         sea.sam?.let {
             createDetailRow("Surface-to-Air Missile",it.name, true,true)
             createDetailRow("Range",it.range.toString()+" meters")
-            createDetailRow("Altitude",it.altitude.toString()+"mm")
+            if (it.altitude ?: 0 > 0){createDetailRow("Altitude",it.altitude.toString()+" meters") }
+            if (it.penetration ?: 0 > 0){createDetailRow("Penetration",it.penetration.toString()+"mm") }
         }
         sea.torpedo?.let {
             createDetailRow("Torpedo",it.name, true,true)
             createDetailRow("Range",it.range.toString()+" meters")
         }
-        sea.transports?.let {
-            createDetailRow("Transports",it.toString(), true,true)
-            createDetailRow("Quantity",sea.qty.toString())
+        if (!(sea.transports.isNullOrBlank() || sea.transports?.contains("null") ?: true)){
+            createDetailRow("Transports",sea.transports.toString(), true,true)
+            if (sea.qty ?: 0 > 0){createDetailRow("Quantity",sea.qty.toString()) }
         }
         if (sea.dive ?: 0 > 0) {createDetailRow("Maximum Depth",sea.dive.toString()+" meters", true,true)}
         sea.speed?.let { createDetailRow("Speed",it.toString()+" kph", true,true) }
         sea.auto?.let { createDetailRow("Autonomy",it.toString()+" km", true,true) }
-        sea.tonnage?.let { createDetailRow("Tonnage",it.toString()+" tons", true,true) }
+        sea.tonnage?.let { createDetailRow("Displacement",it.toString()+" tons", true,true) }
     }
     fun setDetailViews(air: Air){
         air.gun?.let{
