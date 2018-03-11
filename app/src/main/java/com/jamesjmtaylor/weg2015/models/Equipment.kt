@@ -20,7 +20,7 @@ interface Equipment {
 }
 
 enum class EquipmentType {
-    LAND, SEA, AIR, GUN
+    LAND, SEA, AIR, GUN, ALL
 }
 
 class CombinedList(val guns: List<Gun>,

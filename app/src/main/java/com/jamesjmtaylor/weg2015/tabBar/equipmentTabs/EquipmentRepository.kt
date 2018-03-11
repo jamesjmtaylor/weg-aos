@@ -65,6 +65,21 @@ class EquipmentRepository {
         refreshCombined()
         return db.AirDao().getAllAirLiveData();
     }
+    fun getAll(): LiveData<List<Equipment>> {
+        refreshCombined()
+        var mutable = MutableLiveData<List<Equipment>>()
+        thread {
+            val guns : List<Equipment> = db.GunDao().getAllGuns()
+            val nonDisplayableFilteredOut = guns.filter { gun -> !gun.photoUrl.isNullOrBlank() }
+            val land : List<Equipment> = db.LandDao().getAllLand()
+            val sea : List<Equipment> = db.SeaDao().getAllSea()
+            val air : List<Equipment> = db.AirDao().getAllAir()
+            (guns as? ArrayList<Equipment>)?.addAll(land,sea,air)
+            val sorted = nonDisplayableFilteredOut.sortedBy { it.name }
+            mutable.postValue(sorted)
+        }
+        return mutable
+    }
 
     private val DATE_FETCHED_KEY = "dateLastFetched"
     private fun refreshCombined() {

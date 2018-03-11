@@ -44,6 +44,7 @@ class EquipmentViewModel(application: Application) : AndroidViewModel(applicatio
             EquipmentType.SEA -> data = repo.getSea()
             EquipmentType.AIR -> data = repo.getAir()
             EquipmentType.GUN -> data = repo.getGun()
+            EquipmentType.ALL -> data = repo.getAll()
         }
         return data as? LiveData<List<Equipment>>
     }
