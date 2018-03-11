@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import com.jamesjmtaylor.weg2015.R
 
 import android.support.v7.widget.SearchView
+import android.util.DisplayMetrics
 import com.bumptech.glide.Glide
 import com.jamesjmtaylor.weg2015.App
 import com.jamesjmtaylor.weg2015.baseUrl
@@ -22,6 +23,9 @@ import com.jamesjmtaylor.weg2015.models.entities.Air
 import com.jamesjmtaylor.weg2015.models.entities.Gun
 import com.jamesjmtaylor.weg2015.models.entities.Land
 import com.jamesjmtaylor.weg2015.models.entities.Sea
+import com.jamesjmtaylor.weg2015.utils.NpaGridLayoutManager
+import com.jamesjmtaylor.weg2015.utils.convertDpToPixel
+import com.jamesjmtaylor.weg2015.utils.convertPixelsToDp
 import kotlinx.android.synthetic.main.fragment_equipment_list.*
 import kotlinx.android.synthetic.main.fragment_equipment_list.view.*
 
@@ -31,7 +35,7 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
     var eVM: EquipmentViewModel? = null
     private var columnCount = 2
     private var listener: OnListFragmentInteractionListener? = null
-    private var adapter: EquipmentRecyclerViewAdapter? = null
+    var adapter: EquipmentRecyclerViewAdapter? = null
     private var recyclerView : RecyclerView? = null
     private var lastSearch : String? = null
     //MARK: Lifecycle Methods
@@ -42,10 +46,17 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
             adapter = EquipmentRecyclerViewAdapter(this, listener)
         }
     }
+    fun calculateNoOfColumns(context: Context?): Int {
+        val displayMetrics = context?.getResources()?.getDisplayMetrics()
+        val dpWidth = displayMetrics?.widthPixels ?: 0 / (displayMetrics?.density ?: return 0).toInt()
+        val columnWidth = context?.resources?.getDimension(R.dimen.column_width) ?: return 0
+        val noOfColumns = dpWidth / columnWidth + 1
+        return noOfColumns.toInt()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        columnCount = 2
+        columnCount = calculateNoOfColumns(App.instance.applicationContext)
         initVM()
     }
 
@@ -63,7 +74,8 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
         recyclerView = view.recyclerList
         if (recyclerView is RecyclerView) { // Set the adapter
             val context = view.getContext()
-            recyclerView?.layoutManager = GridLayoutManager(context, columnCount)
+            val params = GridLayoutManager.LayoutParams(GridLayoutManager.LayoutParams.MATCH_PARENT,GridLayoutManager.LayoutParams.MATCH_PARENT)
+            recyclerView?.layoutManager = NpaGridLayoutManager(context, columnCount)
             recyclerView?.adapter = adapter
         }
         lastSearch = savedInstanceState?.get(QUERY_STRING_KEY) as? String

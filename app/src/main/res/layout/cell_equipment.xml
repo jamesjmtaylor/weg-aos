@@ -9,7 +9,7 @@
 
     <ImageView
         android:id="@+id/photoImageView"
-        android:layout_width="200dp"
+        android:layout_width="@dimen/column_width"
         android:layout_height="125dp"
         android:layout_weight="1"
         app:srcCompat="@color/clear"/>

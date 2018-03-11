@@ -8,4 +8,5 @@
     <dimen name="toolbar_height_plus_offset">64dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="column_width">200dp</dimen>
 </resources>

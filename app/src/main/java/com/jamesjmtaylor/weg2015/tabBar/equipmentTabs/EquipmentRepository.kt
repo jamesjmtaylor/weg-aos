@@ -21,6 +21,8 @@ import android.graphics.Bitmap
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.jamesjmtaylor.weg2015.*
+import com.jamesjmtaylor.weg2015.models.Equipment
+import kotlin.collections.ArrayList
 
 
 /**
@@ -37,6 +39,19 @@ class EquipmentRepository {
     fun getGun(): LiveData<List<Gun>> {
         refreshCombined()
         return db.GunDao().getAllGunsLiveData()
+    }
+    fun getLandAndGuns(): LiveData<List<Equipment>> {
+        refreshCombined()
+        var mutable = MutableLiveData<List<Equipment>>()
+        thread {
+            val guns : List<Equipment> = db.GunDao().getAllGuns()
+            val land : List<Equipment> = db.LandDao().getAllLand()
+            (guns as? ArrayList<Equipment>)?.addAll(land)
+            val nonDisplayableFilteredOut = guns.filter { gun -> !gun.photoUrl.isNullOrBlank() }
+            val sorted = nonDisplayableFilteredOut.sortedBy { it.name }
+            mutable.postValue(sorted)
+        }
+        return mutable
     }
     fun getLand(): LiveData<List<Land>> {
         refreshCombined()

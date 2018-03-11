@@ -10,6 +10,7 @@ import android.os.PersistableBundle
 
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
 import com.jamesjmtaylor.weg2015.R
 import com.jamesjmtaylor.weg2015.models.Equipment
@@ -53,7 +54,7 @@ class TabBarActivity : AppCompatActivity(),
     //MARK: - Listener methods
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         val searchView = equipmentRecyclerViewFragment?.view?.findViewById<SearchView>(R.id.searchView)
-        searchView?.setQuery("",false)
+        searchView?.setQuery("",false) //Erases search on tab change
         when (item.itemId) {
             R.id.navigation_land -> {
                 eVM?.selectType(EquipmentType.LAND)

@@ -15,7 +15,7 @@ class EquipmentViewModel(application: Application) : AndroidViewModel(applicatio
     val repo = EquipmentRepository()
     val equipment = MediatorLiveData<List<Equipment>>() //Mediator allows this class to pass the RoomLiveData from the repo class to the View
     val isLoading = MediatorLiveData<Boolean>()
-    var filterResults = ArrayList<Equipment>()
+    var filterResults : List<Equipment>? = ArrayList<Equipment>()
     private var selectedType : EquipmentType = EquipmentType.LAND
 
     init {
@@ -31,22 +31,20 @@ class EquipmentViewModel(application: Application) : AndroidViewModel(applicatio
     fun selectType(type:EquipmentType) {
         equipment.removeSource(getCurrentSource() ?: return)
         selectedType = type
+
         equipment.addSource(getCurrentSource() ?: return){
             equipment.value = it
-            filterResults = it as ArrayList<Equipment>
+            filterResults = it //resets filter results
         }
     }
     fun getCurrentSource(): LiveData<List<Equipment>>? {
         var data : LiveData<*>
         when (selectedType){
-            EquipmentType.LAND -> data = repo.getLand()
+            EquipmentType.LAND -> data = repo.getLandAndGuns()
             EquipmentType.SEA -> data = repo.getSea()
             EquipmentType.AIR -> data = repo.getAir()
             EquipmentType.GUN -> data = repo.getGun()
         }
         return data as? LiveData<List<Equipment>>
-    }
-    fun resetSearch() {
-
     }
 }
