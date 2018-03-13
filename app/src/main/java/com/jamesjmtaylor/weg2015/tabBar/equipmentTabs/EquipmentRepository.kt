@@ -31,7 +31,6 @@ import kotlin.collections.ArrayList
 class EquipmentRepository {
     private val TAG = "EquipmentRepo"
 
-    private var FRESH_TIMEOUT = 1000
     private val webservice = WebClient.getInstance()
     private val db = AppDatabase.getInstance(App.instance)
     var isLoading = MutableLiveData<Boolean>() //Mutable allows this class to post changes to observing views
@@ -74,12 +73,16 @@ class EquipmentRepository {
             val land : List<Equipment> = db.LandDao().getAllLand()
             val sea : List<Equipment> = db.SeaDao().getAllSea()
             val air : List<Equipment> = db.AirDao().getAllAir()
-            (guns as? ArrayList<Equipment>)?.addAll(land,sea,air)
+            (guns as? ArrayList<Equipment>)?.addAll(land)
+            (guns as? ArrayList<Equipment>)?.addAll(sea)
+            (guns as? ArrayList<Equipment>)?.addAll(air)
+
             val sorted = nonDisplayableFilteredOut.sortedBy { it.name }
             mutable.postValue(sorted)
         }
         return mutable
     }
+
 
     private val DATE_FETCHED_KEY = "dateLastFetched"
     private fun refreshCombined() {

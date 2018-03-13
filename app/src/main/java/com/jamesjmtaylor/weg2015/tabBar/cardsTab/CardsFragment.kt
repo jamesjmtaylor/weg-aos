@@ -1,5 +1,6 @@
 package com.jamesjmtaylor.weg2015.tabBar.cardsTab
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.jamesjmtaylor.weg2015.R
+import com.jamesjmtaylor.weg2015.models.Equipment
 
 class CardsFragment : Fragment() {
     var cVM : CardsViewModel? = null
@@ -31,7 +33,7 @@ class CardsFragment : Fragment() {
         cVM?.let { lifecycle.addObserver(it) } //Add ViewModel as an observer of this fragment's lifecycle
         cVM?.equipment?.observe(this, cardsObserver)
     }
-    private val cardsObserver = object : {
+    private val cardsObserver = Observer<List<Equipment>> { newEquipment ->
 
     }
 }
