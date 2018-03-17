@@ -1,12 +1,10 @@
-package com.jamesjmtaylor.weg2015.tabBar.equipmentTabs
+package com.jamesjmtaylor.weg2015.equipmentTabs
 
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.util.Log
-import com.bumptech.glide.Glide
-import com.jamesjmtaylor.weg2015.models.CombinedList
 import com.jamesjmtaylor.weg2015.models.entities.Gun
 import com.jamesjmtaylor.weg2015.models.entities.*
 import com.jamesjmtaylor.weg2015.models.parseEquipmentResponseString
@@ -16,10 +14,6 @@ import java.lang.Thread.sleep
 import java.util.*
 import kotlin.concurrent.thread
 
-import android.graphics.Bitmap
-
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.transition.Transition
 import com.jamesjmtaylor.weg2015.*
 import com.jamesjmtaylor.weg2015.models.Equipment
 import kotlin.collections.ArrayList

@@ -1,4 +1,4 @@
-package com.jamesjmtaylor.weg2015.tabBar.equipmentTabs
+package com.jamesjmtaylor.weg2015.equipmentTabs
 
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
@@ -14,9 +14,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.jamesjmtaylor.weg2015.App
 import com.jamesjmtaylor.weg2015.R
 import com.jamesjmtaylor.weg2015.models.Equipment
-import com.jamesjmtaylor.weg2015.models.entities.Land
 
-import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentRecyclerViewFragment.OnListFragmentInteractionListener
+import com.jamesjmtaylor.weg2015.equipmentTabs.EquipmentRecyclerViewFragment.OnListFragmentInteractionListener
 
 class EquipmentRecyclerViewAdapter(private val fragment: EquipmentRecyclerViewFragment,
                                    private val listener: OnListFragmentInteractionListener?)

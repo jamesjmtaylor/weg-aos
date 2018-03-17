@@ -1,4 +1,4 @@
-package com.jamesjmtaylor.weg2015.tabBar.equipmentTabs
+package com.jamesjmtaylor.weg2015.equipmentTabs
 
 
 import android.os.Bundle

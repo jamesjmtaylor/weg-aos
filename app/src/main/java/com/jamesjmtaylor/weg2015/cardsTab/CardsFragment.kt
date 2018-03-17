@@ -1,5 +1,6 @@
-package com.jamesjmtaylor.weg2015.tabBar.cardsTab
+package com.jamesjmtaylor.weg2015.cardsTab
 
+import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -10,7 +11,7 @@ import android.view.ViewGroup
 import com.jamesjmtaylor.weg2015.R
 import com.jamesjmtaylor.weg2015.models.Equipment
 
-class CardsFragment : Fragment() {
+class CardsFragment : Fragment(), LifecycleOwner {
     var cVM : CardsViewModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,10 +23,6 @@ class CardsFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_cards_setup, container, false)
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
     //MARK: ViewModel Methods
     private fun initVM() {

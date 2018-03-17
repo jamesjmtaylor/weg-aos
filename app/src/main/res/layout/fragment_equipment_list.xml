@@ -34,7 +34,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchView"
-        tools:context="com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentRecyclerViewFragment"
+        tools:context=".equipmentTabs.EquipmentRecyclerViewFragment"
         tools:listitem="@layout/cell_equipment">
     </android.support.v7.widget.RecyclerView>
 </android.support.constraint.ConstraintLayout>

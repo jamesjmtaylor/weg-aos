@@ -1,25 +1,23 @@
-package com.jamesjmtaylor.weg2015.tabBar
+package com.jamesjmtaylor.weg2015
 
-import android.app.Fragment
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 
 import android.support.design.widget.BottomNavigationView
+import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
-import com.jamesjmtaylor.weg2015.R
+import com.jamesjmtaylor.weg2015.cardsTab.CardsSetupFragment
 import com.jamesjmtaylor.weg2015.models.Equipment
 import com.jamesjmtaylor.weg2015.models.EquipmentType
 import com.jamesjmtaylor.weg2015.models.parcelizeEquipment
-import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentActivity
-import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentRecyclerViewFragment
-import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentViewModel
-import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.LoadingHudFragment
+import com.jamesjmtaylor.weg2015.equipmentTabs.EquipmentActivity
+import com.jamesjmtaylor.weg2015.equipmentTabs.EquipmentRecyclerViewFragment
+import com.jamesjmtaylor.weg2015.equipmentTabs.EquipmentViewModel
+import com.jamesjmtaylor.weg2015.equipmentTabs.LoadingHudFragment
 import kotlinx.android.synthetic.main.activity_nav.*
 
 class TabBarActivity : AppCompatActivity(),
@@ -35,7 +33,7 @@ class TabBarActivity : AppCompatActivity(),
             equipmentRecyclerViewFragment = EquipmentRecyclerViewFragment()
             supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.recyclerFrameLayout, equipmentRecyclerViewFragment, equipmentRecyclerViewFragment?.TAG)
+                    .replace(R.id.fragmentFrameLayout, equipmentRecyclerViewFragment, equipmentRecyclerViewFragment?.TAG)
                     .commit()
         }
     }
@@ -55,27 +53,32 @@ class TabBarActivity : AppCompatActivity(),
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         val searchView = equipmentRecyclerViewFragment?.view?.findViewById<SearchView>(R.id.searchView)
         searchView?.setQuery("",false) //Erases search on tab change
+        var currentFragment : Fragment? = null
         when (item.itemId) {
             R.id.navigation_land -> {
+                currentFragment = EquipmentRecyclerViewFragment()
                 eVM?.selectType(EquipmentType.LAND)
-                return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_air -> {
+                currentFragment = EquipmentRecyclerViewFragment()
                 eVM?.selectType(EquipmentType.AIR)
-                return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_sea -> {
+                currentFragment = EquipmentRecyclerViewFragment()
                 eVM?.selectType(EquipmentType.SEA)
-                return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_card -> {
-                return@OnNavigationItemSelectedListener true
+                currentFragment = CardsSetupFragment()
             }
             R.id.navigation_calculator -> {
-                return@OnNavigationItemSelectedListener true
+
             }
         }
-        false
+        supportFragmentManager
+                .beginTransaction()
+                .replace(fragmentFrameLayout.id, currentFragment, currentFragment?.tag)
+                .commit()
+        return@OnNavigationItemSelectedListener true
     }
 
     //MARK: - VM methods

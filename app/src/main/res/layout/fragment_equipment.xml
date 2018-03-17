@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentActivityFragment"
+    tools:context=".equipmentTabs.EquipmentActivityFragment"
     tools:showIn="@layout/activity_equipment"
     android:background="@color/gray">
 

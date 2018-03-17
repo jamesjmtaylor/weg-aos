@@ -1,4 +1,4 @@
-package com.jamesjmtaylor.weg2015.tabBar.equipmentTabs
+package com.jamesjmtaylor.weg2015.equipmentTabs
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -14,7 +14,6 @@ import android.view.ViewGroup
 import com.jamesjmtaylor.weg2015.R
 
 import android.support.v7.widget.SearchView
-import android.util.DisplayMetrics
 import com.bumptech.glide.Glide
 import com.jamesjmtaylor.weg2015.App
 import com.jamesjmtaylor.weg2015.baseUrl
@@ -24,8 +23,6 @@ import com.jamesjmtaylor.weg2015.models.entities.Gun
 import com.jamesjmtaylor.weg2015.models.entities.Land
 import com.jamesjmtaylor.weg2015.models.entities.Sea
 import com.jamesjmtaylor.weg2015.utils.NpaGridLayoutManager
-import com.jamesjmtaylor.weg2015.utils.convertDpToPixel
-import com.jamesjmtaylor.weg2015.utils.convertPixelsToDp
 import kotlinx.android.synthetic.main.fragment_equipment_list.*
 import kotlinx.android.synthetic.main.fragment_equipment_list.view.*
 

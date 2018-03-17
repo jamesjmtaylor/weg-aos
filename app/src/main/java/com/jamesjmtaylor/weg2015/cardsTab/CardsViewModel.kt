@@ -1,4 +1,4 @@
-package com.jamesjmtaylor.weg2015.tabBar.cardsTab
+package com.jamesjmtaylor.weg2015.cardsTab
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
@@ -6,7 +6,7 @@ import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.MediatorLiveData
 import com.jamesjmtaylor.weg2015.models.Equipment
 import com.jamesjmtaylor.weg2015.models.EquipmentType
-import com.jamesjmtaylor.weg2015.tabBar.equipmentTabs.EquipmentRepository
+import com.jamesjmtaylor.weg2015.equipmentTabs.EquipmentRepository
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.collections.ArrayList
@@ -16,7 +16,7 @@ import kotlin.collections.ArrayList
  */
 class CardsViewModel(application: Application) : AndroidViewModel(application), LifecycleObserver {
     val equipment = MediatorLiveData<List<Equipment>>()
-    private var selectedType : EquipmentType = EquipmentType.LAND
+    var selectedTypes = ArrayList<EquipmentType>()
     private val repo = EquipmentRepository()
     private var cards = ArrayList<Equipment>()
     var correctCard : Equipment? = null
@@ -35,7 +35,7 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
         }
     }
     fun generateCards(){
-        val possibleCards = equipment.value?.filter { it.type.equals(selectedType) }
+        val possibleCards = equipment.value?.filter { selectedTypes.contains(it.type) }
         if (deckSize > possibleCards?.size ?: 0){
             cards.addAll(0,possibleCards as? Collection<Equipment> ?: return)
             deckSize = possibleCards.size

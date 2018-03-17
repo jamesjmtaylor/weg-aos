@@ -1,12 +1,9 @@
-package com.jamesjmtaylor.weg2015.tabBar.equipmentTabs
+package com.jamesjmtaylor.weg2015.equipmentTabs
 
 import android.app.Application
 import android.arch.lifecycle.*
 import com.jamesjmtaylor.weg2015.models.Equipment
 import com.jamesjmtaylor.weg2015.models.EquipmentType
-import com.jamesjmtaylor.weg2015.models.entities.Air
-import com.jamesjmtaylor.weg2015.models.entities.Land
-import com.jamesjmtaylor.weg2015.models.entities.Sea
 
 /**
  * Created by jtaylor on 2/10/18.

@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray"
-    tools:context="com.jamesjmtaylor.weg2015.tabBar.TabBarActivity">
+    tools:context="com.jamesjmtaylor.weg2015.TabBarActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
     </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/recyclerFrameLayout"
+        android:id="@+id/fragmentFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="@dimen/bottomNavigationViewHeight"

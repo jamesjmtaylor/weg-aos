@@ -1,12 +1,8 @@
-package com.jamesjmtaylor.weg2015.tabBar.equipmentTabs
+package com.jamesjmtaylor.weg2015.equipmentTabs
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.widget.FrameLayout
 import com.jamesjmtaylor.weg2015.R
-import com.jamesjmtaylor.weg2015.models.Equipment
-import com.jamesjmtaylor.weg2015.models.deParcelizeEquipment
 
 import kotlinx.android.synthetic.main.activity_equipment.*
 

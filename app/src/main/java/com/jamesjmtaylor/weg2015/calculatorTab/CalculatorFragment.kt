@@ -1,4 +1,4 @@
-package com.jamesjmtaylor.weg2015.tabBar.calculatorTab
+package com.jamesjmtaylor.weg2015.calculatorTab
 
 import android.content.Context
 import android.net.Uri

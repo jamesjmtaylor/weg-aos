@@ -22,4 +22,15 @@
     <string name="choice_0">Choice 0</string>
     <string name="choice_1">Choice 1</string>
     <string name="choice_2">Choice 2</string>
+    <string name="easy">Easy</string>
+    <string name="medium">Medium</string>
+    <string name="hard">Hard</string>
+    <string name="choose_set_quantity">Choose Set Quantity</string>
+    <string name="placeholder_card_qty">10 Cards</string>
+    <string name="choose_set_type">Choose Set Type(s)</string>
+    <string name="choose_set_difficulty">Choose Set Difficulty</string>
+    <string name="start">START</string>
+    <string name="weapons">Weapons</string>
+    <string name="guns">Guns</string>
+    <string name="equipment_flash_cards">Equipment Flash Cards</string>
 </resources>

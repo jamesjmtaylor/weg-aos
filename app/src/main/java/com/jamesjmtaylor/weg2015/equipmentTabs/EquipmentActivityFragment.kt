@@ -1,4 +1,4 @@
-package com.jamesjmtaylor.weg2015.tabBar.equipmentTabs
+package com.jamesjmtaylor.weg2015.equipmentTabs
 
 import android.graphics.Paint
 import android.support.v4.app.Fragment
@@ -22,7 +22,6 @@ import com.jamesjmtaylor.weg2015.models.entities.Sea
 import android.graphics.Typeface
 import com.jamesjmtaylor.weg2015.utils.boldString
 import kotlinx.android.synthetic.main.fragment_equipment.*
-import kotlinx.android.synthetic.main.row_detail.*
 
 
 /**
