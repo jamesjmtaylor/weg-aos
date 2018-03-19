@@ -2,12 +2,10 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray"
-    tools:context="com.jamesjmtaylor.weg2015.TabBarActivity">
+    android:background="@color/gray">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,7 +26,7 @@
 
     <FrameLayout
         android:id="@+id/fragmentFrameLayout"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="@dimen/bottomNavigationViewHeight"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import com.jamesjmtaylor.weg2015.R
 import com.jamesjmtaylor.weg2015.models.EquipmentType
 import kotlinx.android.synthetic.main.fragment_cards_setup.*
 
@@ -23,7 +24,7 @@ class CardsSetupFragment: Fragment(),LifecycleOwner {
         initVM()
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = super.onCreateView(inflater, container, savedInstanceState)
+        val view = inflater.inflate(R.layout.fragment_cards_setup, container, false)
         return view
     }
 
