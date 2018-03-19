@@ -53,31 +53,38 @@ class TabBarActivity : AppCompatActivity(),
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         val searchView = equipmentRecyclerViewFragment?.view?.findViewById<SearchView>(R.id.searchView)
         searchView?.setQuery("",false) //Erases search on tab change
-        var currentFragment : Fragment? = null
+        var replacementFragment : Fragment? = null
+        var replacementTag = ""
         when (item.itemId) {
             R.id.navigation_land -> {
-                currentFragment = EquipmentRecyclerViewFragment()
+                replacementFragment = EquipmentRecyclerViewFragment()
+                replacementTag = replacementFragment.TAG
                 eVM?.selectType(EquipmentType.LAND)
             }
             R.id.navigation_air -> {
-                currentFragment = EquipmentRecyclerViewFragment()
+                replacementFragment = EquipmentRecyclerViewFragment()
+                replacementTag = replacementFragment.TAG
                 eVM?.selectType(EquipmentType.AIR)
             }
             R.id.navigation_sea -> {
-                currentFragment = EquipmentRecyclerViewFragment()
+                replacementFragment = EquipmentRecyclerViewFragment()
+                replacementTag = replacementFragment.TAG
                 eVM?.selectType(EquipmentType.SEA)
             }
             R.id.navigation_card -> {
-                currentFragment = CardsSetupFragment()
+                replacementFragment = CardsSetupFragment()
+                replacementTag = replacementFragment.TAG
             }
             R.id.navigation_calculator -> {
 
             }
         }
-        supportFragmentManager
-                .beginTransaction()
-                .replace(fragmentFrameLayout.id, currentFragment, currentFragment?.tag)
-                .commit()
+        if (supportFragmentManager.findFragmentByTag(replacementTag) == null && replacementFragment != null){
+            supportFragmentManager
+                    .beginTransaction()
+                    .replace(fragmentFrameLayout.id, replacementFragment, replacementTag)
+                    .commit()
+        }
         return@OnNavigationItemSelectedListener true
     }
 

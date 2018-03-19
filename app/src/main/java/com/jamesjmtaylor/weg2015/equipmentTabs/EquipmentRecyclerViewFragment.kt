@@ -50,23 +50,12 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
         val noOfColumns = dpWidth / columnWidth + 1
         return noOfColumns.toInt()
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         columnCount = calculateNoOfColumns(App.instance.applicationContext)
         initVM()
     }
-
-    //MARK: ViewModel Methods
-    private fun initVM() {
-        eVM = activity?.let {ViewModelProviders.of(it).get(EquipmentViewModel::class.java)}
-        eVM?.let { lifecycle.addObserver(it) } //Add ViewModel as an observer of this fragment's lifecycle
-        eVM?.equipment?.observe(this, equipmentObserver)
-    }
-
-    //MARK: - Lifecycle Methods
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
         val view = inflater.inflate(R.layout.fragment_equipment_list, container, false)
         recyclerView = view.recyclerList
         if (recyclerView is RecyclerView) { // Set the adapter
@@ -78,7 +67,6 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
         lastSearch = savedInstanceState?.get(QUERY_STRING_KEY) as? String
         return view
     }
-
     override fun onResume() {
         this.searchView.setOnQueryTextListener(searchViewListener)
         super.onResume()
@@ -87,17 +75,23 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
             adapter?.updateAdapterWithNewList(eVM?.filterResults)
         }
     }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         if (searchView?.query?.isNotBlank() ?: false)
             outState.putString(QUERY_STRING_KEY, searchView?.query.toString())
     }
-
     override fun onDetach() {
         super.onDetach()
         listener = null
     }
+
+    //MARK: ViewModel Methods
+    private fun initVM() {
+        eVM = activity?.let {ViewModelProviders.of(it).get(EquipmentViewModel::class.java)}
+        eVM?.let { lifecycle.addObserver(it) } //Add ViewModel as an observer of this fragment's lifecycle
+        eVM?.equipment?.observe(this, equipmentObserver)
+    }
+
 
     //MARK: - Observers
     //TODO: Breakdown from specific object to equipment (data loss) occurs here.

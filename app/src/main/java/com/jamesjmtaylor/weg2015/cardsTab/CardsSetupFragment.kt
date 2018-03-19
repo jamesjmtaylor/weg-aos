@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.fragment_cards_setup.*
  * Created by jtaylor on 3/17/18.
  */
 class CardsSetupFragment: Fragment(),LifecycleOwner {
+    val TAG = "cardSetupFragment"
     //<editor-fold desc="Lifecycle Methods">
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
