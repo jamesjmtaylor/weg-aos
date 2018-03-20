@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import com.jamesjmtaylor.weg2015.R
 import com.jamesjmtaylor.weg2015.models.EquipmentType
+import kotlinx.android.synthetic.main.activity_nav.*
 import kotlinx.android.synthetic.main.fragment_cards_setup.*
 
 /**
@@ -48,8 +49,11 @@ class CardsSetupFragment: Fragment(),LifecycleOwner {
             if (f.airToggleButton.isActivated) cVM?.selectedTypes?.add(EquipmentType.AIR)
             if (f.seaToggleButton.isActivated) cVM?.selectedTypes?.add(EquipmentType.SEA)
             if (f.gunsToggleButton.isActivated) cVM?.selectedTypes?.add(EquipmentType.GUN)
-
-
+            val frameLayout = activity?.fragmentFrameLayout?.id ?: return
+            val cardsFragment = CardsFragment()
+            cardsFragment.cVM = cVM
+            val transaction = activity?.supportFragmentManager ?: return
+            transaction.beginTransaction().replace(frameLayout, cardsFragment, cardsFragment.TAG).commit()
         }
     }
     val onSeekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {

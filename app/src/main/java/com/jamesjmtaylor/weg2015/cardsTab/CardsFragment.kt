@@ -12,6 +12,7 @@ import com.jamesjmtaylor.weg2015.R
 import com.jamesjmtaylor.weg2015.models.Equipment
 
 class CardsFragment : Fragment(), LifecycleOwner {
+    val TAG = "cardSetupFragment"
     var cVM : CardsViewModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +23,7 @@ class CardsFragment : Fragment(), LifecycleOwner {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cards_setup, container, false)
+        return inflater.inflate(R.layout.fragment_cards, container, false)
     }
     //MARK: ViewModel Methods
     private fun initVM() {
