@@ -15,7 +15,7 @@ import kotlin.collections.ArrayList
  * Created by jtaylor on 3/11/18.
  */
 class CardsViewModel(application: Application) : AndroidViewModel(application), LifecycleObserver {
-    val equipment = MediatorLiveData<List<Equipment>>()
+    val equipment = MediatorLiveData<List<Equipment>>() //TODO: Find out why this is null even after repo post
     var selectedTypes = ArrayList<EquipmentType>()
     private val repo = EquipmentRepository()
     private var cards = ArrayList<Equipment>()
@@ -34,7 +34,7 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
             equipment.value = it
         }
     }
-    fun generateCards(){
+    private fun generateCards(){
         val possibleCards = equipment.value?.filter { selectedTypes.contains(it.type) }
         if (deckSize > possibleCards?.size ?: 0){
             cards.addAll(0,possibleCards as? Collection<Equipment> ?: return)
@@ -47,17 +47,17 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
             }
         }
     }
-    fun generateChoices(correctCard: Equipment){
+    private fun generateChoices(correctCard: Equipment?){
         val possibleCards = equipment.value ?: ArrayList<Equipment>()
         Collections.shuffle(possibleCards)
         var i = -1
         while (choices.size < difficulty.choices && i < possibleCards.lastIndex){
             i++
-            if (possibleCards.get(i).name.equals(correctCard.name)) continue //Don't add correct answer yet
+            if (possibleCards.get(i).name.equals(correctCard?.name)) continue //Don't add correct answer yet
             choices.add(possibleCards.get(i).name)
         }
         correctChoiceIndex = (0..difficulty.choices-1).random()
-        choices.set(correctChoiceIndex,correctCard.name) //choices fully generated
+        choices.set(correctChoiceIndex,correctCard?.name ?: return) //choices fully generated
     }
     fun checkGuess(selectedAnswer: String):Boolean{
         val correct = (selectedAnswer.equals(choices.get(correctChoiceIndex)))
@@ -65,11 +65,10 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
         if (!correct) incorrectGuesses++
         return correct
     }
-    fun getNextCard(): Equipment? {
+    fun setNextCard(){
         currentDeckIndex++
-        if (currentDeckIndex > cards.lastIndex) return null
-        val correctCard = cards.get(currentDeckIndex)
-        return correctCard
+        if (currentDeckIndex > cards.lastIndex) return
+        correctCard = cards.get(currentDeckIndex)
     }
     fun calculateCorrectPercentage(): Int{
         return (totalGuesses - incorrectGuesses) / totalGuesses
@@ -78,8 +77,8 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
         totalGuesses = 0
         incorrectGuesses = 0
         generateCards()
-        correctCard = getNextCard() ?: return
-        generateChoices(correctCard as Equipment)
+        setNextCard()
+        generateChoices(correctCard as? Equipment)
     }
 
 }

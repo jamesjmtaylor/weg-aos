@@ -49,6 +49,9 @@ class CardsSetupFragment: Fragment(),LifecycleOwner {
             if (f.airToggleButton.isActivated) cVM?.selectedTypes?.add(EquipmentType.AIR)
             if (f.seaToggleButton.isActivated) cVM?.selectedTypes?.add(EquipmentType.SEA)
             if (f.gunsToggleButton.isActivated) cVM?.selectedTypes?.add(EquipmentType.GUN)
+
+            cVM?.resetCards()
+
             val frameLayout = activity?.fragmentFrameLayout?.id ?: return
             val cardsFragment = CardsFragment()
             cardsFragment.cVM = cVM

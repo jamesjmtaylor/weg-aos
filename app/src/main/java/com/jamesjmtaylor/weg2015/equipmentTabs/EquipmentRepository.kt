@@ -67,9 +67,9 @@ class EquipmentRepository {
             val land : List<Equipment> = db.LandDao().getAllLand()
             val sea : List<Equipment> = db.SeaDao().getAllSea()
             val air : List<Equipment> = db.AirDao().getAllAir()
-            (guns as? ArrayList<Equipment>)?.addAll(land)
-            (guns as? ArrayList<Equipment>)?.addAll(sea)
-            (guns as? ArrayList<Equipment>)?.addAll(air)
+            (nonDisplayableFilteredOut as? ArrayList<Equipment>)?.addAll(land)
+            (nonDisplayableFilteredOut as? ArrayList<Equipment>)?.addAll(sea)
+            (nonDisplayableFilteredOut as? ArrayList<Equipment>)?.addAll(air)
 
             val sorted = nonDisplayableFilteredOut.sortedBy { it.name }
             mutable.postValue(sorted)
