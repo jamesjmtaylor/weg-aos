@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_cards.*
 
 class CardsFragment : Fragment(), LifecycleOwner {
     val TAG = "cardSetupFragment"
-    var cVM : CardsViewModel? = null
+    var cVM: CardsViewModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initVM()
@@ -38,9 +38,9 @@ class CardsFragment : Fragment(), LifecycleOwner {
         super.onViewCreated(view, savedInstanceState)
         val current = cVM?.currentDeckIndex.toString()
         val total = cVM?.deckSize.toString()
-        cardCountTextView.text =  "${current} of ${total}"
+        cardCountTextView.text = "${current} of ${total}"
 
-        for (i in 0..(cVM?.difficulty?.ordinal ?: 0)){
+        for (i in 0..(cVM?.difficulty?.ordinal ?: 0)) {
             createGuessRow(i)
         }
 
@@ -52,27 +52,24 @@ class CardsFragment : Fragment(), LifecycleOwner {
                 .into(equipmentImageView)
 
     }
-    fun createGuessRow(rowNumber: Int){
+
+    fun createGuessRow(rowNumber: Int) {
         val inflater = LayoutInflater.from(activity)
-        val guessRow = inflater.inflate(R.layout.row_cards,null, false)
+        val guessRow = inflater.inflate(R.layout.row_cards, null, false)
         val choice0 = guessRow.findViewById<Button>(R.id.choice0)
         val choice1 = guessRow.findViewById<Button>(R.id.choice1)
         val choice2 = guessRow.findViewById<Button>(R.id.choice2)
-        if ((cVM?.choices?.count() ?: 0) < 2+rowNumber*3) return
-        choice0.text = cVM?.choices?.get((0+rowNumber*3))
-        choice1.text = cVM?.choices?.get((1+rowNumber*3))
-        choice2.text = cVM?.choices?.get((2+rowNumber*3))
+        if ((cVM?.choices?.count() ?: 0) < 2 + rowNumber * 3) return
+        choice0.text = cVM?.choices?.get((0 + rowNumber * 3))
+        choice1.text = cVM?.choices?.get((1 + rowNumber * 3))
+        choice2.text = cVM?.choices?.get((2 + rowNumber * 3))
         //TODO: Add clickListeners to buttons as well
         guessLinearLayout.addView(guessRow)
     }
 
     //MARK: ViewModel Methods
     private fun initVM() {
-        cVM = activity?.let { ViewModelProviders.of(it).get(CardsViewModel::class.java)}
+        cVM = activity?.let { ViewModelProviders.of(it).get(CardsViewModel::class.java) }
         cVM?.let { lifecycle.addObserver(it) } //Add ViewModel as an observer of this fragment's lifecycle
-        cVM?.equipment?.observe(this, cardsObserver)
-    }
-    private val cardsObserver = Observer<List<Equipment>> { newEquipment ->
-
     }
 }

@@ -41,7 +41,7 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
             deckSize = possibleCards.size
         } else {
             Collections.shuffle(possibleCards)
-            for (i in 0..deckSize-1) {
+            for (i in 0 until deckSize) {
                 val card = possibleCards?.get(i)
                 cards.add(card ?: return)
             }
@@ -56,8 +56,8 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
             if (possibleCards.get(i).name.equals(correctCard?.name)) continue //Don't add correct answer yet
             choices.add(possibleCards.get(i).name)
         }
-        correctChoiceIndex = (0..difficulty.choices-1).random()
-        choices.set(correctChoiceIndex,correctCard?.name ?: return) //choices fully generated
+        correctChoiceIndex = (0 .. difficulty.choices).random()
+        choices[correctChoiceIndex] = (correctCard?.name ?: return) //choices fully generated
     }
     fun checkGuess(selectedAnswer: String):Boolean{
         val correct = (selectedAnswer.equals(choices.get(correctChoiceIndex)))
