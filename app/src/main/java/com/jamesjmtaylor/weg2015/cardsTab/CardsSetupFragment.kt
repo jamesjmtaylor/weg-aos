@@ -45,10 +45,11 @@ class CardsSetupFragment: Fragment(),LifecycleOwner {
                 mediumRadioButton.id -> cVM?.difficulty = Difficulty.MEDIUM
                 hardRadioButton.id -> cVM?.difficulty = Difficulty.HARD
             }
-            if (f.landToggleButton.isActivated) cVM?.selectedTypes?.add(EquipmentType.LAND)
-            if (f.airToggleButton.isActivated) cVM?.selectedTypes?.add(EquipmentType.AIR)
-            if (f.seaToggleButton.isActivated) cVM?.selectedTypes?.add(EquipmentType.SEA)
-            if (f.gunsToggleButton.isActivated) cVM?.selectedTypes?.add(EquipmentType.GUN)
+            cVM?.selectedTypes?.removeAll {true}
+            if (f.landToggleButton.isChecked) cVM?.selectedTypes?.add(EquipmentType.LAND)
+            if (f.airToggleButton.isChecked) cVM?.selectedTypes?.add(EquipmentType.AIR)
+            if (f.seaToggleButton.isChecked) cVM?.selectedTypes?.add(EquipmentType.SEA)
+            if (f.gunsToggleButton.isChecked) cVM?.selectedTypes?.add(EquipmentType.GUN)
 
             cVM?.resetCards()
 

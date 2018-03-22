@@ -16,6 +16,7 @@ import kotlin.concurrent.thread
 
 import com.jamesjmtaylor.weg2015.*
 import com.jamesjmtaylor.weg2015.models.Equipment
+import com.jamesjmtaylor.weg2015.models.EquipmentType
 import kotlin.collections.ArrayList
 
 
@@ -28,17 +29,36 @@ class EquipmentRepository {
     private val webservice = WebClient.getInstance()
     private val db = AppDatabase.getInstance(App.instance)
     var isLoading = MutableLiveData<Boolean>() //Mutable allows this class to post changes to observing views
-    //TODO: Eventually have an in-memory store as well for 3-tiered fetch
-    fun getGun(): LiveData<List<Gun>> {
+
+    var gun : List<Gun>? = null
+    var land : List<Land>? = null
+    var sea : List<Sea>? = null
+    var air : List<Air>? = null
+
+    fun getInMemoryAsLiveData(type: EquipmentType):LiveData<List<Equipment>>{
+        val mutable = MutableLiveData<List<Equipment>>()
+        thread {
+            when (type){
+                EquipmentType.GUN -> mutable.postValue(gun ?: db.GunDao().getAllGuns())
+                EquipmentType.LAND -> mutable.postValue(land ?: db.LandDao().getAllLand())
+                EquipmentType.SEA -> mutable.postValue(sea ?: db.SeaDao().getAllSea())
+                EquipmentType.AIR -> mutable.postValue(air ?: db.AirDao().getAllAir())
+                EquipmentType.ALL -> mutable.postValue(getAll().value)
+            }
+        }
+        return mutable
+    }
+
+    fun getGun(): LiveData<List<Equipment>> {
         refreshCombined()
-        return db.GunDao().getAllGunsLiveData()
+        return getInMemoryAsLiveData(EquipmentType.GUN)
     }
     fun getLandAndGuns(): LiveData<List<Equipment>> {
         refreshCombined()
         var mutable = MutableLiveData<List<Equipment>>()
         thread {
-            val guns : List<Equipment> = db.GunDao().getAllGuns()
-            val land : List<Equipment> = db.LandDao().getAllLand()
+            val guns : List<Equipment> = this.gun ?: db.GunDao().getAllGuns()
+            val land : List<Equipment> = this.land ?: db.LandDao().getAllLand()
             (guns as? ArrayList<Equipment>)?.addAll(land)
             val nonDisplayableFilteredOut = guns.filter { gun -> !gun.photoUrl.isNullOrBlank() }
             val sorted = nonDisplayableFilteredOut.sortedBy { it.name }
@@ -46,27 +66,27 @@ class EquipmentRepository {
         }
         return mutable
     }
-    fun getLand(): LiveData<List<Land>> {
+    fun getLand(): LiveData<List<Equipment>> {
         refreshCombined()
-        return db.LandDao().getAllLandLiveData()
+        return getInMemoryAsLiveData(EquipmentType.LAND)
     }
-    fun getSea(): LiveData<List<Sea>> {
+    fun getSea(): LiveData<List<Equipment>> {
         refreshCombined()
-        return db.SeaDao().getAllSeaLiveData();
+        return getInMemoryAsLiveData(EquipmentType.SEA)
     }
-    fun getAir(): LiveData<List<Air>> {
+    fun getAir(): LiveData<List<Equipment>> {
         refreshCombined()
-        return db.AirDao().getAllAirLiveData();
+        return getInMemoryAsLiveData(EquipmentType.AIR)
     }
     fun getAll(): LiveData<List<Equipment>> {
         refreshCombined()
         var mutable = MutableLiveData<List<Equipment>>()
         thread {
-            val guns : List<Equipment> = db.GunDao().getAllGuns()
+            val guns : List<Equipment> = this.gun ?: db.GunDao().getAllGuns()
             val nonDisplayableFilteredOut = guns.filter { gun -> !gun.photoUrl.isNullOrBlank() }
-            val land : List<Equipment> = db.LandDao().getAllLand()
-            val sea : List<Equipment> = db.SeaDao().getAllSea()
-            val air : List<Equipment> = db.AirDao().getAllAir()
+            val land : List<Equipment> = this.land ?: db.LandDao().getAllLand()
+            val sea : List<Equipment> = this.sea ?: db.SeaDao().getAllSea()
+            val air : List<Equipment> = this.air ?: db.AirDao().getAllAir()
             (nonDisplayableFilteredOut as? ArrayList<Equipment>)?.addAll(land)
             (nonDisplayableFilteredOut as? ArrayList<Equipment>)?.addAll(sea)
             (nonDisplayableFilteredOut as? ArrayList<Equipment>)?.addAll(air)
@@ -93,14 +113,18 @@ class EquipmentRepository {
                     val responseBody = response.body()?.string() ?: ""
                     if (response.isSuccessful) {
                         val fetchedCombinedList = parseEquipmentResponseString(responseBody)
-                        db.LandDao().insertLand(fetchedCombinedList.land)
-                        db.GunDao().insertGuns(fetchedCombinedList.guns)
-                        db.SeaDao().insertSea(fetchedCombinedList.sea)
-                        db.AirDao().insertAir(fetchedCombinedList.air)
+                        gun = fetchedCombinedList.guns
+                        land = fetchedCombinedList.land
+                        sea = fetchedCombinedList.sea
+                        air = fetchedCombinedList.air
+                        //Force unwrap safe because they were just assigned AND try/catch block
+                        db.LandDao().insertLand(land!!)
+                        db.GunDao().insertGuns(gun!!)
+                        db.SeaDao().insertSea(sea!!)
+                        db.AirDao().insertAir(air!!)
                         saveFetchDate()
-
                     } else {
-                        var error = response.message()
+                        Log.e(TAG,response.message())
                     }
                 } catch (e: Exception){
                     Log.e(TAG,e.localizedMessage)

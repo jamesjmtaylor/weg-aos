@@ -15,8 +15,8 @@ import kotlin.collections.ArrayList
  * Created by jtaylor on 3/11/18.
  */
 class CardsViewModel(application: Application) : AndroidViewModel(application), LifecycleObserver {
-    val equipment = MediatorLiveData<List<Equipment>>() //TODO: Find out why this is null even after repo post
-    var selectedTypes = ArrayList<EquipmentType>()
+    val equipment = MediatorLiveData<List<Equipment>>()
+    var selectedTypes = ArrayList<EquipmentType>()//TODO: Find out why this is empty even adding values
     private val repo = EquipmentRepository()
     private var cards = ArrayList<Equipment>()
     var correctCard : Equipment? = null
