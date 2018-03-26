@@ -2,7 +2,6 @@ package com.jamesjmtaylor.weg2015.cardsTab
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -34,15 +33,23 @@ class CardsSetupFragment: Fragment(),LifecycleOwner {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         qtySeekBar.setOnSeekBarChangeListener(onSeekBarChangeListener)
+        landToggleButton.setOnClickListener(onToggleListener)
+        seaToggleButton.setOnClickListener(onToggleListener)
+        airToggleButton.setOnClickListener(onToggleListener)
+        gunsToggleButton.setOnClickListener(onToggleListener)
         startButton.setOnClickListener(onStartClickListener)
     }
     //</editor-fold>
 
     //<editor-fold desc="UI Listeners">
+    val onToggleListener = object : View.OnClickListener {
+        override fun onClick(p0: View?) {
+            setCardFilters()
+        }
+    }
     val onStartClickListener = object : View.OnClickListener {
         override fun onClick(p0: View?) {
             setCardFilters()
-            cVM?.resetCards()
 
             val frameLayout = activity?.fragmentFrameLayout?.id ?: return
             val cardsFragment = CardsFragment()
@@ -75,6 +82,7 @@ class CardsSetupFragment: Fragment(),LifecycleOwner {
         if (f.seaToggleButton.isChecked) cVM?.selectedTypes?.add(EquipmentType.SEA)
         if (f.gunsToggleButton.isChecked) cVM?.selectedTypes?.add(EquipmentType.GUN)
         cVM?.deckSize = qtySeekBar.progress
+        cVM?.resetCards()
     }
     //</editor-fold>
 
@@ -87,7 +95,6 @@ class CardsSetupFragment: Fragment(),LifecycleOwner {
     }
     private val cardsObserver = Observer<List<Equipment>> { newEquipment ->
         setCardFilters()
-        cVM?.resetCards()
     }
     //</editor-fold>
 }

@@ -167,7 +167,7 @@ class EquipmentActivityFragment : Fragment() {
         }
         titleTextView.text = title
         valueTextView.text = value
-        guessLinearLayout?.addView(detailRow)
+        detailLinearLayout?.addView(detailRow)
     }
     fun setImage(imageView: ImageView?, imageUrl: String?){
         val view = imageView ?: return

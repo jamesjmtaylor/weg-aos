@@ -16,7 +16,7 @@ import kotlin.collections.ArrayList
  */
 class CardsViewModel(application: Application) : AndroidViewModel(application), LifecycleObserver {
     val equipment = MediatorLiveData<List<Equipment>>()
-    var selectedTypes = ArrayList<EquipmentType>()//TODO: Find out why this is empty even adding values
+    var selectedTypes = ArrayList<EquipmentType>()
     private val repo = EquipmentRepository()
     private var cards = ArrayList<Equipment>()
     var correctCard : Equipment? = null
@@ -33,6 +33,9 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
         equipment.addSource(source) {
             equipment.value = it
         }
+    }
+    fun getCurrentCardNumber():Int{
+        return totalGuesses - incorrectGuesses + 1
     }
     private fun generateCards(){
         val possibleCards = equipment.value?.filter { selectedTypes.contains(it.type) }
@@ -51,10 +54,11 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
         val possibleCards = equipment.value ?: ArrayList<Equipment>()
         Collections.shuffle(possibleCards)
         var i = -1
+        choices.removeAll{true}
         while (choices.size < difficulty.choices && i < possibleCards.lastIndex){
             i++
             if (possibleCards.get(i).name.equals(correctCard?.name)) continue //Don't add correct answer yet
-            choices.add(possibleCards.get(i).name)
+            choices.add(shorten(possibleCards.get(i).name))
         }
         correctChoiceIndex = (0 .. difficulty.choices).random()
         choices[correctChoiceIndex] = (correctCard?.name ?: return) //choices fully generated
@@ -65,20 +69,32 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
         if (!correct) incorrectGuesses++
         return correct
     }
-    fun setNextCard(){
+    fun isEndElseSetNextCard(): Boolean{
         currentDeckIndex++
-        if (currentDeckIndex > cards.lastIndex) return
+        if (currentDeckIndex > cards.lastIndex) return true
         correctCard = cards.get(currentDeckIndex)
+        return false
     }
     fun calculateCorrectPercentage(): Int{
-        return (totalGuesses - incorrectGuesses) / totalGuesses
+        return ((totalGuesses - incorrectGuesses) / totalGuesses) * 100
     }
     fun resetCards(){
         totalGuesses = 0
         incorrectGuesses = 0
+        cards = ArrayList()
         generateCards()
-        setNextCard()
-        generateChoices(correctCard as? Equipment)
+        isEndElseSetNextCard()
+        generateChoices(correctCard)
+    }
+
+    // A helper method to take the string returned by toString and shorten it
+    private fun shorten(longName: String): String {
+        val descriptionStart = longName.indexOf(";")
+        return if (descriptionStart > 0) {
+            longName.substring(0, descriptionStart)
+        } else {
+            longName
+        }
     }
 
 }
