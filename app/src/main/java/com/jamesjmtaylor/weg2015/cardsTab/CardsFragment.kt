@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -32,63 +33,74 @@ class CardsFragment : Fragment(), LifecycleOwner {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        showNextFlashcard()
+        createGuessRows()
+        refreshUi()
     }
 
-    private fun showNextFlashcard() {
+    private fun refreshUi() {
         val current = cVM?.getCurrentCardNumber().toString()
         val total = cVM?.deckSize.toString()
         cardCountTextView.text = "${current} of ${total}"
-        guessLinearLayout.removeAllViews()
-        for (i in 0..(cVM?.difficulty?.ordinal ?: 0)) {
-            createGuessRow(i)
-        }
+
         Glide.with(this)
                 .load(App.instance.getString(R.string.base_url) + cVM?.correctCard?.photoUrl)
                 .apply(RequestOptions()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .fitCenter())
                 .into(equipmentImageView)
+        populateGuessButtons()
     }
-    //TODO: Find out why percentage is broken
-    //TODO: Figure out why name shortner doesn't always work.
-    //TODO: Find out why the correct button is the same button every single time (buttons don't change)
-    //TODO: Find out why reset quiz means that all the buttons return incorrect
-    //TODO: Find out why percentage is incorrect
+
     //TODO: Add incorrect animation
     //TODO: Animate countdown timer (Medium & Hard only, gone otherwise)
     //TODO: Add cool animation for card
     //TODO: Remove calculator tab
 
-    fun createGuessRow(rowNumber: Int) {
-        val inflater = LayoutInflater.from(activity)
-        val guessRow = inflater.inflate(R.layout.row_cards, null, false)
-        val choice0 = guessRow.findViewById<Button>(R.id.choice0)
-        val choice1 = guessRow.findViewById<Button>(R.id.choice1)
-        val choice2 = guessRow.findViewById<Button>(R.id.choice2)
-        if ((cVM?.choices?.count() ?: 0) < 2 + rowNumber * 3) return
-        choice0.text = cVM?.choices?.get((0 + rowNumber * 3))
-        choice1.text = cVM?.choices?.get((1 + rowNumber * 3))
-        choice2.text = cVM?.choices?.get((2 + rowNumber * 3))
-
-        choice0.setOnClickListener(guessClickListener)
-        choice1.setOnClickListener(guessClickListener)
-        choice2.setOnClickListener(guessClickListener)
-        //TODO: Add clickListeners to buttons as well
-        guessLinearLayout.addView(guessRow)
+    fun createGuessRows() {
+        for (i in 0..(cVM?.difficulty?.ordinal ?: 0)) {
+            val inflater = LayoutInflater.from(activity)
+            val guessRow = inflater.inflate(R.layout.row_cards, null, false)
+            val choice0 = guessRow.findViewById<Button>(R.id.choice0)
+            val choice1 = guessRow.findViewById<Button>(R.id.choice1)
+            val choice2 = guessRow.findViewById<Button>(R.id.choice2)
+            choice0.setOnClickListener(guessClickListener)
+            choice1.setOnClickListener(guessClickListener)
+            choice2.setOnClickListener(guessClickListener)
+            guessLinearLayout.addView(guessRow)
+        }
+    }
+    fun populateGuessButtons() {
+        for (row in 0 until guessLinearLayout.childCount){
+            val rowLayout = guessLinearLayout.getChildAt(row) as LinearLayout
+            for (column in 0 until rowLayout.childCount){
+                val button = rowLayout.getChildAt(column) as Button
+                button.text = cVM?.choices?.get(column + row * 3)
+            }
+        }
+    }
+    fun reactivateGuessButtons(){
+        for (row in 0 until guessLinearLayout.childCount){
+            val rowLayout = guessLinearLayout.getChildAt(row) as LinearLayout
+            for (column in 0 until rowLayout.childCount){
+                val button = rowLayout.getChildAt(column) as Button
+                button.isEnabled = true
+            }
+        }
     }
     private val guessClickListener = object : View.OnClickListener{
         override fun onClick(p0: View?) {
             val button = (p0 as Button)
             val guess = button.text.toString()
             if (cVM?.checkGuess(guess) ?: false){ //Correct answer
-                if (cVM?.isEndElseSetNextCard() ?: false){ //Last answer
+                reactivateGuessButtons()
+                if (cVM?.isEnd() ?: false){ //Last answer
                     val percentage = cVM?.calculateCorrectPercentage() ?: 0
                     val builder = AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert)
                     builder.setTitle("Quiz Completed")
                             .setMessage("You got ${percentage}% correct.")
                             .setPositiveButton("Restart Quiz") { dialog, which ->
                                 cVM?.resetCards()
+                                refreshUi()
                             }
                             .setNegativeButton("Change Quiz") { dialog, which ->
                                 activity?.fragmentFrameLayout?.id?.let {
@@ -99,7 +111,8 @@ class CardsFragment : Fragment(), LifecycleOwner {
                             }
                             .show()
                 } else { //Not last answer
-                    showNextFlashcard()
+                    cVM?.setNextCardAndGenerateChoices()
+                    refreshUi()
                 }
             } else {//Incorrect answer
                 button.isEnabled = false

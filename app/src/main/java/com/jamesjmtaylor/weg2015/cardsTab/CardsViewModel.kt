@@ -61,7 +61,7 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
             choices.add(shorten(possibleCards.get(i).name))
         }
         correctChoiceIndex = (0 .. difficulty.choices).random()
-        choices[correctChoiceIndex] = (correctCard?.name ?: return) //choices fully generated
+        choices[correctChoiceIndex] = (shorten(correctCard?.name?:"")) //choices fully generated
     }
     fun checkGuess(selectedAnswer: String):Boolean{
         val correct = (selectedAnswer.equals(choices.get(correctChoiceIndex)))
@@ -69,22 +69,25 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
         if (!correct) incorrectGuesses++
         return correct
     }
-    fun isEndElseSetNextCard(): Boolean{
+    fun setNextCardAndGenerateChoices(){
         currentDeckIndex++
-        if (currentDeckIndex > cards.lastIndex) return true
+        if (currentDeckIndex >= cards.size) return
         correctCard = cards.get(currentDeckIndex)
-        return false
+        generateChoices(correctCard)
+    }
+    fun isEnd():Boolean{
+        return (currentDeckIndex > cards.lastIndex)
     }
     fun calculateCorrectPercentage(): Int{
-        return ((totalGuesses - incorrectGuesses) / totalGuesses) * 100
+        return (((totalGuesses - incorrectGuesses).toDouble()) / (totalGuesses.toDouble()) * 100).toInt()
     }
     fun resetCards(){
         totalGuesses = 0
         incorrectGuesses = 0
+        currentDeckIndex = 0
         cards = ArrayList()
         generateCards()
-        isEndElseSetNextCard()
-        generateChoices(correctCard)
+        setNextCardAndGenerateChoices()
     }
 
     // A helper method to take the string returned by toString and shorten it
