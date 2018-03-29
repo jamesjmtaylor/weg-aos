@@ -3,20 +3,26 @@ package com.jamesjmtaylor.weg2015.cardsTab
 import android.app.AlertDialog
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.ViewModelProviders
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.jamesjmtaylor.weg2015.App
 import com.jamesjmtaylor.weg2015.R
+import com.jamesjmtaylor.weg2015.utils.FlipListener
 import kotlinx.android.synthetic.main.activity_nav.*
 import kotlinx.android.synthetic.main.fragment_cards.*
+import android.animation.ValueAnimator
+
+
 
 class CardsFragment : Fragment(), LifecycleOwner {
     val TAG = "cardSetupFragment"
@@ -50,7 +56,7 @@ class CardsFragment : Fragment(), LifecycleOwner {
                 .into(equipmentImageView)
         populateGuessButtons()
     }
-
+    //TODO: Persist incorrect buttons on screen rotation
     //TODO: Add incorrect animation
     //TODO: Animate countdown timer (Medium & Hard only, gone otherwise)
     //TODO: Add cool animation for card
@@ -111,8 +117,19 @@ class CardsFragment : Fragment(), LifecycleOwner {
                             }
                             .show()
                 } else { //Not last answer
-                    cVM?.setNextCardAndGenerateChoices()
-                    refreshUi()
+
+                    //Rework this into something cooler. (This POC worked).
+                    val front = equipmentImageView
+                    val back = ImageView(activity)
+                    back.setBackgroundColor(Color.RED)
+                    val flip = FlipListener(front,front)
+                    val flipAnimator = ValueAnimator.ofFloat(0f, 1f)
+                    flipAnimator.addUpdateListener(flip)
+                    flipAnimator.setDuration(3000L)
+                    flipAnimator.start()
+                    //flipAnimator.reverse();
+                    //cVM?.setNextCardAndGenerateChoices()
+                    //refreshUi()
                 }
             } else {//Incorrect answer
                 button.isEnabled = false
