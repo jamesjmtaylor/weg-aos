@@ -50,12 +50,10 @@ class EquipmentRepository {
     }
 
     fun getGun(): LiveData<List<Equipment>> {
-        refreshCombined()
-        return getInMemoryAsLiveData(EquipmentType.GUN)
+        return refreshCombined() ?: getInMemoryAsLiveData(EquipmentType.GUN)
     }
     fun getLandAndGuns(): LiveData<List<Equipment>> {
-        refreshCombined()
-        var mutable = MutableLiveData<List<Equipment>>()
+        val mutable = MutableLiveData<List<Equipment>>()
         thread {
             val guns : List<Equipment> = this.gun ?: db.GunDao().getAllGuns()
             val land : List<Equipment> = this.land ?: db.LandDao().getAllLand()
@@ -67,20 +65,16 @@ class EquipmentRepository {
         return mutable
     }
     fun getLand(): LiveData<List<Equipment>> {
-        refreshCombined()
-        return getInMemoryAsLiveData(EquipmentType.LAND)
+        return refreshCombined() ?: getInMemoryAsLiveData(EquipmentType.LAND)
     }
     fun getSea(): LiveData<List<Equipment>> {
-        refreshCombined()
-        return getInMemoryAsLiveData(EquipmentType.SEA)
+        return refreshCombined() ?: getInMemoryAsLiveData(EquipmentType.SEA)
     }
     fun getAir(): LiveData<List<Equipment>> {
-        refreshCombined()
-        return getInMemoryAsLiveData(EquipmentType.AIR)
+        return refreshCombined() ?: getInMemoryAsLiveData(EquipmentType.AIR)
     }
     fun getAll(): LiveData<List<Equipment>> {
-        refreshCombined()
-        var mutable = MutableLiveData<List<Equipment>>()
+        val mutable = MutableLiveData<List<Equipment>>()
         thread {
             val guns : List<Equipment> = this.gun ?: db.GunDao().getAllGuns()
             val nonDisplayableFilteredOut = guns.filter { gun -> !gun.photoUrl.isNullOrBlank() }
@@ -99,8 +93,9 @@ class EquipmentRepository {
 
 
     private val DATE_FETCHED_KEY = "dateLastFetched"
-    private fun refreshCombined() {
+    private fun refreshCombined():LiveData<List<Equipment>>? {
         if (shouldFetch()){
+            val mutable = MutableLiveData<List<Equipment>>()
             isLoading.postValue(true)
             thread {
                 val request = Request.Builder()
@@ -123,6 +118,11 @@ class EquipmentRepository {
                         db.SeaDao().insertSea(sea!!)
                         db.AirDao().insertAir(air!!)
                         saveFetchDate()
+
+                        (gun as? ArrayList<Equipment>)?.addAll(land!!)
+                        val nonDisplayableFilteredOut = gun?.filter { gun -> !gun.photoUrl.isNullOrBlank() }
+                        val sorted = nonDisplayableFilteredOut?.sortedBy { it.name }
+                        mutable.postValue(sorted)
                     } else {
                         Log.e(TAG,response.message())
                     }
@@ -131,7 +131,10 @@ class EquipmentRepository {
                 }
                 try {sleep(2000)} catch (e: Exception){}//So loading animation has a chance to show
                 isLoading.postValue(false)
-            }}
+            }
+            return mutable
+        }
+        return null
     }
 
     private fun shouldFetch(): Boolean {
