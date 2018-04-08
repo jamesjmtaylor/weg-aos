@@ -37,7 +37,7 @@ class EquipmentViewModel(application: Application) : AndroidViewModel(applicatio
     fun getCurrentSource(): LiveData<List<Equipment>>? {
         var data : LiveData<*>
         when (selectedType){
-            EquipmentType.LAND -> data = repo.getLandAndGuns()
+            EquipmentType.LAND -> data = repo.getLand()
             EquipmentType.SEA -> data = repo.getSea()
             EquipmentType.AIR -> data = repo.getAir()
             EquipmentType.GUN -> data = repo.getGun()

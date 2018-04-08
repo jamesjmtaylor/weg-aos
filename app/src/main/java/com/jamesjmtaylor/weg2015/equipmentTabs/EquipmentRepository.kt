@@ -35,65 +35,25 @@ class EquipmentRepository {
     var sea : List<Sea>? = null
     var air : List<Air>? = null
 
-    fun getInMemoryAsLiveData(type: EquipmentType):LiveData<List<Equipment>>{
-        val mutable = MutableLiveData<List<Equipment>>()
-        thread {
-            when (type){
-                EquipmentType.GUN -> mutable.postValue(gun ?: db.GunDao().getAllGuns())
-                EquipmentType.LAND -> mutable.postValue(land ?: db.LandDao().getAllLand())
-                EquipmentType.SEA -> mutable.postValue(sea ?: db.SeaDao().getAllSea())
-                EquipmentType.AIR -> mutable.postValue(air ?: db.AirDao().getAllAir())
-                EquipmentType.ALL -> mutable.postValue(getAll().value)
-            }
-        }
-        return mutable
-    }
-
     fun getGun(): LiveData<List<Equipment>> {
-        return refreshCombined() ?: getInMemoryAsLiveData(EquipmentType.GUN)
-    }
-    fun getLandAndGuns(): LiveData<List<Equipment>> {
-        val mutable = MutableLiveData<List<Equipment>>()
-        thread {
-            val guns : List<Equipment> = this.gun ?: db.GunDao().getAllGuns()
-            val land : List<Equipment> = this.land ?: db.LandDao().getAllLand()
-            (guns as? ArrayList<Equipment>)?.addAll(land)
-            val nonDisplayableFilteredOut = guns.filter { gun -> !gun.photoUrl.isNullOrBlank() }
-            val sorted = nonDisplayableFilteredOut.sortedBy { it.name }
-            mutable.postValue(sorted)
-        }
-        return mutable
+        return refreshCombined(EquipmentType.GUN) ?: getInMemoryAsLiveData(EquipmentType.GUN)
     }
     fun getLand(): LiveData<List<Equipment>> {
-        return refreshCombined() ?: getInMemoryAsLiveData(EquipmentType.LAND)
+        return refreshCombined(EquipmentType.LAND) ?: getInMemoryAsLiveData(EquipmentType.LAND)
     }
     fun getSea(): LiveData<List<Equipment>> {
-        return refreshCombined() ?: getInMemoryAsLiveData(EquipmentType.SEA)
+        return refreshCombined(EquipmentType.SEA) ?: getInMemoryAsLiveData(EquipmentType.SEA)
     }
     fun getAir(): LiveData<List<Equipment>> {
-        return refreshCombined() ?: getInMemoryAsLiveData(EquipmentType.AIR)
+        return refreshCombined(EquipmentType.AIR) ?: getInMemoryAsLiveData(EquipmentType.AIR)
     }
     fun getAll(): LiveData<List<Equipment>> {
-        val mutable = MutableLiveData<List<Equipment>>()
-        thread {
-            val guns : List<Equipment> = this.gun ?: db.GunDao().getAllGuns()
-            val nonDisplayableFilteredOut = guns.filter { gun -> !gun.photoUrl.isNullOrBlank() }
-            val land : List<Equipment> = this.land ?: db.LandDao().getAllLand()
-            val sea : List<Equipment> = this.sea ?: db.SeaDao().getAllSea()
-            val air : List<Equipment> = this.air ?: db.AirDao().getAllAir()
-            (nonDisplayableFilteredOut as? ArrayList<Equipment>)?.addAll(land)
-            (nonDisplayableFilteredOut as? ArrayList<Equipment>)?.addAll(sea)
-            (nonDisplayableFilteredOut as? ArrayList<Equipment>)?.addAll(air)
-
-            val sorted = nonDisplayableFilteredOut.sortedBy { it.name }
-            mutable.postValue(sorted)
-        }
-        return mutable
+        return refreshCombined(EquipmentType.ALL) ?: getInMemoryAsLiveData(EquipmentType.ALL)
     }
 
 
     private val DATE_FETCHED_KEY = "dateLastFetched"
-    private fun refreshCombined():LiveData<List<Equipment>>? {
+    private fun refreshCombined(type: EquipmentType):MutableLiveData<List<Equipment>>? {
         if (shouldFetch()){
             val mutable = MutableLiveData<List<Equipment>>()
             isLoading.postValue(true)
@@ -119,10 +79,13 @@ class EquipmentRepository {
                         db.AirDao().insertAir(air!!)
                         saveFetchDate()
 
-                        (gun as? ArrayList<Equipment>)?.addAll(land!!)
-                        val nonDisplayableFilteredOut = gun?.filter { gun -> !gun.photoUrl.isNullOrBlank() }
-                        val sorted = nonDisplayableFilteredOut?.sortedBy { it.name }
-                        mutable.postValue(sorted)
+                        when (type){
+                            EquipmentType.GUN -> mutable.postValue(gun)
+                            EquipmentType.LAND -> postLandAndGunsLiveData(mutable)
+                            EquipmentType.SEA -> mutable.postValue(sea)
+                            EquipmentType.AIR -> mutable.postValue(air)
+                            EquipmentType.ALL -> postAll(mutable)
+                        }
                     } else {
                         Log.e(TAG,response.message())
                     }
@@ -131,10 +94,51 @@ class EquipmentRepository {
                 }
                 try {sleep(2000)} catch (e: Exception){}//So loading animation has a chance to show
                 isLoading.postValue(false)
+
             }
             return mutable
         }
         return null
+    }
+
+    fun getInMemoryAsLiveData(type: EquipmentType):LiveData<List<Equipment>>{
+        val mutable = MutableLiveData<List<Equipment>>()
+        thread {
+            when (type){
+                EquipmentType.GUN -> mutable.postValue(gun ?: db.GunDao().getAllGuns())
+                EquipmentType.LAND -> postLandAndGunsLiveData(mutable)
+                EquipmentType.SEA -> mutable.postValue(sea ?: db.SeaDao().getAllSea())
+                EquipmentType.AIR -> mutable.postValue(air ?: db.AirDao().getAllAir())
+                EquipmentType.ALL -> postAll(mutable)
+            }
+        }
+        return mutable
+    }
+    private fun postLandAndGunsLiveData(mutable: MutableLiveData<List<Equipment>>){
+        //return refreshCombined() ?: getInMemoryAsLiveData(EquipmentType.GUN)
+        thread {
+            val guns: List<Equipment> = this.gun ?: db.GunDao().getAllGuns()
+            val land: List<Equipment> = this.land ?: db.LandDao().getAllLand()
+            (guns as? ArrayList<Equipment>)?.addAll(land)
+            val nonDisplayableFilteredOut = guns.filter { gun -> !gun.photoUrl.isNullOrBlank() }
+            val sorted = nonDisplayableFilteredOut.sortedBy { it.name }
+            mutable.postValue(sorted)
+        }
+    }
+    private fun postAll(mutable: MutableLiveData<List<Equipment>>) {
+        thread {
+            val guns : List<Equipment> = this.gun ?: db.GunDao().getAllGuns()
+            val nonDisplayableFilteredOut = guns.filter { gun -> !gun.photoUrl.isNullOrBlank() }
+            val land : List<Equipment> = this.land ?: db.LandDao().getAllLand()
+            val sea : List<Equipment> = this.sea ?: db.SeaDao().getAllSea()
+            val air : List<Equipment> = this.air ?: db.AirDao().getAllAir()
+            (nonDisplayableFilteredOut as? ArrayList<Equipment>)?.addAll(land)
+            (nonDisplayableFilteredOut as? ArrayList<Equipment>)?.addAll(sea)
+            (nonDisplayableFilteredOut as? ArrayList<Equipment>)?.addAll(air)
+
+            val sorted = nonDisplayableFilteredOut.sortedBy { it.name }
+            mutable.postValue(sorted)
+        }
     }
 
     private fun shouldFetch(): Boolean {
