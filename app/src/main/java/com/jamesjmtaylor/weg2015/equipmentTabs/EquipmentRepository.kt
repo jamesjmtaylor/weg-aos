@@ -115,12 +115,13 @@ class EquipmentRepository {
         return mutable
     }
     private fun postLandAndGunsLiveData(mutable: MutableLiveData<List<Equipment>>){
-        //return refreshCombined() ?: getInMemoryAsLiveData(EquipmentType.GUN)
         thread {
             val guns: List<Equipment> = this.gun ?: db.GunDao().getAllGuns()
             val land: List<Equipment> = this.land ?: db.LandDao().getAllLand()
-            (guns as? ArrayList<Equipment>)?.addAll(land)
-            val nonDisplayableFilteredOut = guns.filter { gun -> !gun.photoUrl.isNullOrBlank() }
+            val landAndGuns = ArrayList<Equipment>()
+            landAndGuns.addAll(guns)
+            landAndGuns.addAll(land)
+            val nonDisplayableFilteredOut = landAndGuns.filter { !it.photoUrl.isNullOrBlank() }
             val sorted = nonDisplayableFilteredOut.sortedBy { it.name }
             mutable.postValue(sorted)
         }
