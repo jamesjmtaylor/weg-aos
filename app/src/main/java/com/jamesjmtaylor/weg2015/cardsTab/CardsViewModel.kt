@@ -23,7 +23,7 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
     var choices = ArrayList<String>()
     private var correctChoiceIndex = 0
     var deckSize = 10
-    var currentDeckIndex = 0
+    var currentDeckIndex = -1
     var difficulty = Difficulty.EASY
     private var incorrectGuesses = 0
     private var totalGuesses = 0
@@ -76,7 +76,7 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
         generateChoices(correctCard)
     }
     fun isEnd():Boolean{
-        return (currentDeckIndex > cards.lastIndex)
+        return (currentDeckIndex >= cards.lastIndex)
     }
     fun calculateCorrectPercentage(): Int{
         return (((totalGuesses - incorrectGuesses).toDouble()) / (totalGuesses.toDouble()) * 100).toInt()
@@ -84,7 +84,7 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
     fun resetCards(){
         totalGuesses = 0
         incorrectGuesses = 0
-        currentDeckIndex = 0
+        currentDeckIndex = -1
         cards = ArrayList()
         generateCards()
         setNextCardAndGenerateChoices()

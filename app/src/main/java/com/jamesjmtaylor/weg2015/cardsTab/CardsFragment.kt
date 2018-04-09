@@ -31,8 +31,6 @@ class CardsFragment : Fragment(), LifecycleOwner {
         super.onCreate(savedInstanceState)
         initVM()
     }
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_cards, container, false)
@@ -52,14 +50,11 @@ class CardsFragment : Fragment(), LifecycleOwner {
                 .load(App.instance.getString(R.string.base_url) + cVM?.correctCard?.photoUrl)
                 .apply(RequestOptions()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .fitCenter())
+                        .centerInside())
                 .into(equipmentImageView)
         populateGuessButtons()
     }
-    //TODO: Persist incorrect buttons on screen rotation
-    //TODO: Add incorrect animation
     //TODO: Animate countdown timer (Medium & Hard only, gone otherwise)
-    //TODO: Add cool animation for card
     //TODO: Remove calculator tab
 
     fun createGuessRows() {
@@ -117,19 +112,8 @@ class CardsFragment : Fragment(), LifecycleOwner {
                             }
                             .show()
                 } else { //Not last answer
-
-                    //Rework this into something cooler. (This POC worked).
-                    val front = equipmentImageView
-                    val back = ImageView(activity)
-                    back.setBackgroundColor(Color.RED)
-                    val flip = FlipListener(front,front)
-                    val flipAnimator = ValueAnimator.ofFloat(0f, 1f)
-                    flipAnimator.addUpdateListener(flip)
-                    flipAnimator.setDuration(3000L)
-                    flipAnimator.start()
-                    //flipAnimator.reverse();
-                    //cVM?.setNextCardAndGenerateChoices()
-                    //refreshUi()
+                    cVM?.setNextCardAndGenerateChoices()
+                    refreshUi()
                 }
             } else {//Incorrect answer
                 button.isEnabled = false
