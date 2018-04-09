@@ -26,7 +26,7 @@ data class Air(override @PrimaryKey val id: Long = 0,
 
                val speed: Int? = null, var auto: Int? = null, var ceiling: Int? = null,
                val weight: Int? = null): Equipment, Parcelable {
-    @Ignore override val type = EquipmentType.AIR
+    @Ignore override var type = EquipmentType.AIR
 
     constructor(parcel: Parcel) : this(
             parcel.readLong(),

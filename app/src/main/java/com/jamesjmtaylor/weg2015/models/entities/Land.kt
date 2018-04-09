@@ -22,7 +22,7 @@ data class Land(override @PrimaryKey val id: Long = 0,
 
                 val armor: Int? = null, val speed: Int? = null, val auto: Int? = null,
                 val weight: Int? = null): Equipment, Parcelable {
-    @Ignore override val type = EquipmentType.LAND
+    @Ignore override var type = EquipmentType.LAND
 
     constructor(parcel: Parcel) : this(
             parcel.readLong(),

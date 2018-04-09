@@ -72,6 +72,11 @@ class EquipmentRepository {
                         land = fetchedCombinedList.land
                         sea = fetchedCombinedList.sea
                         air = fetchedCombinedList.air
+                        //Doesn't come from API with type, assign here.
+                        gun?.map { it.type = EquipmentType.GUN }
+                        land?.map { it.type = EquipmentType.LAND }
+                        sea?.map { it.type = EquipmentType.SEA }
+                        air?.map { it.type = EquipmentType.AIR }
                         //Force unwrap safe because they were just assigned AND try/catch block
                         db.LandDao().insertLand(land!!)
                         db.GunDao().insertGuns(gun!!)

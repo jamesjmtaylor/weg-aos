@@ -22,7 +22,7 @@ data class Sea(override @PrimaryKey val id: Long = 0,
 
                val transports: String? = null, val qty: Int? = null, val dive: Int? = null,
                val speed: Int? = null, val auto: Int? = null, val tonnage: Int? = null):Equipment, Parcelable {
-    @Ignore override val type = EquipmentType.SEA
+    @Ignore override var type = EquipmentType.SEA
 
     constructor(parcel: Parcel) : this(
             parcel.readLong(),

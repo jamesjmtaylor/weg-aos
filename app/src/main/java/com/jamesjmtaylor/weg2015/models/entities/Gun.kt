@@ -22,7 +22,7 @@ data class Gun(override @PrimaryKey val id: Long = 0,
                val altitude: Int? = null,
                override val photoUrl: String? = null,
                val range: Int? = null): Equipment, Parcelable {
-    @Ignore override val type = EquipmentType.GUN
+    @Ignore override var type = EquipmentType.GUN
 
     constructor(parcel: Parcel) : this(
             parcel.readLong(),
