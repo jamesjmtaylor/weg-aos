@@ -3,25 +3,20 @@ package com.jamesjmtaylor.weg2015.cardsTab
 import android.app.AlertDialog
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.ViewModelProviders
-import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.LinearLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.jamesjmtaylor.weg2015.App
 import com.jamesjmtaylor.weg2015.R
-import com.jamesjmtaylor.weg2015.utils.FlipListener
 import kotlinx.android.synthetic.main.activity_nav.*
 import kotlinx.android.synthetic.main.fragment_cards.*
-import android.animation.ValueAnimator
-
 
 
 class CardsFragment : Fragment(), LifecycleOwner {
@@ -38,10 +33,10 @@ class CardsFragment : Fragment(), LifecycleOwner {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         createGuessRows()
-        refreshUi()
+        updateUi()
     }
 
-    private fun refreshUi() {
+    private fun updateUi() {
         val current = cVM?.getCurrentCardNumber().toString()
         val total = cVM?.deckSize.toString()
         cardCountTextView.text = "${current} of ${total}"
@@ -101,7 +96,7 @@ class CardsFragment : Fragment(), LifecycleOwner {
                             .setMessage("You got ${percentage}% correct.")
                             .setPositiveButton("Restart Quiz") { dialog, which ->
                                 cVM?.resetCards()
-                                refreshUi()
+                                updateUi()
                             }
                             .setNegativeButton("Change Quiz") { dialog, which ->
                                 activity?.fragmentFrameLayout?.id?.let {
@@ -113,7 +108,7 @@ class CardsFragment : Fragment(), LifecycleOwner {
                             .show()
                 } else { //Not last answer
                     cVM?.setNextCardAndGenerateChoices()
-                    refreshUi()
+                    updateUi()
                 }
             } else {//Incorrect answer
                 button.isEnabled = false
