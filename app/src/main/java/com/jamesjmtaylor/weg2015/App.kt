@@ -14,18 +14,22 @@ import com.jamesjmtaylor.weg2015.models.entities.Gun
 import com.jamesjmtaylor.weg2015.models.entities.Land
 import com.jamesjmtaylor.weg2015.models.entities.Sea
 import okhttp3.OkHttpClient
+import com.google.firebase.analytics.FirebaseAnalytics
+
+
 
 /**
  * Created by jtaylor on 2/14/18.
  */
 class App : Application() {
+    private var firebaseAnalytics: FirebaseAnalytics? = null
     override fun onCreate() {
         super.onCreate()
         instance = this
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
     }
 
     companion object {
-
         lateinit var instance: App
             private set
     }

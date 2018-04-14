@@ -6,7 +6,7 @@
     <application
         android:name=".App"
         android:allowBackup="true"
-        android:icon=" @mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -32,15 +32,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jamesjmtaylor.weg2015.TabBarActivity"/>
-        </activity>
-        <activity android:name="com.jamesjmtaylor.weg2015.calculatorTab.CalculatorActivity">
-        </activity>
-        <activity android:name="com.jamesjmtaylor.weg2015.cardsTab.CardsActivity">
-        </activity>
-        <activity
-            android:name="com.jamesjmtaylor.weg2015.equipmentTabs.ScrollingActivity"
-            android:label="@string/title_activity_scrolling"
-            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 
