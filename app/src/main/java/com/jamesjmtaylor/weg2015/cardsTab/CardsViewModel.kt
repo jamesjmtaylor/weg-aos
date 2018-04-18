@@ -4,12 +4,14 @@ import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.MediatorLiveData
+import android.arch.lifecycle.MutableLiveData
 import com.jamesjmtaylor.weg2015.models.Equipment
 import com.jamesjmtaylor.weg2015.models.EquipmentType
 import com.jamesjmtaylor.weg2015.equipmentTabs.EquipmentRepository
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.collections.ArrayList
+import kotlin.concurrent.timerTask
 
 /**
  * Created by jtaylor on 3/11/18.
@@ -25,6 +27,8 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
     var deckSize = 10
     var currentDeckIndex = -1
     var difficulty = Difficulty.EASY
+    var timeRemaining = 10
+    var timeRemainingData = MutableLiveData<Int>()
     private var incorrectGuesses = 0
     private var totalGuesses = 0
 
@@ -69,11 +73,12 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
         if (!correct) incorrectGuesses++
         return correct
     }
-    fun setNextCardAndGenerateChoices(){
+    fun setNextCardGetChoicesResetTimer(){
         currentDeckIndex++
         if (currentDeckIndex >= cards.size) return
         correctCard = cards.get(currentDeckIndex)
         generateChoices(correctCard)
+        resetTimer()
     }
     fun isEnd():Boolean{
         return (currentDeckIndex >= cards.lastIndex)
@@ -87,9 +92,20 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
         currentDeckIndex = -1
         cards = ArrayList()
         generateCards()
-        setNextCardAndGenerateChoices()
+        setNextCardGetChoicesResetTimer()
     }
-
+    var timer = Timer()
+    private fun resetTimer(){
+        when (difficulty) {
+            Difficulty.EASY -> timeRemaining = 999
+            Difficulty.MEDIUM -> timeRemaining = 10
+            Difficulty.HARD -> timeRemaining = 5
+        }
+        timer.cancel()
+        timer = Timer() //Chuck the old-timer & old task
+        val task = timerTask {timeRemaining--; timeRemainingData.postValue(timeRemaining)}
+        timer.schedule(task,0, 1000)
+    }
     // A helper method to take the string returned by toString and shorten it
     private fun shorten(longName: String): String {
         val descriptionStart = longName.indexOf(";")

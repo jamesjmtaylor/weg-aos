@@ -5,4 +5,5 @@ package com.jamesjmtaylor.weg2015
  */
 
 val baseUrl = "http://10.0.2.2:8080/"
+val doUrl = "http://159.65.105.185:8080/"
 val getAll = baseUrl+"/getAllCombined/"

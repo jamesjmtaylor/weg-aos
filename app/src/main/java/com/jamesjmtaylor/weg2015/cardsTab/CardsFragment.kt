@@ -2,6 +2,7 @@ package com.jamesjmtaylor.weg2015.cardsTab
 
 import android.app.AlertDialog
 import android.arch.lifecycle.LifecycleOwner
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -40,7 +41,9 @@ class CardsFragment : Fragment(), LifecycleOwner {
         val current = cVM?.getCurrentCardNumber().toString()
         val total = cVM?.deckSize.toString()
         cardCountTextView.text = "${current} of ${total}"
-
+        if (cVM?.difficulty?.equals(Difficulty.EASY)?:true){
+            timeRemainingTextView.visibility = View.GONE
+        }
         Glide.with(this)
                 .load(App.instance.getString(R.string.base_url) + cVM?.correctCard?.photoUrl)
                 .apply(RequestOptions()
@@ -50,7 +53,6 @@ class CardsFragment : Fragment(), LifecycleOwner {
         populateGuessButtons()
     }
     //TODO: Animate countdown timer (Medium & Hard only, gone otherwise)
-    //TODO: Remove calculator tab
 
     fun createGuessRows() {
         for (i in 0..(cVM?.difficulty?.ordinal ?: 0)) {
@@ -107,7 +109,7 @@ class CardsFragment : Fragment(), LifecycleOwner {
                             }
                             .show()
                 } else { //Not last answer
-                    cVM?.setNextCardAndGenerateChoices()
+                    cVM?.setNextCardGetChoicesResetTimer()
                     updateUi()
                 }
             } else {//Incorrect answer
@@ -119,5 +121,16 @@ class CardsFragment : Fragment(), LifecycleOwner {
     private fun initVM() {
         cVM = activity?.let { ViewModelProviders.of(it).get(CardsViewModel::class.java) }
         cVM?.let { lifecycle.addObserver(it) } //Add ViewModel as an observer of this fragment's lifecycle
+        cVM?.timeRemainingData?.observe(this, timeObserver)
+    }
+    val timeObserver = Observer<Int> { timeRemaining ->
+        val timeText = """00:${String.format("%02d", timeRemaining)} Remaining"""
+        timeRemainingTextView.text = timeText
+        if (timeRemaining != null && timeRemaining < 1) {
+            reactivateGuessButtons()
+            cVM?.checkGuess("") //Time expired = no guess
+            cVM?.setNextCardGetChoicesResetTimer()
+            updateUi()
+        }
     }
 }
