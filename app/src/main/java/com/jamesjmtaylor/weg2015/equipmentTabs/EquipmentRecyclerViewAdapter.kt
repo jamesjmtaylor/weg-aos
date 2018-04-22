@@ -13,6 +13,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.jamesjmtaylor.weg2015.App
 import com.jamesjmtaylor.weg2015.R
+import com.jamesjmtaylor.weg2015.baseUrl
 import com.jamesjmtaylor.weg2015.models.Equipment
 
 import com.jamesjmtaylor.weg2015.equipmentTabs.EquipmentRecyclerViewFragment.OnListFragmentInteractionListener
@@ -30,7 +31,7 @@ class EquipmentRecyclerViewAdapter(private val fragment: EquipmentRecyclerViewFr
         holder.item =  equipment.get(position)
         holder.nameView.text = holder.item?.name
         Glide.with(fragment)
-                .load(App.instance.getString(R.string.base_url) + holder.item?.photoUrl)
+                .load(baseUrl + holder.item?.photoUrl)
                 .apply(RequestOptions()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .centerCrop())

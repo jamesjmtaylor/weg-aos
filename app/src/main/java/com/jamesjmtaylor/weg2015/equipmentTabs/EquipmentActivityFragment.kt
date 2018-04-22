@@ -20,6 +20,7 @@ import com.jamesjmtaylor.weg2015.models.entities.Gun
 import com.jamesjmtaylor.weg2015.models.entities.Land
 import com.jamesjmtaylor.weg2015.models.entities.Sea
 import android.graphics.Typeface
+import com.jamesjmtaylor.weg2015.baseUrl
 import com.jamesjmtaylor.weg2015.utils.boldString
 import kotlinx.android.synthetic.main.fragment_equipment.*
 
@@ -172,7 +173,7 @@ class EquipmentActivityFragment : Fragment() {
     fun setImage(imageView: ImageView?, imageUrl: String?){
         val view = imageView ?: return
         Glide.with(this)
-                .load(App.instance.getString(R.string.base_url) + imageUrl)
+                .load(baseUrl + imageUrl)
                 .apply(RequestOptions()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .fitCenter())

@@ -96,16 +96,24 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
     }
     var timer = Timer()
     private fun resetTimer(){
+        setTimeToDifficulty()
+        timer.cancel()
+        timer = Timer() //Chuck the old-timer & old task
+        val task = timerTask {
+            timeRemaining--; if (timeRemaining < 0) setTimeToDifficulty()
+            timeRemainingData.postValue(timeRemaining)
+        }
+        timer.schedule(task,0, 1000)
+    }
+
+    private fun setTimeToDifficulty() {
         when (difficulty) {
             Difficulty.EASY -> timeRemaining = 999
             Difficulty.MEDIUM -> timeRemaining = 10
             Difficulty.HARD -> timeRemaining = 5
         }
-        timer.cancel()
-        timer = Timer() //Chuck the old-timer & old task
-        val task = timerTask {timeRemaining--; timeRemainingData.postValue(timeRemaining)}
-        timer.schedule(task,0, 1000)
     }
+
     // A helper method to take the string returned by toString and shorten it
     private fun shorten(longName: String): String {
         val descriptionStart = longName.indexOf(";")

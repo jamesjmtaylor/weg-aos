@@ -16,6 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.jamesjmtaylor.weg2015.App
 import com.jamesjmtaylor.weg2015.R
+import com.jamesjmtaylor.weg2015.baseUrl
 import kotlinx.android.synthetic.main.activity_nav.*
 import kotlinx.android.synthetic.main.fragment_cards.*
 
@@ -45,7 +46,7 @@ class CardsFragment : Fragment(), LifecycleOwner {
             timeRemainingTextView.visibility = View.GONE
         }
         Glide.with(this)
-                .load(App.instance.getString(R.string.base_url) + cVM?.correctCard?.photoUrl)
+                .load(baseUrl + cVM?.correctCard?.photoUrl)
                 .apply(RequestOptions()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .centerInside())
