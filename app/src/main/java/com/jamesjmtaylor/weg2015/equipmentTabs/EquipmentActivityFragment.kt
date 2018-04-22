@@ -93,10 +93,10 @@ class EquipmentActivityFragment : Fragment() {
             createDetailRow("Range",it.range.toString()+" meters")
             createDetailRow("Penetration",it.penetration.toString()+"mm")
         }
-        land.armor?.let { createDetailRow("Armor",it.toString()+"mm", true,true) }
-        land.speed?.let { createDetailRow("Speed",it.toString()+" kph", true,true) }
-        land.auto?.let { createDetailRow("Autonomy",it.toString()+" km", true,true) }
-        land.weight?.let { createDetailRow("Weight",it.toString()+" tons", true,true) }
+        land.armor?.let { if (it > 0){createDetailRow("Armor",it.toString()+"mm", true,true)}}
+        land.speed?.let { if (it > 0){createDetailRow("Speed",it.toString()+" kph", true,true)}}
+        land.auto?.let {if (it > 0){createDetailRow("Autonomy",it.toString()+" km", true,true)}}
+        land.weight?.let { if (it > 0){createDetailRow("Weight",it.toString()+" tons", true,true)}}
     }
     fun setDetailViews(sea: Sea){
         sea.gun?.let{
