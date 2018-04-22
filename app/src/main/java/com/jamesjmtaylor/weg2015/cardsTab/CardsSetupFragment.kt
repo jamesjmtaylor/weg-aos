@@ -82,7 +82,7 @@ class CardsSetupFragment: Fragment(),LifecycleOwner {
         if (f.seaToggleButton.isChecked) cVM?.selectedTypes?.add(EquipmentType.SEA)
         if (f.gunsToggleButton.isChecked) cVM?.selectedTypes?.add(EquipmentType.GUN)
         cVM?.deckSize = qtySeekBar.progress
-        cVM?.resetCards()
+        cVM?.resetTest()
     }
     //</editor-fold>
 

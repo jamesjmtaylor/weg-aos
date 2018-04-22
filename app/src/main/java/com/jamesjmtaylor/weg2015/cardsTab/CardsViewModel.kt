@@ -39,7 +39,8 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
         }
     }
     fun getCurrentCardNumber():Int{
-        return totalGuesses - incorrectGuesses + 1
+        return currentDeckIndex + 1
+        //return totalGuesses - incorrectGuesses + 1
     }
     private fun generateCards(){
         val possibleCards = equipment.value?.filter { selectedTypes.contains(it.type) }
@@ -67,7 +68,7 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
         correctChoiceIndex = (0 .. difficulty.choices).random()
         choices[correctChoiceIndex] = (shorten(correctCard?.name?:"")) //choices fully generated
     }
-    fun checkGuess(selectedAnswer: String):Boolean{
+    fun checkGuessAndIncrementTotal(selectedAnswer: String):Boolean{
         val correct = (selectedAnswer.equals(choices.get(correctChoiceIndex)))
         totalGuesses++
         if (!correct) incorrectGuesses++
@@ -86,7 +87,7 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
     fun calculateCorrectPercentage(): Int{
         return (((totalGuesses - incorrectGuesses).toDouble()) / (totalGuesses.toDouble()) * 100).toInt()
     }
-    fun resetCards(){
+    fun resetTest(){
         totalGuesses = 0
         incorrectGuesses = 0
         currentDeckIndex = -1
@@ -94,7 +95,10 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
         generateCards()
         setNextCardGetChoicesResetTimer()
     }
-    var timer = Timer()
+    private var timer = Timer()
+    fun stopTimer(){
+        timer.cancel()
+    }
     private fun resetTimer(){
         setTimeToDifficulty()
         timer.cancel()
@@ -109,8 +113,8 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
     private fun setTimeToDifficulty() {
         when (difficulty) {
             Difficulty.EASY -> timeRemaining = 999
-            Difficulty.MEDIUM -> timeRemaining = 10
-            Difficulty.HARD -> timeRemaining = 5
+            Difficulty.MEDIUM -> timeRemaining = 11
+            Difficulty.HARD -> timeRemaining = 6
         }
     }
 

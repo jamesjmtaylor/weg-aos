@@ -14,7 +14,6 @@ import android.widget.LinearLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.jamesjmtaylor.weg2015.App
 import com.jamesjmtaylor.weg2015.R
 import com.jamesjmtaylor.weg2015.baseUrl
 import kotlinx.android.synthetic.main.activity_nav.*
@@ -88,17 +87,18 @@ class CardsFragment : Fragment(), LifecycleOwner {
     }
     private val guessClickListener = object : View.OnClickListener{
         override fun onClick(p0: View?) {
-            val button = (p0 as Button)
-            val guess = button.text.toString()
-            if (cVM?.checkGuess(guess) ?: false){ //Correct answer
+            val button = (p0 as? Button)
+            val guess = button?.text.toString()
+            if ((cVM?.checkGuessAndIncrementTotal(guess) ?: false)||button==null){ //Go to next card
                 reactivateGuessButtons()
                 if (cVM?.isEnd() ?: false){ //Last answer
+                    cVM?.stopTimer()
                     val percentage = cVM?.calculateCorrectPercentage() ?: 0
                     val builder = AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert)
                     builder.setTitle("Quiz Completed")
                             .setMessage("You got ${percentage}% correct.")
                             .setPositiveButton("Restart Quiz") { dialog, which ->
-                                cVM?.resetCards()
+                                cVM?.resetTest()
                                 updateUi()
                             }
                             .setNegativeButton("Change Quiz") { dialog, which ->
@@ -114,7 +114,7 @@ class CardsFragment : Fragment(), LifecycleOwner {
                     updateUi()
                 }
             } else {//Incorrect answer
-                button.isEnabled = false
+                button?.isEnabled = false
             }
         }
     }
@@ -128,10 +128,7 @@ class CardsFragment : Fragment(), LifecycleOwner {
         val timeText = """00:${String.format("%02d", timeRemaining)} Remaining"""
         timeRemainingTextView.text = timeText
         if (timeRemaining != null && timeRemaining < 1) {
-            reactivateGuessButtons()
-            cVM?.checkGuess("") //Time expired = no guess
-            cVM?.setNextCardGetChoicesResetTimer()
-            updateUi()
+            guessClickListener.onClick(null)
         }
     }
 }
