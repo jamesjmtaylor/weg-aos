@@ -39,9 +39,10 @@ class CardsFragment : Fragment(), LifecycleOwner {
     }
 
     private fun updateUi() {
-        val current = cVM?.getCurrentCardNumber().toString()
-        val total = cVM?.deckSize.toString()
-        cardCountTextView.text = "${current} of ${total}"
+        val totalCards = if ((cVM?.deckSize ?: 0) > 0) cVM!!.deckSize else 1
+        val totalCardsString = totalCards.toString()
+        val currentCardsString = cVM?.getCurrentCardNumber().toString()
+        cardCountTextView.text = "$currentCardsString of $totalCardsString"
         if (cVM?.difficulty?.equals(Difficulty.EASY)?:true){
             timeRemainingTextView.visibility = View.GONE
         }
