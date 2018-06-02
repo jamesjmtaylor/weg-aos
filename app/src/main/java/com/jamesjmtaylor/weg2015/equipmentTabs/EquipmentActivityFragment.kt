@@ -70,8 +70,7 @@ class EquipmentActivityFragment : Fragment() {
         }
     }
     fun setDetailViews(gun: Gun){
-            createDetailRow("Range",gun.range.toString()+" meters")
-        if (gun.penetration ?: 0 > 0 ) {createDetailRow("Range",gun.range.toString()+" meters")}
+        if (gun.range ?: 0 > 0 ) {createDetailRow("Range",gun.range.toString()+" meters")}
         if (gun.altitude ?: 0 > 0 ) {createDetailRow("Altitude",gun.penetration.toString()+" meters")}
         if (gun.penetration ?: 0 > 0 ) {createDetailRow("Penetration",gun.penetration.toString()+"mm")}
     }

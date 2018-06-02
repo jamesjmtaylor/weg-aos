@@ -33,4 +33,5 @@
     <string name="weapons">Weapons</string>
     <string name="guns">Guns</string>
     <string name="equipment_flash_cards">Equipment Flash Cards</string>
+    <string name="no_flashcards_error">The selected flashcard setup resulted in a test with no cards!</string>
 </resources>

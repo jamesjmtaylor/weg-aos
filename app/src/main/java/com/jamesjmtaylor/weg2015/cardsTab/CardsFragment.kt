@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -52,8 +53,6 @@ class CardsFragment : Fragment(), LifecycleOwner {
                 .into(equipmentImageView)
         populateGuessButtons()
     }
-    //TODO: Animate countdown timer (Medium & Hard only, gone otherwise)
-
     fun createGuessRows() {
         for (i in 0..(cVM?.difficulty?.ordinal ?: 0)) {
             val inflater = LayoutInflater.from(activity)
@@ -68,13 +67,23 @@ class CardsFragment : Fragment(), LifecycleOwner {
         }
     }
     fun populateGuessButtons() {
-        for (row in 0 until guessLinearLayout.childCount){
-            val rowLayout = guessLinearLayout.getChildAt(row) as LinearLayout
-            for (column in 0 until rowLayout.childCount){
-                val button = rowLayout.getChildAt(column) as Button
-                button.text = cVM?.choices?.get(column + row * 3)
+        try {
+            for (row in 0 until guessLinearLayout.childCount){
+                val rowLayout = guessLinearLayout.getChildAt(row) as LinearLayout
+                for (column in 0 until rowLayout.childCount){
+                    val button = rowLayout.getChildAt(column) as Button
+                    button.text = cVM?.choices?.get(column + row * 3)
+                }
+            }
+        } catch (e: Exception){
+            Toast.makeText(this.context,getString(R.string.no_flashcards_error),Toast.LENGTH_LONG).show()
+            activity?.fragmentFrameLayout?.id?.let {
+                val cardsSetupFragment = CardsSetupFragment()
+                val transaction = activity?.supportFragmentManager
+                transaction?.beginTransaction()?.replace(it, cardsSetupFragment, cardsSetupFragment.TAG)?.commit()
             }
         }
+
     }
     fun reactivateGuessButtons(){
         for (row in 0 until guessLinearLayout.childCount){
