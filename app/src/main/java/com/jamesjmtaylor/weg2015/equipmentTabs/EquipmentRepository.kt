@@ -4,6 +4,7 @@ package com.jamesjmtaylor.weg2015.equipmentTabs
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
+import android.os.AsyncTask
 import android.util.Log
 import com.jamesjmtaylor.weg2015.models.entities.Gun
 import com.jamesjmtaylor.weg2015.models.entities.*
@@ -53,11 +54,14 @@ class EquipmentRepository {
 
 
     private val DATE_FETCHED_KEY = "dateLastFetched"
+
+    //TODO: Find out why this doesn't resolve in tests
+    //TODO: Make this method static to avoid compiler warning?
     private fun refreshCombined(type: EquipmentType):MutableLiveData<List<Equipment>>? {
         if (shouldFetch()){
             val mutable = MutableLiveData<List<Equipment>>()
             isLoading.postValue(true)
-            thread {
+            object : AsyncTask<Void, Void, Void?>() { override fun doInBackground(vararg voids: Void): Void? {
                 val request = Request.Builder()
                         .url(getAll)
                         .get()
@@ -99,8 +103,8 @@ class EquipmentRepository {
                 }
                 try {sleep(2000)} catch (e: Exception){}//So loading animation has a chance to show
                 isLoading.postValue(false)
-
-            }
+                return null
+            }}.execute()
             return mutable
         }
         return null

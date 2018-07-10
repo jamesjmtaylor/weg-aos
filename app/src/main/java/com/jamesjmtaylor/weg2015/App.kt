@@ -33,6 +33,8 @@ class App : Application() {
         lateinit var instance: App
             private set
     }
+
+
 }
 
 abstract class WebClient : OkHttpClient() {
@@ -43,6 +45,9 @@ abstract class WebClient : OkHttpClient() {
                 INSTANCE = OkHttpClient()
             }
             return INSTANCE as OkHttpClient
+        }
+        fun setInstance(client: OkHttpClient){
+            INSTANCE = client
         }
         fun destroyInstance() {
             INSTANCE = null
@@ -66,6 +71,9 @@ abstract class AppDatabase : RoomDatabase() {
                         .build()
             }
             return INSTANCE as AppDatabase
+        }
+        fun setInstance(db: AppDatabase){
+            INSTANCE = db
         }
         fun destroyInstance() {
             INSTANCE = null

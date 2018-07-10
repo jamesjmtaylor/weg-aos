@@ -34,7 +34,7 @@ dependencies {
 
     String archVersion = '1.0.0'
     compile "android.arch.lifecycle:runtime:$archVersion"
-    compile "android.arch.lifecycle:extensions:1.1.0"
+    compile "android.arch.lifecycle:extensions:$archVersion"
     kapt "android.arch.lifecycle:compiler:$archVersion"
     compile "android.arch.persistence.room:runtime:$archVersion"
     kapt "android.arch.persistence.room:compiler:$archVersion"
@@ -60,4 +60,15 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.google.firebase:firebase-core:15.0.0'
     compile 'com.crashlytics.sdk.android:crashlytics:2.9.1'
+
+    testImplementation "org.robolectric:robolectric:3.8"
+
+    android {
+        testOptions {
+            unitTests {
+                includeAndroidResources = true
+            }
+        }
+    }
+    testImplementation 'junit:junit:4.12'
 }
