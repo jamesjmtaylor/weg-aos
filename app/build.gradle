@@ -29,23 +29,27 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support:support-v4:27.1.0'
+    implementation 'com.android.support:support-v4:27.1.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    String archVersion = '1.0.0'
+    String archVersion = '1.1.1'
+
     compile "android.arch.lifecycle:runtime:$archVersion"
-    compile "android.arch.lifecycle:extensions:1.1.0"
-    kapt "android.arch.lifecycle:compiler:$archVersion"
-    compile "android.arch.persistence.room:runtime:$archVersion"
-    kapt "android.arch.persistence.room:compiler:$archVersion"
-    compile "android.arch.persistence.room:rxjava2:$archVersion"
+    compile "android.arch.lifecycle:extensions:$archVersion"
+
+    //NOTE: These MUST have the same version to compile, see https://stackoverflow.com/a/50302959/4520965
+    String kaptArchVersion = '1.0.0'
+    kapt "android.arch.lifecycle:compiler:$kaptArchVersion"
+    compile "android.arch.persistence.room:runtime:$kaptArchVersion"
+    kapt "android.arch.persistence.room:compiler:$kaptArchVersion"
+    compile "android.arch.persistence.room:rxjava2:$kaptArchVersion"
 
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.8.1'
 
-    String supportVersion = '27.1.0'
+    String supportVersion = '27.1.1'
     compile "com.android.support:appcompat-v7:$supportVersion"
     compile "com.android.support:design:$supportVersion"
     compile "com.android.support:support-vector-drawable:$supportVersion"
@@ -56,8 +60,8 @@ dependencies {
 
     compile 'com.airbnb.android:lottie:2.5.0-rc1'
     compile 'com.google.code.gson:gson:2.8.2'
-    compile 'com.squareup.okhttp3:okhttp:3.9.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.google.firebase:firebase-core:15.0.0'
-    compile 'com.crashlytics.sdk.android:crashlytics:2.9.1'
+    compile 'com.squareup.okhttp3:okhttp:3.10.0'
+    compile 'com.android.support.constraint:constraint-layout:1.1.2'
+    compile 'com.google.firebase:firebase-core:16.0.1'
+    compile 'com.crashlytics.sdk.android:crashlytics:2.9.4'
 }
