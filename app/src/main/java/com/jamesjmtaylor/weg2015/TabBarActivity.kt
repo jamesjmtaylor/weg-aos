@@ -31,10 +31,13 @@ class TabBarActivity : AppCompatActivity(),
         setContentView(R.layout.activity_nav)
         if (savedInstanceState == null) { //Prevents fragment from being instantiated when it already exists
             equipmentRecyclerViewFragment = EquipmentRecyclerViewFragment()
-            supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.fragmentFrameLayout, equipmentRecyclerViewFragment, equipmentRecyclerViewFragment?.TAG)
-                    .commit()
+            equipmentRecyclerViewFragment?.let {
+                supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.fragmentFrameLayout, it, it.TAG)
+                        .commit()
+            }
+
         }
     }
 

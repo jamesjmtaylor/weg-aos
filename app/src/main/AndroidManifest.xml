@@ -33,6 +33,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jamesjmtaylor.weg2015.TabBarActivity"/>
         </activity>
+        <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
     </application>
-
 </manifest>
