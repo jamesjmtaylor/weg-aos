@@ -6,11 +6,12 @@ import java.io.InputStream
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
+val NO_DATA = "No data present"
 fun setOfflineWebMock(json: String, app: App){
     val mWeb = OkHttpClient.Builder()
             .addInterceptor(OfflineMockInterceptor(json))
             .build()
-    app.appWebClient = mWeb
+    app.setAppWebClient(mWeb)
 }
 
 fun getJsonFromInputStream(input: InputStream?):String{
