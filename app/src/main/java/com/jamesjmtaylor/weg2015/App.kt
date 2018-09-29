@@ -32,20 +32,17 @@ class App : Application() {
     companion object {
         lateinit var instance: App
             private set
+        val appWebClient: OkHttpClient by lazy {WebClient.getInstance()}
+        val appDatabase: AppDatabase by lazy {AppDatabase.getInstance(instance)}
     }
 }
 
 abstract class WebClient : OkHttpClient() {
     companion object {
-        private var INSTANCE: OkHttpClient? = null
+        var INSTANCE: OkHttpClient? = null
         fun getInstance(): OkHttpClient {
-            if (INSTANCE == null) {
-                INSTANCE = OkHttpClient()
-            }
+            if (INSTANCE == null) INSTANCE = OkHttpClient()
             return INSTANCE as OkHttpClient
-        }
-        fun destroyInstance() {
-            INSTANCE = null
         }
     }
 }
@@ -66,9 +63,6 @@ abstract class AppDatabase : RoomDatabase() {
                         .build()
             }
             return INSTANCE as AppDatabase
-        }
-        fun destroyInstance() {
-            INSTANCE = null
         }
     }
 }
