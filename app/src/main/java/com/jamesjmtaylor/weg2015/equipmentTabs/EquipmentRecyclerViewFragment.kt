@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.arch.lifecycle.LifecycleOwner
+import android.graphics.drawable.Drawable
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -14,7 +15,11 @@ import android.view.ViewGroup
 import com.jamesjmtaylor.weg2015.R
 
 import android.support.v7.widget.SearchView
+import android.util.Log
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.jamesjmtaylor.weg2015.App
 import com.jamesjmtaylor.weg2015.baseUrl
 import com.jamesjmtaylor.weg2015.models.Equipment
@@ -25,6 +30,7 @@ import com.jamesjmtaylor.weg2015.models.entities.Sea
 import com.jamesjmtaylor.weg2015.utils.NpaGridLayoutManager
 import kotlinx.android.synthetic.main.fragment_equipment_list.*
 import kotlinx.android.synthetic.main.fragment_equipment_list.view.*
+import java.io.File
 
 class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
     val TAG = "equipmentRecyclerFrag"
@@ -115,10 +121,25 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
     }
 
     fun preLoadImage(url: String?) {
-        val target = Glide.with(App.instance)
+        val listenerResult = Glide.with(App.instance)
                 .downloadOnly()
                 .load(baseUrl + url)
-                .preload()
+                .listener(object : RequestListener<File> {
+                    override fun onResourceReady(resource: File?, model: Any?,
+                                                 target: com.bumptech.glide.request.target.Target<File>?,
+                                                 dataSource: DataSource?,
+                                                 isFirstResource: Boolean): Boolean {
+                        // TODO: something on success
+                        return true
+                    }
+                    override fun onLoadFailed(e: GlideException?, model: Any?,
+                                              target: com.bumptech.glide.request.target.Target<File>?,
+                                              isFirstResource: Boolean): Boolean {
+                        //TODO: something on exception (fallback to file load!)
+                        return false
+                    }
+
+                })
     }
 
     //MARK: - Listener methods

@@ -78,9 +78,6 @@ class TabBarActivity : AppCompatActivity(),
                 replacementFragment = CardsSetupFragment()
                 replacementTag = replacementFragment.TAG
             }
-//            R.id.navigation_calculator -> {
-//
-//            }
         }
         if (supportFragmentManager.findFragmentByTag(replacementTag) == null && replacementFragment != null){
             supportFragmentManager

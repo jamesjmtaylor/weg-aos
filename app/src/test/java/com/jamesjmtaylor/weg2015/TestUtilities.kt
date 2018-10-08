@@ -37,7 +37,7 @@ val <T> LiveData<T>.blockingValue: T?
             value = it
             latch.countDown()
         }
-        if (latch.await(20, TimeUnit.SECONDS)) return value
+        if (latch.await(2, TimeUnit.SECONDS)) return value
         else throw Exception("LiveData value was not set within 2 seconds")
     }
 

@@ -1,5 +1,6 @@
 package com.jamesjmtaylor.weg2015.utils
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.content.Context.MODE_PRIVATE
 import android.content.ContextWrapper
@@ -7,6 +8,9 @@ import com.jamesjmtaylor.weg2015.App
 import android.graphics.BitmapFactory
 import android.widget.ImageView
 import java.io.*
+import java.io.FileOutputStream
+
+
 
 
 fun saveToInternalStorage(imageName: String, bitmapImage: Bitmap) {
@@ -36,6 +40,18 @@ fun loadImageFromStorage(imageName: String, view: ImageView) {
     } finally {
         try {fis?.close()}
         catch (e: IOException) {e.printStackTrace() }
+    }
+}
+
+fun Bitmap.saveWithName(name:String){
+    val outputStream: FileOutputStream
+    try {
+        val context = App.instance.applicationContext
+        outputStream = context.openFileOutput(name, Context.MODE_PRIVATE)
+        this.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+        outputStream.close()
+    } catch (error: Exception) {
+        error.printStackTrace()
     }
 }
 
