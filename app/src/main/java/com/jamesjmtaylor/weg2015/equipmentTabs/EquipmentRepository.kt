@@ -125,7 +125,9 @@ class EquipmentRepository {
                         EquipmentType.ALL -> postAll(gun,land,sea,air,mutable)
                     }
                 } else {
-                    Log.e(TAG,response.message())
+                    val code = response.code().toString()
+                    val error = response.message() ?: "No error provided"
+                    Log.e(TAG, "$code: $error")
                 }
             } catch (e: Exception){
                 Log.e(TAG,e.localizedMessage)
