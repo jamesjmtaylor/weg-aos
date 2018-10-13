@@ -2,62 +2,60 @@ package com.jamesjmtaylor.weg2015.utils
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.content.Context.MODE_PRIVATE
-import android.content.ContextWrapper
 import com.jamesjmtaylor.weg2015.App
 import android.graphics.BitmapFactory
-import android.widget.ImageView
+import android.util.Log
+import com.jamesjmtaylor.weg2015.baseUrl
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import java.io.*
-import java.io.FileOutputStream
 
-
-
-
-fun saveToInternalStorage(imageName: String, bitmapImage: Bitmap) {
-    val file = getFile(imageName)
-    var fos : FileOutputStream? = null
-    try {
-        fos = FileOutputStream(file)// Use the compress method on the BitMap object to write image to the OutputStream
-        bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, fos)
-    } catch (e: Exception) {
-        e.printStackTrace()
-    } finally {
-        try {fos?.close()}
-        catch (e: IOException) {e.printStackTrace() }
-    }
-    //return directory.absolutePath
-}
-
-fun loadImageFromStorage(imageName: String, view: ImageView) {
-    val f = getFile(imageName)
-    var fis : FileInputStream? = null
-    try {
-        fis = FileInputStream(f)
-        val b = BitmapFactory.decodeStream(fis)
-        view.setImageBitmap(b)
-    } catch (e: FileNotFoundException) {
-        e.printStackTrace()
-    } finally {
-        try {fis?.close()}
-        catch (e: IOException) {e.printStackTrace() }
+//fun loadImageFromStorage(imageName: String) : Bitmap? {
+//    val f = openFile(imageName)
+//    var fis : FileInputStream? = null
+//    try {
+//        fis = FileInputStream(f)
+//        return BitmapFactory.decodeStream(fis)
+//    } catch (e: FileNotFoundException) {
+//        e.printStackTrace()
+//    } finally {
+//        try {fis?.close()}
+//        catch (e: IOException) {e.printStackTrace() }
+//    }
+//    return null
+//}
+fun saveUrlToFile(imgUrl: String?) {
+    imgUrl?.let { name ->
+        val imgRequest = Request.Builder()
+                .url(baseUrl + name)
+                .get()
+                .addHeader("Cache-Control", "no-cache")
+                .build()
+        val imgResponse = App.appWebClient.newCall(imgRequest).execute()
+        if (imgResponse.isSuccessful) {
+            val inputStream = imgResponse.body()?.byteStream()
+            val bm = BitmapFactory.decodeStream(inputStream)
+            bm.saveWithName(name)
+        }
     }
 }
 
 fun Bitmap.saveWithName(name:String){
-    val outputStream: FileOutputStream
-    try {
-        val context = App.instance.applicationContext
-        outputStream = context.openFileOutput(name, Context.MODE_PRIVATE)
-        this.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-        outputStream.close()
-    } catch (error: Exception) {
-        error.printStackTrace()
+    val context = App.instance.applicationContext
+    context.openFileOutput(name.removePathSeperators(), Context.MODE_PRIVATE).use {
+        this.compress(Bitmap.CompressFormat.JPEG, 100, it)
     }
 }
 
-private fun getFile(imageName: String): File {
-    val cw = ContextWrapper(App.instance.baseContext)
-    val directory = cw.getDir("imageDir", MODE_PRIVATE)// path to /data/data/yourapp/app_data/imageDir
-    val mypath = File(directory, "${imageName}.jpg")// Create imageDir
-    return mypath
+fun openFile(imageName: String?): File {
+    val context = App.instance.applicationContext
+    val files = context.fileList().joinToString(", ")
+    Log.d("FILES",files) //For debugging purposes.
+
+    val directory = context.filesDir
+    val file = File(directory, imageName?.removePathSeperators())
+    return file
+}
+private fun String.removePathSeperators():String{
+    return this.replace("/","-")
 }
