@@ -137,6 +137,7 @@ class EquipmentRepository {
         } catch (e: Exception){
             Log.e(TAG,e.localizedMessage)
         }
+        try {sleep(2000)} catch (e: Exception){}//So loading animation has a chance to show
         isLoading.postValue(false)
         return null
     }
