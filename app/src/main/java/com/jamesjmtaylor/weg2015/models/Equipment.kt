@@ -28,7 +28,7 @@ class CombinedList(val guns: List<Gun>,
                    val sea: List<Sea>,
                    val air: List<Air>) {
     fun getEquipment():List<Equipment>{
-        var equipmentList = ArrayList<Equipment>()
+        val equipmentList = ArrayList<Equipment>()
         equipmentList.addAll(guns)
         equipmentList.addAll(land)
         equipmentList.addAll(sea)
@@ -47,6 +47,7 @@ fun parcelizeEquipment(equipment: Equipment, intent: Intent): Intent {
         EquipmentType.SEA -> intent.putExtra("equipment", equipment as? Sea)
         EquipmentType.AIR -> intent.putExtra("equipment", equipment as? Air)
         EquipmentType.GUN -> intent.putExtra("equipment", equipment as? Gun)
+        EquipmentType.ALL -> {}
     }
     intent.putExtra("type",equipment.type)
     return intent

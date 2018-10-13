@@ -121,7 +121,7 @@ class EquipmentRepository {
                 db.AirDao().insertAir(fetchedCombinedList.air)
 
                 saveFetchDate()
-
+                try {sleep(3000)} catch (e: Exception){}//So loading animation has a chance to show
                 when (type){
                     EquipmentType.GUN -> mutable.postValue(gun)
                     EquipmentType.LAND -> postLandAndGunsLiveData(gun,land,mutable)
@@ -137,7 +137,6 @@ class EquipmentRepository {
         } catch (e: Exception){
             Log.e(TAG,e.localizedMessage)
         }
-        try {sleep(2000)} catch (e: Exception){}//So loading animation has a chance to show
         isLoading.postValue(false)
         return null
     }

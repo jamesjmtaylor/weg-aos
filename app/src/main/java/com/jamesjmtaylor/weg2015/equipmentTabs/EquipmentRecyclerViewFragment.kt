@@ -16,11 +16,6 @@ import android.view.ViewGroup
 import com.jamesjmtaylor.weg2015.R
 
 import android.support.v7.widget.SearchView
-import android.util.Log
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
 import com.jamesjmtaylor.weg2015.App
 import com.jamesjmtaylor.weg2015.baseUrl
 import com.jamesjmtaylor.weg2015.models.Equipment
