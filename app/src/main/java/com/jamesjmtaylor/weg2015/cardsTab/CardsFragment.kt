@@ -48,10 +48,8 @@ class CardsFragment : Fragment(), LifecycleOwner {
             timeRemainingTextView.visibility = View.GONE
         }
         Glide.with(this)
-
                 .load(openFile(cVM?.correctCard?.photoUrl))
                 .apply(RequestOptions()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .centerInside())
                 .into(equipmentImageView)
         populateGuessButtons()

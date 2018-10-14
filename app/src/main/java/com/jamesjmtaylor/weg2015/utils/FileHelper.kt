@@ -49,14 +49,18 @@ fun Bitmap.saveWithName(name:String){
     }
 }
 
-fun openFile(imageName: String?): File {
+fun openFile(imageName: String?): File? {
+    val TAG = "FILES"
     val context = App.instance.applicationContext
-    val files = context.fileList().joinToString(", ")
-    Log.d("FILES",files) //For debugging purposes.
+    try {
+        val directory = context.filesDir
+        val file = File(directory, imageName?.removePathSeperators())
+        return file
+    } catch (e: Exception){
+        Log.d(TAG,e.localizedMessage)
+        return null
+    }
 
-    val directory = context.filesDir
-    val file = File(directory, imageName?.removePathSeperators())
-    return file
 }
 private fun String.removePathSeperators():String{
     return this.replace("/","-")
