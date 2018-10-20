@@ -22,8 +22,8 @@ fun saveUrlToFile(imgUrl: String?) {
                     .addHeader("Cache-Control", "no-cache")
                     .build()
             val responseCallback = object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    Log.d(TAG, "OkHttp failed to obtain result", e)
+                override fun onFailure(call: Call, throwable: IOException) {
+                    Log.e(TAG, "OkHttp failed to obtain result", throwable)
                 }
 
                 override fun onResponse(call: Call, response: Response) {
@@ -57,7 +57,7 @@ fun openFile(imageName: String?): File? {
         val file = File(directory, imageName?.removePathSeperators())
         return file
     } catch (e: Exception){
-        Log.d(TAG,e.localizedMessage)
+        Log.e(TAG, "Could not open file", e)
         return null
     }
 
