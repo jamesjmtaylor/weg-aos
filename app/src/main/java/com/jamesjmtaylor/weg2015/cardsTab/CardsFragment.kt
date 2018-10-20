@@ -17,6 +17,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.jamesjmtaylor.weg2015.R
 import com.jamesjmtaylor.weg2015.baseUrl
+import com.jamesjmtaylor.weg2015.utils.openFile
 import kotlinx.android.synthetic.main.activity_nav.*
 import kotlinx.android.synthetic.main.fragment_cards.*
 
@@ -47,9 +48,8 @@ class CardsFragment : Fragment(), LifecycleOwner {
             timeRemainingTextView.visibility = View.GONE
         }
         Glide.with(this)
-                .load(baseUrl + cVM?.correctCard?.photoUrl)
+                .load(openFile(cVM?.correctCard?.photoUrl))
                 .apply(RequestOptions()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .centerInside())
                 .into(equipmentImageView)
         populateGuessButtons()

@@ -28,29 +28,30 @@ class App : Application() {
         instance = this
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
     }
-
     companion object {
         lateinit var instance: App
             private set
+        val appWebClient: OkHttpClient by lazy {WebClient.getInstance()}
+        val appDatabase: AppDatabase by lazy {AppDatabase.getInstance(instance)}
     }
-
-
+    //For testing purposes (TODO: Abstract to TestApplication extension)
+    fun setAppDb(db: AppDatabase){
+        AppDatabase.setInstance(db)
+    }
+    fun setAppWebClient(client: OkHttpClient){
+        WebClient.setInstance(client)
+    }
 }
 
 abstract class WebClient : OkHttpClient() {
     companion object {
-        private var INSTANCE: OkHttpClient? = null
+        var INSTANCE: OkHttpClient? = null
         fun getInstance(): OkHttpClient {
-            if (INSTANCE == null) {
-                INSTANCE = OkHttpClient()
-            }
+            if (INSTANCE == null) INSTANCE = OkHttpClient()
             return INSTANCE as OkHttpClient
         }
         fun setInstance(client: OkHttpClient){
             INSTANCE = client
-        }
-        fun destroyInstance() {
-            INSTANCE = null
         }
     }
 }
@@ -74,9 +75,6 @@ abstract class AppDatabase : RoomDatabase() {
         }
         fun setInstance(db: AppDatabase){
             INSTANCE = db
-        }
-        fun destroyInstance() {
-            INSTANCE = null
         }
     }
 }

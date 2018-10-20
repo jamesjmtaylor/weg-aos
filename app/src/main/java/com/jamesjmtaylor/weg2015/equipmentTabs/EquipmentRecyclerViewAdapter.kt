@@ -17,6 +17,7 @@ import com.jamesjmtaylor.weg2015.baseUrl
 import com.jamesjmtaylor.weg2015.models.Equipment
 
 import com.jamesjmtaylor.weg2015.equipmentTabs.EquipmentRecyclerViewFragment.OnListFragmentInteractionListener
+import com.jamesjmtaylor.weg2015.utils.openFile
 
 class EquipmentRecyclerViewAdapter(private val fragment: EquipmentRecyclerViewFragment,
                                    private val listener: OnListFragmentInteractionListener?)
@@ -31,9 +32,8 @@ class EquipmentRecyclerViewAdapter(private val fragment: EquipmentRecyclerViewFr
         holder.item =  equipment.get(position)
         holder.nameView.text = holder.item?.name
         Glide.with(fragment)
-                .load(baseUrl + holder.item?.photoUrl)
+                .load(openFile(holder.item?.photoUrl))
                 .apply(RequestOptions()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .centerCrop())
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.photoView)
@@ -72,7 +72,7 @@ class EquipmentRecyclerViewAdapter(private val fragment: EquipmentRecyclerViewFr
             }
         })
         this.equipment.clear()
-        this.equipment.addAll(newEquipment as List<Equipment>)
+        newEquipment?.let { this.equipment.addAll(it)}
         diffResult.dispatchUpdatesTo(this)
     }
     //MARK: - ViewHolder class

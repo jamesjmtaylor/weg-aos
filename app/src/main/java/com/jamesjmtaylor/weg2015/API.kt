@@ -7,4 +7,4 @@ package com.jamesjmtaylor.weg2015
 val localUrl = "http://10.0.2.2:8080/"
 val doUrl = "http://api.jjmtaylor.com:8080/"
 val baseUrl = doUrl
-val getAll = baseUrl+"/getAllCombined/"
+val getAll = baseUrl+"getAllCombined/"
