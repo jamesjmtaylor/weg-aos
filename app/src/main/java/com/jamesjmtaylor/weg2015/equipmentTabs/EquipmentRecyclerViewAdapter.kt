@@ -72,7 +72,7 @@ class EquipmentRecyclerViewAdapter(private val fragment: EquipmentRecyclerViewFr
             }
         })
         this.equipment.clear()
-        this.equipment.addAll(newEquipment as List<Equipment>)
+        newEquipment?.let { this.equipment.addAll(it)}
         diffResult.dispatchUpdatesTo(this)
     }
     //MARK: - ViewHolder class
