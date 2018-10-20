@@ -21,24 +21,17 @@ fun saveUrlToFile(imgUrl: String?) {
                     .get()
                     .addHeader("Cache-Control", "no-cache")
                     .build()
-            val responseCallback = object : Callback {
+            val call = App.appWebClient.newCall(imgRequest)
+            call.enqueue(object : Callback {
                 override fun onFailure(call: Call, throwable: IOException) {
                     Log.e(TAG, "OkHttp failed to obtain result", throwable)
                 }
-
                 override fun onResponse(call: Call, response: Response) {
                     val inputStream = response.body()?.byteStream()
                     val bm = BitmapFactory.decodeStream(inputStream) ?: return
                     bm.saveWithName(name)
                 }
-
-            }
-            App.appWebClient.newCall(imgRequest).enqueue(responseCallback)
-//            if (imgResponse.isSuccessful) {
-//                val inputStream = imgResponse.body()?.byteStream()
-//                val bm = BitmapFactory.decodeStream(inputStream)
-//                bm.saveWithName(name)
-//            }
+            })
     }
 }
 

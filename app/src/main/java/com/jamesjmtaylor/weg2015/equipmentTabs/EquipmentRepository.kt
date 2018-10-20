@@ -121,7 +121,6 @@ class EquipmentRepository {
                 db.AirDao().insertAir(fetchedCombinedList.air)
 
                 saveFetchDate()
-                try {sleep(2000)} catch (e: Exception){}//So loading animation has a chance to show
                 when (type){
                     EquipmentType.GUN -> mutable.postValue(gun)
                     EquipmentType.LAND -> postLandAndGunsLiveData(gun,land,mutable)
@@ -163,6 +162,13 @@ class EquipmentRepository {
                     }
                 }
                 saveUrlToFile(e.photoUrl)
+            }
+            val d = App.appWebClient.dispatcher()
+            var attempts = 0
+            //TODO: Talk to Adam about a more elegant way to do this.
+            while (d.queuedCallsCount() + d.runningCallsCount() > 0 || attempts < 20){
+                try {sleep(500)} catch (e: Exception){}
+                attempts++
             }
         }
     }
