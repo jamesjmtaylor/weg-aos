@@ -134,7 +134,7 @@ class EquipmentRepository {
                 Log.e(TAG, "$code: $error")
             }
         } catch (e: Exception){
-            Log.e(TAG,e.localizedMessage)
+            Log.e(TAG,"Equipment Repository",e)
         }
         isLoading.postValue(false)
         return null
