@@ -2,7 +2,6 @@ package com.jamesjmtaylor.weg2015.models
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Parcel
 import com.google.gson.GsonBuilder
 import com.jamesjmtaylor.weg2015.models.entities.Air
 import com.jamesjmtaylor.weg2015.models.entities.Gun
@@ -13,10 +12,10 @@ import com.jamesjmtaylor.weg2015.models.entities.Sea
  * Created by jtaylor on 3/1/18.
  */
 interface Equipment {
-    val id : Long
-    val name : String
+    val id: Long
+    val name: String
     val photoUrl: String?
-    val type : EquipmentType
+    val type: EquipmentType
 }
 
 enum class EquipmentType {
@@ -27,7 +26,7 @@ class CombinedList(val guns: List<Gun>,
                    val land: List<Land>,
                    val sea: List<Sea>,
                    val air: List<Air>) {
-    fun getEquipment():List<Equipment>{
+    fun getEquipment(): List<Equipment> {
         val equipmentList = ArrayList<Equipment>()
         equipmentList.addAll(guns)
         equipmentList.addAll(land)
@@ -36,26 +35,30 @@ class CombinedList(val guns: List<Gun>,
         return equipmentList
     }
 }
+
 fun parseEquipmentResponseString(response: String): CombinedList {
     val gson = GsonBuilder().create()
     val combinedList = gson.fromJson<CombinedList>(response, CombinedList::class.java)
     return combinedList
 }
+
 fun parcelizeEquipment(equipment: Equipment, intent: Intent): Intent {
-    when (equipment.type){
+    when (equipment.type) {
         EquipmentType.LAND -> intent.putExtra("equipment", equipment as? Land)
         EquipmentType.SEA -> intent.putExtra("equipment", equipment as? Sea)
         EquipmentType.AIR -> intent.putExtra("equipment", equipment as? Air)
         EquipmentType.GUN -> intent.putExtra("equipment", equipment as? Gun)
-        EquipmentType.ALL -> {}
+        EquipmentType.ALL -> {
+        }
     }
-    intent.putExtra("type",equipment.type)
+    intent.putExtra("type", equipment.type)
     return intent
 }
-fun deParcelizeEquipment(bundle: Bundle?):Equipment?{
+
+fun deParcelizeEquipment(bundle: Bundle?): Equipment? {
     val type = bundle?.get("type")
-    var equipment : Equipment? = null
-    when (type){
+    var equipment: Equipment? = null
+    when (type) {
         EquipmentType.LAND -> equipment = bundle.getParcelable<Land>("equipment")
         EquipmentType.SEA -> equipment = bundle.getParcelable<Sea>("equipment")
         EquipmentType.AIR -> equipment = bundle.getParcelable<Air>("equipment")

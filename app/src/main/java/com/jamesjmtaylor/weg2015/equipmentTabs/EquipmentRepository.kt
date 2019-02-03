@@ -7,24 +7,23 @@ import android.arch.lifecycle.MutableLiveData
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.util.Log
-import com.jamesjmtaylor.weg2015.models.entities.Gun
-import com.jamesjmtaylor.weg2015.models.entities.*
-import com.jamesjmtaylor.weg2015.models.parseEquipmentResponseString
-import okhttp3.Request
-
-import java.lang.Thread.sleep
-import java.util.*
-import kotlin.concurrent.thread
-
-import com.jamesjmtaylor.weg2015.*
+import com.jamesjmtaylor.weg2015.App
+import com.jamesjmtaylor.weg2015.R
+import com.jamesjmtaylor.weg2015.getAll
 import com.jamesjmtaylor.weg2015.models.CombinedList
 import com.jamesjmtaylor.weg2015.models.Equipment
 import com.jamesjmtaylor.weg2015.models.EquipmentType
+import com.jamesjmtaylor.weg2015.models.entities.Air
+import com.jamesjmtaylor.weg2015.models.entities.Gun
+import com.jamesjmtaylor.weg2015.models.entities.Land
+import com.jamesjmtaylor.weg2015.models.entities.Sea
+import com.jamesjmtaylor.weg2015.models.parseEquipmentResponseString
 import com.jamesjmtaylor.weg2015.utils.saveUrlToFile
-import okhttp3.Response
+import okhttp3.Request
+import java.lang.Thread.sleep
+import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -33,59 +32,67 @@ import kotlin.collections.ArrayList
  */
 class EquipmentRepository {
     var isLoading = MutableLiveData<Boolean>() //Mutable allows this class to post changes to observing views
-    var gun : List<Gun>? = null
-    var land : List<Land>? = null
-    var sea : List<Sea>? = null
-    var air : List<Air>? = null
+    var gun: List<Gun>? = null
+    var land: List<Land>? = null
+    var sea: List<Sea>? = null
+    var air: List<Air>? = null
 
     fun getGun(): LiveData<List<Equipment>> {
         return refreshCombined(EquipmentType.GUN) ?: getInMemoryAsLiveData(EquipmentType.GUN)
     }
+
     fun getLand(): LiveData<List<Equipment>> {
         return refreshCombined(EquipmentType.LAND) ?: getInMemoryAsLiveData(EquipmentType.LAND)
     }
+
     fun getSea(): LiveData<List<Equipment>> {
         return refreshCombined(EquipmentType.SEA) ?: getInMemoryAsLiveData(EquipmentType.SEA)
     }
+
     fun getAir(): LiveData<List<Equipment>> {
         return refreshCombined(EquipmentType.AIR) ?: getInMemoryAsLiveData(EquipmentType.AIR)
     }
+
     fun getAll(): LiveData<List<Equipment>> {
         return refreshCombined(EquipmentType.ALL) ?: getInMemoryAsLiveData(EquipmentType.ALL)
     }
-    private fun refreshCombined(type: EquipmentType):MutableLiveData<List<Equipment>>? {
-        if (shouldFetch()){
+
+    private fun refreshCombined(type: EquipmentType): MutableLiveData<List<Equipment>>? {
+        if (shouldFetch()) {
             val mutable = MutableLiveData<List<Equipment>>()
             isLoading.postValue(true)
-            GetEquipmentTask(gun,land,sea,air,mutable,isLoading,type).execute()
+            GetEquipmentTask(gun, land, sea, air, mutable, isLoading, type).execute()
             return mutable
         }
         return null
     }
 
-    fun getInMemoryAsLiveData(type: EquipmentType):LiveData<List<Equipment>>{
+    fun getInMemoryAsLiveData(type: EquipmentType): LiveData<List<Equipment>> {
         val mutable = MutableLiveData<List<Equipment>>()
-        GetInMemoryAsLiveDataTask(gun,land,sea,air,mutable,type).execute()
+        GetInMemoryAsLiveDataTask(gun, land, sea, air, mutable, type).execute()
         return mutable
     }
+
     private class GetInMemoryAsLiveDataTask(var gun: List<Gun>?,
                                             var land: List<Land>?,
                                             var sea: List<Sea>?,
                                             var air: List<Air>?,
                                             var mutable: MutableLiveData<List<Equipment>>,
-                                            var type: EquipmentType) : AsyncTask<Void, Void, Void?>() { @SuppressLint("LogNotTimber")
-    override fun doInBackground(vararg voids: Void): Void? {
-        val db = App.appDatabase
-        when (type){
-            EquipmentType.GUN -> mutable.postValue(gun ?: db.GunDao().getAllGuns())
-            EquipmentType.LAND -> postLandAndGunsLiveData(gun,land,mutable)
-            EquipmentType.SEA -> mutable.postValue(sea ?: db.SeaDao().getAllSea())
-            EquipmentType.AIR -> mutable.postValue(air ?: db.AirDao().getAllAir())
-            EquipmentType.ALL -> postAll(gun,land,sea,air,mutable)
+                                            var type: EquipmentType) : AsyncTask<Void, Void, Void?>() {
+        @SuppressLint("LogNotTimber")
+        override fun doInBackground(vararg voids: Void): Void? {
+            val db = App.appDatabase
+            when (type) {
+                EquipmentType.GUN -> mutable.postValue(gun ?: db.GunDao().getAllGuns())
+                EquipmentType.LAND -> postLandAndGunsLiveData(gun, land, mutable)
+                EquipmentType.SEA -> mutable.postValue(sea ?: db.SeaDao().getAllSea())
+                EquipmentType.AIR -> mutable.postValue(air ?: db.AirDao().getAllAir())
+                EquipmentType.ALL -> postAll(gun, land, sea, air, mutable)
+            }
+            return null
         }
-        return null
     }
-    }
+
     class GetEquipmentTask(var gun: List<Gun>?,
                            var land: List<Land>?,
                            var sea: List<Sea>?,
@@ -93,52 +100,53 @@ class EquipmentRepository {
                            var mutable: MutableLiveData<List<Equipment>>,
                            var isLoading: MutableLiveData<Boolean>,
                            var type: EquipmentType)
-        : AsyncTask<Void, Void, Void?>() { @SuppressLint("LogNotTimber")
-    override fun doInBackground(vararg voids: Void): Void? {
-        val request = Request.Builder()
-                .url(getAll)
-                .get()
-                .addHeader("Cache-Control", "no-cache")
-                .build()
-        try {
-            val db = App.appDatabase
-            val response = App.appWebClient.newCall(request).execute()
-            val responseBody = response.body()?.string() ?: ""
-            if (response.isSuccessful) {
-                val fetchedCombinedList = parseEquipmentResponseString(responseBody)
+        : AsyncTask<Void, Void, Void?>() {
+        @SuppressLint("LogNotTimber")
+        override fun doInBackground(vararg voids: Void): Void? {
+            val request = Request.Builder()
+                    .url(getAll)
+                    .get()
+                    .addHeader("Cache-Control", "no-cache")
+                    .build()
+            try {
+                val db = App.appDatabase
+                val response = App.appWebClient.newCall(request).execute()
+                val responseBody = response.body()?.string() ?: ""
+                if (response.isSuccessful) {
+                    val fetchedCombinedList = parseEquipmentResponseString(responseBody)
 
-                //Doesn't come from API with type, assign here.
-                fetchedCombinedList.guns.map { it.type = EquipmentType.GUN }
-                fetchedCombinedList.land.map { it.type = EquipmentType.LAND }
-                fetchedCombinedList.sea.map { it.type = EquipmentType.SEA }
-                fetchedCombinedList.air.map { it.type = EquipmentType.AIR }
+                    //Doesn't come from API with type, assign here.
+                    fetchedCombinedList.guns.map { it.type = EquipmentType.GUN }
+                    fetchedCombinedList.land.map { it.type = EquipmentType.LAND }
+                    fetchedCombinedList.sea.map { it.type = EquipmentType.SEA }
+                    fetchedCombinedList.air.map { it.type = EquipmentType.AIR }
 
-                saveImages(fetchedCombinedList)
+                    saveImages(fetchedCombinedList)
 
-                db.GunDao().insertGuns(fetchedCombinedList.guns)
-                db.LandDao().insertLand(fetchedCombinedList.land)
-                db.SeaDao().insertSea(fetchedCombinedList.sea)
-                db.AirDao().insertAir(fetchedCombinedList.air)
+                    db.GunDao().insertGuns(fetchedCombinedList.guns)
+                    db.LandDao().insertLand(fetchedCombinedList.land)
+                    db.SeaDao().insertSea(fetchedCombinedList.sea)
+                    db.AirDao().insertAir(fetchedCombinedList.air)
 
-                saveFetchDate()
-                when (type){
-                    EquipmentType.GUN -> mutable.postValue(gun)
-                    EquipmentType.LAND -> postLandAndGunsLiveData(gun,land,mutable)
-                    EquipmentType.SEA -> mutable.postValue(sea)
-                    EquipmentType.AIR -> mutable.postValue(air)
-                    EquipmentType.ALL -> postAll(gun,land,sea,air,mutable)
+                    saveFetchDate()
+                    when (type) {
+                        EquipmentType.GUN -> mutable.postValue(gun)
+                        EquipmentType.LAND -> postLandAndGunsLiveData(gun, land, mutable)
+                        EquipmentType.SEA -> mutable.postValue(sea)
+                        EquipmentType.AIR -> mutable.postValue(air)
+                        EquipmentType.ALL -> postAll(gun, land, sea, air, mutable)
+                    }
+                } else {
+                    val code = response.code().toString()
+                    val error = response.message() ?: "No error provided"
+                    Log.e(TAG, "$code: $error")
                 }
-            } else {
-                val code = response.code().toString()
-                val error = response.message() ?: "No error provided"
-                Log.e(TAG, "$code: $error")
+            } catch (e: Exception) {
+                Log.e(TAG, "Equipment Repository", e.cause)
             }
-        } catch (e: Exception){
-            Log.e(TAG,"Equipment Repository",e.cause)
+            isLoading.postValue(false)
+            return null
         }
-        isLoading.postValue(false)
-        return null
-    }
 
         private fun saveImages(fetchedCombinedList: CombinedList) {
             for (e in fetchedCombinedList.getEquipment()) {
@@ -166,28 +174,34 @@ class EquipmentRepository {
             val d = App.appWebClient.dispatcher()
             var attempts = 0
             //TODO: Talk to Adam about a more elegant way to do this.
-            while (d.queuedCallsCount() + d.runningCallsCount() > 0 || attempts < 20){
-                try {sleep(500)} catch (e: Exception){}
+            while (d.queuedCallsCount() + d.runningCallsCount() > 0 || attempts < 20) {
+                try {
+                    sleep(500)
+                } catch (e: Exception) {
+                }
                 attempts++
             }
         }
     }
 }
-private val DATE_FETCHED_KEY = "dateLastFetched"
+
+private const val DATE_FETCHED_KEY = "dateLastFetched"
 private fun shouldFetch(): Boolean {
     val app = App.instance
     val pref = app.getSharedPreferences(app.getString(R.string.bundle_id), Context.MODE_PRIVATE)
     val dateLastFetched = pref.getLong(DATE_FETCHED_KEY, 0)
     return dateLastFetched + (7 * 24 * 60 * 60 * 1000) < Date().time
 }
-private fun saveFetchDate(){
+
+private fun saveFetchDate() {
     val app = App.instance
     val pref = app.getSharedPreferences(app.getString(R.string.bundle_id), Context.MODE_PRIVATE)
-    pref.edit().putLong(DATE_FETCHED_KEY,Date().time).apply()
+    pref.edit().putLong(DATE_FETCHED_KEY, Date().time).apply()
 }
+
 private fun postLandAndGunsLiveData(gun: List<Gun>?,
                                     land: List<Land>?,
-                                    mutable: MutableLiveData<List<Equipment>>){
+                                    mutable: MutableLiveData<List<Equipment>>) {
     val db = App.appDatabase
     val landAndGuns = ArrayList<Equipment>()
     landAndGuns.addAll(gun ?: db.GunDao().getAllGuns())
@@ -196,13 +210,14 @@ private fun postLandAndGunsLiveData(gun: List<Gun>?,
     val sorted = nonDisplayableFilteredOut.sortedBy { it.name }
     mutable.postValue(sorted)
 }
+
 private fun postAll(gun: List<Gun>?,
                     land: List<Land>?,
                     sea: List<Sea>?,
                     air: List<Air>?,
                     mutable: MutableLiveData<List<Equipment>>) {
     val db = App.appDatabase
-    val guns : List<Equipment> = gun ?: db.GunDao().getAllGuns()
+    val guns: List<Equipment> = gun ?: db.GunDao().getAllGuns()
     val nonDisplayableFilteredOut = guns.filter { g -> !g.photoUrl.isNullOrBlank() }
     (nonDisplayableFilteredOut as? ArrayList<Equipment>)?.addAll(land ?: db.LandDao().getAllLand())
     (nonDisplayableFilteredOut as? ArrayList<Equipment>)?.addAll(sea ?: db.SeaDao().getAllSea())
