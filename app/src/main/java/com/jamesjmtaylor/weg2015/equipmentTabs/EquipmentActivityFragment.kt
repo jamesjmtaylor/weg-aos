@@ -46,7 +46,7 @@ class EquipmentActivityFragment : Fragment() {
         setImage(this.photoImageView, equipment?.photoUrl)
         configureViewToEquipmentType(equipment)
     }
-    fun configureViewToEquipmentType(item: Equipment?){
+    private fun configureViewToEquipmentType(item: Equipment?){
         val description = boldString("Description:")
         if (item is Gun){
             setImage(this.groupImageView, item.groupIconUrl)
@@ -70,12 +70,12 @@ class EquipmentActivityFragment : Fragment() {
             item.description?.let { this.descriptionTextView?.text = description.append(" $it") }
         }
     }
-    fun setDetailViews(gun: Gun){
+    private fun setDetailViews(gun: Gun){
         if (gun.range ?: 0 > 0 ) {createDetailRow("Range",gun.range.toString()+" meters")}
         if (gun.altitude ?: 0 > 0 ) {createDetailRow("Altitude",gun.penetration.toString()+" meters")}
         if (gun.penetration ?: 0 > 0 ) {createDetailRow("Penetration",gun.penetration.toString()+"mm")}
     }
-    fun setDetailViews(land: Land){
+    private fun setDetailViews(land: Land){
         land.primaryWeapon?.let{
             createDetailRow("Primary Weapon",it.name, true,true)
             createDetailRow("Range",it.range.toString()+" meters")
@@ -98,7 +98,7 @@ class EquipmentActivityFragment : Fragment() {
         land.auto?.let {if (it > 0){createDetailRow("Autonomy",it.toString()+" km", true,true)}}
         land.weight?.let { if (it > 0){createDetailRow("Weight",it.toString()+" tons", true,true)}}
     }
-    fun setDetailViews(sea: Sea){
+    private fun setDetailViews(sea: Sea){
         sea.gun?.let{
             createDetailRow("Deck Gun",it.name, true,true)
             createDetailRow("Range",it.range.toString()+" meters")
@@ -130,7 +130,7 @@ class EquipmentActivityFragment : Fragment() {
         sea.auto?.let { createDetailRow("Autonomy",it.toString()+" km", true,true) }
         sea.tonnage?.let { createDetailRow("Displacement",it.toString()+" tons", true,true) }
     }
-    fun setDetailViews(air: Air){
+    private fun setDetailViews(air: Air){
         air.gun?.let{
             createDetailRow("Cannon",it.name, true,true)
             createDetailRow("Range",it.range.toString()+" meters")
@@ -154,14 +154,14 @@ class EquipmentActivityFragment : Fragment() {
         air.auto?.let { createDetailRow("Autonomy",it.toString()+" km", true,true) }
         air.weight?.let { createDetailRow("Weight",it.toString()+" kg", true,true) }
     }
-    fun createDetailRow(title: String, value: String, underline: Boolean = false, bold: Boolean = false){
+    private fun createDetailRow(title: String, value: String, underline: Boolean = false, bold: Boolean = false){
         val inflater = LayoutInflater.from(activity)
         val detailRow = inflater.inflate(R.layout.row_detail,null, false)
         val titleTextView = detailRow.findViewById<TextView>(R.id.rowTitleTextView)
         val valueTextView = detailRow.findViewById<TextView>(R.id.rowValueTextView)
         if (underline) {
-            titleTextView.setPaintFlags(titleTextView.getPaintFlags() or Paint.UNDERLINE_TEXT_FLAG)
-            valueTextView.setPaintFlags(valueTextView.getPaintFlags() or Paint.UNDERLINE_TEXT_FLAG)
+            titleTextView.paintFlags = titleTextView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+            valueTextView.paintFlags = valueTextView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         }
         if (bold) {
             valueTextView.setTypeface(null, Typeface.BOLD)
@@ -170,7 +170,7 @@ class EquipmentActivityFragment : Fragment() {
         valueTextView.text = value
         detailLinearLayout?.addView(detailRow)
     }
-    fun setImage(imageView: ImageView?, imageUrl: String?){
+    private fun setImage(imageView: ImageView?, imageUrl: String?){
         val view = imageView ?: return
         Glide.with(this)
                 .load(openFile(imageUrl))

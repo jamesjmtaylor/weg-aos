@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tab_nav_graph"
+    app:startDestination="@id/tabBarActivity">
+
+    <activity
+        android:id="@+id/tabBarActivity"
+        android:name="com.jamesjmtaylor.weg2015.TabBarActivity"
+        android:label="TabBarActivity" />
+    <fragment
+        android:id="@+id/equipmentRecyclerViewFragment"
+        android:name="com.jamesjmtaylor.weg2015.equipmentTabs.EquipmentRecyclerViewFragment"
+        android:label="EquipmentRecyclerViewFragment" />
+    <fragment
+        android:id="@+id/cardsFragment2"
+        android:name="com.jamesjmtaylor.weg2015.cardsTab.CardsFragment"
+        android:label="fragment_cards"
+        tools:layout="@layout/fragment_cards" />
+    <fragment
+        android:id="@+id/cardsSetupFragment2"
+        android:name="com.jamesjmtaylor.weg2015.cardsTab.CardsSetupFragment"
+        android:label="CardsSetupFragment" >
+        <action
+            android:id="@+id/action_cardsSetupFragment2_to_cardsFragment2"
+            app:destination="@id/cardsFragment2" />
+    </fragment>
+</navigation>

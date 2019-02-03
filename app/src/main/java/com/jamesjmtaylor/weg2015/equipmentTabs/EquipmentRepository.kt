@@ -6,6 +6,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.content.ContentValues.TAG
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.util.Log
@@ -23,7 +24,6 @@ import com.jamesjmtaylor.weg2015.models.CombinedList
 import com.jamesjmtaylor.weg2015.models.Equipment
 import com.jamesjmtaylor.weg2015.models.EquipmentType
 import com.jamesjmtaylor.weg2015.utils.saveUrlToFile
-import com.jamesjmtaylor.weg2015.utils.saveWithName
 import okhttp3.Response
 import kotlin.collections.ArrayList
 
@@ -134,7 +134,7 @@ class EquipmentRepository {
                 Log.e(TAG, "$code: $error")
             }
         } catch (e: Exception){
-            Log.e(TAG,"Equipment Repository",e)
+            Log.e(TAG,"Equipment Repository",e.cause)
         }
         isLoading.postValue(false)
         return null
@@ -161,7 +161,7 @@ class EquipmentRepository {
                     EquipmentType.ALL -> {
                     }
                 }
-                saveUrlToFile(e.photoUrl)
+                saveUrlToFile(e.photoUrl, Bitmap.CompressFormat.JPEG)
             }
             val d = App.appWebClient.dispatcher()
             var attempts = 0

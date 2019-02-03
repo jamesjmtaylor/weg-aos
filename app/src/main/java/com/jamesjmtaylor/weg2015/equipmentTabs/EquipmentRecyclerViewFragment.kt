@@ -24,7 +24,6 @@ import com.jamesjmtaylor.weg2015.models.entities.Gun
 import com.jamesjmtaylor.weg2015.models.entities.Land
 import com.jamesjmtaylor.weg2015.models.entities.Sea
 import com.jamesjmtaylor.weg2015.utils.NpaGridLayoutManager
-import com.jamesjmtaylor.weg2015.utils.saveWithName
 import kotlinx.android.synthetic.main.fragment_equipment_list.*
 import kotlinx.android.synthetic.main.fragment_equipment_list.view.*
 import java.io.File
