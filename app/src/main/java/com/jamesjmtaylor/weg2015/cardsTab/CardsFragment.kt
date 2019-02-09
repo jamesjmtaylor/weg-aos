@@ -17,6 +17,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.jamesjmtaylor.weg2015.App
 import com.jamesjmtaylor.weg2015.R
 import com.jamesjmtaylor.weg2015.utils.openFile
@@ -25,11 +26,13 @@ import kotlinx.android.synthetic.main.fragment_cards.*
 
 
 class CardsFragment : Fragment(), LifecycleOwner {
-    val TAG = "cardSetupFragment"
-    var cVM: CardsViewModel? = null
+    private var cVM: CardsViewModel? = null
+    private var firebaseAnalytics: FirebaseAnalytics? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initVM()
+        context?.let { firebaseAnalytics = FirebaseAnalytics.getInstance(it) }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
