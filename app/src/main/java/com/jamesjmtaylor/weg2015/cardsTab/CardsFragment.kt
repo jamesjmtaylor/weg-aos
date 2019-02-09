@@ -20,6 +20,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.jamesjmtaylor.weg2015.App
 import com.jamesjmtaylor.weg2015.R
+import com.jamesjmtaylor.weg2015.utils.Analytics
 import com.jamesjmtaylor.weg2015.utils.openFile
 import kotlinx.android.synthetic.main.activity_nav.*
 import kotlinx.android.synthetic.main.fragment_cards.*
@@ -47,10 +48,8 @@ class CardsFragment : Fragment(), LifecycleOwner {
     }
 
     private fun updateUi() {
-        val totalCards = if ((cVM?.deckSize ?: 0) > 0) cVM!!.deckSize else 1
-        val totalCardsString = totalCards.toString()
-        val currentCardsString = cVM?.getCurrentCardNumber().toString()
-        cardCountTextView.text = "$currentCardsString of $totalCardsString"
+        val totalCards = if ((cVM?.deckSize ?: 0) > 0) cVM?.deckSize else 1
+        cardCountTextView.text = "${cVM?.getCurrentCardNumber()} of $totalCards"
         if (cVM?.difficulty?.equals(Difficulty.EASY) ?: true) {
             timeRemainingTextView.visibility = View.GONE
         }
@@ -62,7 +61,7 @@ class CardsFragment : Fragment(), LifecycleOwner {
         populateGuessButtons()
     }
 
-    fun createGuessRows() {
+    private fun createGuessRows() {
         for (i in 0..(cVM?.difficulty?.ordinal ?: 0)) {
             val inflater = LayoutInflater.from(activity)
             val guessRow = inflater.inflate(R.layout.row_cards, null, false)
@@ -76,7 +75,7 @@ class CardsFragment : Fragment(), LifecycleOwner {
         }
     }
 
-    fun populateGuessButtons() {
+    private fun populateGuessButtons() {
         try {
             for (row in 0 until guessLinearLayout.childCount) {
                 val rowLayout = guessLinearLayout.getChildAt(row) as LinearLayout
@@ -115,6 +114,9 @@ class CardsFragment : Fragment(), LifecycleOwner {
                 if (cVM?.isEnd() == true) { //Last answer
                     cVM?.stopTimer()
                     val percentage = cVM?.calculateCorrectPercentage() ?: 0
+
+                    Analytics.saveQuizResults(cVM?.selectedTypes.toString(), percentage, cVM?.difficulty?.ordinal
+                            ?: -1)
                     val pref = App.instance.getSharedPreferences(App.instance.getString(R.string.bundle_id), Context.MODE_PRIVATE)
                     val previouslyPrompted = pref.getBoolean(RATING_PROMPT_KEY, false)
                     if (percentage > 90 && !previouslyPrompted) {
