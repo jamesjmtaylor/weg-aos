@@ -27,7 +27,8 @@ import kotlinx.android.synthetic.main.fragment_cards.*
 
 
 class CardsFragment : Fragment(), LifecycleOwner {
-    private var cVM: CardsViewModel? = null
+    val TAG = "cardsFragment"
+    var cVM: CardsViewModel? = null
     private var firebaseAnalytics: FirebaseAnalytics? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
