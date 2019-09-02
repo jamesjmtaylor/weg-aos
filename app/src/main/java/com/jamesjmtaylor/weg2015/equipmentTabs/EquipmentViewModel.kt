@@ -1,7 +1,9 @@
 package com.jamesjmtaylor.weg2015.equipmentTabs
 
 import android.app.Application
-import android.arch.lifecycle.*
+import android.arch.lifecycle.AndroidViewModel
+import android.arch.lifecycle.LifecycleObserver
+import android.arch.lifecycle.LiveData
 import com.jamesjmtaylor.weg2015.models.Equipment
 import com.jamesjmtaylor.weg2015.models.EquipmentType
 
@@ -10,39 +12,13 @@ import com.jamesjmtaylor.weg2015.models.EquipmentType
  */
 class EquipmentViewModel(application: Application) : AndroidViewModel(application), LifecycleObserver {
     val repo = EquipmentRepository()
-    val equipment = MediatorLiveData<List<Equipment>>() //Mediator allows this class to pass the RoomLiveData from the repo class to the View
-    val isLoading = MediatorLiveData<Boolean>()
-    var filterResults : List<Equipment>? = ArrayList<Equipment>()
-    private var selectedType : EquipmentType = EquipmentType.LAND
+    val equipment: LiveData<List<Equipment>>? = null
+    val isLoading: LiveData<Boolean>? = null
+    var filterResults: List<Equipment>? = ArrayList<Equipment>()
+    private var selectedType: EquipmentType = EquipmentType.LAND
 
-    init {
-        isLoading.addSource(repo.isLoading){isLoading.value=it}
-        val source = getCurrentSource()
-        if (source != null){
-            equipment.addSource(source) {
-                equipment.value = it
-            }
-        }
-    }
-
-    fun selectType(type:EquipmentType) {
-        equipment.removeSource(getCurrentSource() ?: return)
+    fun selectType(type: EquipmentType) {
         selectedType = type
-
-        equipment.addSource(getCurrentSource() ?: return){
-            equipment.value = it
-            filterResults = it //resets filter results
-        }
-    }
-    fun getCurrentSource(): LiveData<List<Equipment>>? {
-        var data : LiveData<*>
-        when (selectedType){
-            EquipmentType.LAND -> data = repo.getLand()
-            EquipmentType.SEA -> data = repo.getSea()
-            EquipmentType.AIR -> data = repo.getAir()
-            EquipmentType.GUN -> data = repo.getGun()
-            EquipmentType.ALL -> data = repo.getAll()
-        }
-        return data as? LiveData<List<Equipment>>
+        filterResults = equipment?.value?.filter { it.type == type }
     }
 }

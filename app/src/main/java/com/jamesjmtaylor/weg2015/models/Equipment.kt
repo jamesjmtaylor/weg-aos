@@ -22,10 +22,10 @@ enum class EquipmentType {
     LAND, SEA, AIR, GUN, ALL
 }
 
-class CombinedList(val guns: List<Gun>,
-                   val land: List<Land>,
-                   val sea: List<Sea>,
-                   val air: List<Air>) {
+class CombinedLists(val guns: List<Gun>,
+                    val land: List<Land>,
+                    val sea: List<Sea>,
+                    val air: List<Air>) {
     fun getEquipment(): List<Equipment> {
         val equipmentList = ArrayList<Equipment>()
         equipmentList.addAll(guns)
@@ -36,9 +36,9 @@ class CombinedList(val guns: List<Gun>,
     }
 }
 
-fun parseEquipmentResponseString(response: String): CombinedList {
+fun parseEquipmentResponseString(response: String): CombinedLists {
     val gson = GsonBuilder().create()
-    val combinedList = gson.fromJson<CombinedList>(response, CombinedList::class.java)
+    val combinedList = gson.fromJson<CombinedLists>(response, CombinedLists::class.java)
     return combinedList
 }
 

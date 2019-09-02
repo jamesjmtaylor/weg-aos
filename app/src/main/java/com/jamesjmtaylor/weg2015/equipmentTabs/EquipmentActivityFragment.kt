@@ -49,26 +49,31 @@ class EquipmentActivityFragment : Fragment() {
 
     private fun configureViewToEquipmentType(item: Equipment?) {
         val description = boldString("Description:")
-        if (item is Gun) {
-            setImage(this.groupImageView, item.groupIconUrl)
-            setImage(this.individualImageView, item.individualIconUrl)
-            setDetailViews(item)
-            item.description?.let { this.descriptionTextView?.text = description.append(" $it") }
-        } else if (item is Land) {
-            setImage(this.groupImageView, item.groupIconUrl)
-            setImage(this.individualImageView, item.individualIconUrl)
-            setDetailViews(item)
-            item.description?.let { this.descriptionTextView?.text = description.append(" $it") }
-        } else if (item is Sea) {
-            setImage(this.individualImageView, item.individualIconUrl)
-            groupImageView?.visibility = View.INVISIBLE
-            setDetailViews(item)
-            item.description?.let { this.descriptionTextView?.text = description.append(" $it") }
-        } else if (item is Air) {
-            setImage(this.groupImageView, item.groupIconUrl)
-            setImage(this.individualImageView, item.individualIconUrl)
-            setDetailViews(item)
-            item.description?.let { this.descriptionTextView?.text = description.append(" $it") }
+        when (item) {
+            is Gun -> {
+                setImage(this.groupImageView, item.groupIconUrl)
+                setImage(this.individualImageView, item.individualIconUrl)
+                setDetailViews(item)
+                item.description?.let { this.descriptionTextView?.text = description.append(" $it") }
+            }
+            is Land -> {
+                setImage(this.groupImageView, item.groupIconUrl)
+                setImage(this.individualImageView, item.individualIconUrl)
+                setDetailViews(item)
+                item.description?.let { this.descriptionTextView?.text = description.append(" $it") }
+            }
+            is Sea -> {
+                setImage(this.individualImageView, item.individualIconUrl)
+                groupImageView?.visibility = View.INVISIBLE
+                setDetailViews(item)
+                item.description?.let { this.descriptionTextView?.text = description.append(" $it") }
+            }
+            is Air -> {
+                setImage(this.groupImageView, item.groupIconUrl)
+                setImage(this.individualImageView, item.individualIconUrl)
+                setDetailViews(item)
+                item.description?.let { this.descriptionTextView?.text = description.append(" $it") }
+            }
         }
     }
 

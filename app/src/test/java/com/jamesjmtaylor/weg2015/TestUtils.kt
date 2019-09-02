@@ -2,16 +2,18 @@ package com.jamesjmtaylor.weg2015
 
 import android.arch.lifecycle.LiveData
 import okhttp3.*
+import java.io.InputStream
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
-fun setOfflineWebMock(json: String){
+val NO_DATA = "No data present"
+fun setOfflineWebMock(json: String, app: App) {
     val mWeb = OkHttpClient.Builder()
             .addInterceptor(OfflineMockInterceptor(json))
             .build()
-    WebClient.setInstance(mWeb)
+    app.setAppWebClient(mWeb)
 }
-val NO_DATA = "No data"
+
 val <T> LiveData<T>.blockingValue: T?
     get() {
         var value: T? = null
@@ -35,5 +37,26 @@ class OfflineMockInterceptor(private val json: String) : Interceptor {
                 .code(200)
                 .build()
     }
+
     val MEDIA_JSON = MediaType.parse("application/json")
+}
+
+fun getJsonFromInputStream(input: InputStream?): String {
+    if (input == null) {
+        return ""
+    }
+    val sb = StringBuilder()
+    try {
+        System.out.println("Total file size to read (in bytes) : " + input.available())
+        var content = input.read()
+        while (content != -1) {
+            sb.append(content.toChar())
+            content = input.read()
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    } finally {
+        input.close()
+    }
+    return sb.toString()
 }
