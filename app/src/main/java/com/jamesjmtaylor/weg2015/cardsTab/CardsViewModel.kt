@@ -19,7 +19,7 @@ import kotlin.concurrent.timerTask
 class CardsViewModel(application: Application) : AndroidViewModel(application), LifecycleObserver {
     val equipment = MediatorLiveData<List<Equipment>>()
     var selectedTypes = ArrayList<EquipmentType>()
-    private val repo = EquipmentRepository()
+    private val repo = EquipmentRepository.getInstance()
     private var cards = ArrayList<Equipment>()
     var correctCard: Equipment? = null
     var choices = ArrayList<String>()

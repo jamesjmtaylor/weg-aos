@@ -11,11 +11,15 @@ import com.jamesjmtaylor.weg2015.models.EquipmentType
  * Created by jtaylor on 2/10/18.
  */
 class EquipmentViewModel(application: Application) : AndroidViewModel(application), LifecycleObserver {
-    val repo = EquipmentRepository()
+    val repo = EquipmentRepository.getInstance()
     val equipment: LiveData<List<Equipment>>? = null
     val isLoading: LiveData<Boolean>? = null
     var filterResults: List<Equipment>? = ArrayList<Equipment>()
     private var selectedType: EquipmentType = EquipmentType.LAND
+
+    init {
+//            repo.getAll() //Crashes app
+    }
 
     fun selectType(type: EquipmentType) {
         selectedType = type

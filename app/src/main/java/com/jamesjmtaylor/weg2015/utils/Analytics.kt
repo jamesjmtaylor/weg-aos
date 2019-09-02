@@ -5,7 +5,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.jamesjmtaylor.weg2015.App
 
 object Analytics {
-    private var firebaseAnalytics: FirebaseAnalytics = FirebaseAnalytics.getInstance(App.instance)
+    private var firebaseAnalytics: FirebaseAnalytics = FirebaseAnalytics.getInstance(App.INSTANCE)
     fun saveQuizResults(categories: String, score: Int, difficulty: Int) {
         val bundle = Bundle()
         bundle.putString(FirebaseAnalytics.Param.CHARACTER, categories)

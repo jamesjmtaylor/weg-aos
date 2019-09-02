@@ -118,7 +118,7 @@ class CardsFragment : Fragment(), LifecycleOwner {
 
                     Analytics.saveQuizResults(cVM?.selectedTypes.toString(), percentage, cVM?.difficulty?.ordinal
                             ?: -1)
-                    val pref = App.instance.getSharedPreferences(App.instance.getString(R.string.bundle_id), Context.MODE_PRIVATE)
+                    val pref = App.INSTANCE.getSharedPreferences(App.INSTANCE.getString(R.string.bundle_id), Context.MODE_PRIVATE)
                     val previouslyPrompted = pref.getBoolean(RATING_PROMPT_KEY, false)
                     if (percentage > 90 && !previouslyPrompted) {
                         showRequestRatingDialogue(percentage)
@@ -151,7 +151,7 @@ class CardsFragment : Fragment(), LifecycleOwner {
 
     private fun showRequestRatingDialogue(percentage: Int) {
         val builder = AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert)
-        val pref = App.instance.getSharedPreferences(App.instance.getString(R.string.bundle_id), Context.MODE_PRIVATE)
+        val pref = App.INSTANCE.getSharedPreferences(App.INSTANCE.getString(R.string.bundle_id), Context.MODE_PRIVATE)
         pref.edit().putBoolean(RATING_PROMPT_KEY, true).apply()
         builder.setTitle("Congratulations!")
                 .setMessage("You got $percentage% correct.  Would you please rate the app? This will be the only time that you're prompted to leave a rating on Google Play.")

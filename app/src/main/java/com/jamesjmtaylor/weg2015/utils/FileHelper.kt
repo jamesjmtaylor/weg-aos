@@ -29,7 +29,7 @@ fun saveUrlToFile(imgUrl: String?, format: Bitmap.CompressFormat? = Bitmap.Compr
             override fun onResponse(call: Call, response: Response) {
                 val inputStream = response.body()?.byteStream()
                 val bm = BitmapFactory.decodeStream(inputStream) ?: return
-                val context = App.instance.applicationContext
+                val context = App.INSTANCE.applicationContext
                 context.openFileOutput(name.removePathSeperators(), Context.MODE_PRIVATE).use {
                     bm.compress(format, 100, it)
                 }
@@ -41,7 +41,7 @@ fun saveUrlToFile(imgUrl: String?, format: Bitmap.CompressFormat? = Bitmap.Compr
 
 fun openFile(imageName: String?): File? {
     val TAG = "FILES"
-    val context = App.instance.applicationContext
+    val context = App.INSTANCE.applicationContext
     try {
         val directory = context.filesDir
         val file = File(directory, imageName?.removePathSeperators())

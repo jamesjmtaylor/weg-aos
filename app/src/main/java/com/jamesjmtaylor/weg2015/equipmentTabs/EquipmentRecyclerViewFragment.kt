@@ -50,7 +50,7 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        columnCount = calculateNoOfColumns(App.instance.applicationContext)
+        columnCount = calculateNoOfColumns(App.INSTANCE.applicationContext)
         initVM()
     }
 

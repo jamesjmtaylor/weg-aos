@@ -22,7 +22,7 @@ import java.util.*
 /**
  * Created by jtaylor on 2/13/18.
  */
-class EquipmentRepository {
+class EquipmentRepository private constructor() {
     var gun: List<Gun>? = null
     var land: List<Land>? = null
     var sea: List<Sea>? = null
@@ -46,6 +46,7 @@ class EquipmentRepository {
         val response = App.appWebClient.newCall(request).execute()
         val responseBody = response.body()?.string() ?: ""
         if (response.isSuccessful) {
+            saveFetchDate()
             val fetchedCombinedList = parseEquipmentResponseString(responseBody)
 
             //Doesn't come from API with type, assign here.
@@ -89,21 +90,30 @@ class EquipmentRepository {
         }
     }
 
-    companion object {
-        const val DATE_FETCHED_KEY = "dateLastFetched"
-    }
-
     private fun shouldFetch(): Boolean {
-        val app = App.instance
+        val app = App.INSTANCE
         val pref = app.getSharedPreferences(app.getString(R.string.bundle_id), Context.MODE_PRIVATE)
         val dateLastFetched = pref.getLong(DATE_FETCHED_KEY, 0)
         return dateLastFetched + (7 * 24 * 60 * 60 * 1000) < Date().time
     }
 
     private fun saveFetchDate() {
-        val app = App.instance
+        val app = App.INSTANCE
         val pref = app.getSharedPreferences(app.getString(R.string.bundle_id), Context.MODE_PRIVATE)
         pref.edit().putLong(DATE_FETCHED_KEY, Date().time).apply()
+    }
+
+    companion object {
+        const val DATE_FETCHED_KEY = "dateLastFetched"
+        private var INSTANCE: EquipmentRepository? = null
+        fun getInstance(): EquipmentRepository {
+            if (INSTANCE == null) INSTANCE = EquipmentRepository()
+            return INSTANCE as EquipmentRepository
+        }
+
+        fun setInstance(repo: EquipmentRepository) {
+            INSTANCE = repo
+        }
     }
 }
 
