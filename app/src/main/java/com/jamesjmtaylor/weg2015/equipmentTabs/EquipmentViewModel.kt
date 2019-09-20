@@ -6,7 +6,6 @@ import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.MutableLiveData
 import com.jamesjmtaylor.weg2015.models.Equipment
 import com.jamesjmtaylor.weg2015.models.EquipmentType
-import kotlin.concurrent.thread
 
 /**
  * Created by jtaylor on 2/10/18.
@@ -19,13 +18,7 @@ class EquipmentViewModel(application: Application) : AndroidViewModel(applicatio
     private var selectedType: EquipmentType = EquipmentType.LAND
 
     init {
-        isLoading?.postValue(true)
-        thread {
-            equipment?.postValue(repo.getAll())
-            isLoading?.postValue(false)
-        }
-//            repo.getAll() //Crashes app
-
+//        repo.getAll() //Crashes app
     }
 
     fun selectType(type: EquipmentType) {
