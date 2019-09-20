@@ -35,7 +35,7 @@ class EquipmentRepository private constructor() {
         return equipment ?: emptyList()
     }
 
-    fun getCombinedList(): List<Equipment> {
+    private fun getCombinedList(): List<Equipment> {
         val request = Request.Builder()
                 .url(getAll)
                 .get()
@@ -61,6 +61,7 @@ class EquipmentRepository private constructor() {
             db.LandDao().insertLand(fetchedCombinedList.land)
             db.SeaDao().insertSea(fetchedCombinedList.sea)
             db.AirDao().insertAir(fetchedCombinedList.air)
+            return fetchedCombinedList.getEquipment()
         }
         return emptyList<Equipment>()
     }
@@ -94,7 +95,7 @@ class EquipmentRepository private constructor() {
         val app = App.INSTANCE
         val pref = app.getSharedPreferences(app.getString(R.string.bundle_id), Context.MODE_PRIVATE)
         val dateLastFetched = pref.getLong(DATE_FETCHED_KEY, 0)
-        return dateLastFetched + (7 * 24 * 60 * 60 * 1000) < Date().time
+        return true//dateLastFetched + (7 * 24 * 60 * 60 * 1000) < Date().time
     }
 
     private fun saveFetchDate() {
