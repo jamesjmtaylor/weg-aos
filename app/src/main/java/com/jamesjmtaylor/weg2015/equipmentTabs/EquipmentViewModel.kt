@@ -3,7 +3,7 @@ package com.jamesjmtaylor.weg2015.equipmentTabs
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LifecycleObserver
-import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import com.jamesjmtaylor.weg2015.models.Equipment
 import com.jamesjmtaylor.weg2015.models.EquipmentType
 
@@ -12,8 +12,8 @@ import com.jamesjmtaylor.weg2015.models.EquipmentType
  */
 class EquipmentViewModel(application: Application) : AndroidViewModel(application), LifecycleObserver {
     val repo = EquipmentRepository.getInstance()
-    val equipment: LiveData<List<Equipment>>? = null
-    val isLoading: LiveData<Boolean>? = null
+    val equipment = MutableLiveData<List<Equipment>>()
+    val isLoading = MutableLiveData<Boolean>()
     var filterResults: List<Equipment>? = ArrayList<Equipment>()
     private var selectedType: EquipmentType = EquipmentType.LAND
 
@@ -23,6 +23,6 @@ class EquipmentViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun selectType(type: EquipmentType) {
         selectedType = type
-        filterResults = equipment?.value?.filter { it.type == type }
+        filterResults = equipment.value?.filter { it.type == type }
     }
 }
