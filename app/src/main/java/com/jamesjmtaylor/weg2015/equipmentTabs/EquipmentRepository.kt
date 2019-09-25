@@ -15,6 +15,8 @@ import com.jamesjmtaylor.weg2015.models.entities.Land
 import com.jamesjmtaylor.weg2015.models.entities.Sea
 import com.jamesjmtaylor.weg2015.models.parseEquipmentResponseString
 import com.jamesjmtaylor.weg2015.utils.saveUrlToFile
+import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
 import okhttp3.Request
 import java.util.*
 
@@ -35,7 +37,9 @@ class EquipmentRepository private constructor() {
         return equipment ?: emptyList()
     }
 
-    private fun getCombinedList(): List<Equipment> {
+    private fun getCombinedList(): Observable<List<Equipment>> {
+        val observable = BehaviorSubject<List<Equipment>>()
+
         val request = Request.Builder()
                 .url(getAll)
                 .get()
@@ -43,6 +47,7 @@ class EquipmentRepository private constructor() {
                 .build()
 
         val db = App.appDatabase
+
         val response = App.appWebClient.newCall(request).execute()
         val responseBody = response.body()?.string() ?: ""
         if (response.isSuccessful) {
