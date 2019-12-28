@@ -15,7 +15,7 @@ import com.jamesjmtaylor.weg2015.models.entities.Land
 import com.jamesjmtaylor.weg2015.models.entities.Sea
 import okhttp3.OkHttpClient
 import com.google.firebase.analytics.FirebaseAnalytics
-
+import java.util.concurrent.TimeUnit
 
 
 /**
@@ -47,7 +47,10 @@ abstract class WebClient : OkHttpClient() {
     companion object {
         var INSTANCE: OkHttpClient? = null
         fun getInstance(): OkHttpClient {
-            if (INSTANCE == null) INSTANCE = OkHttpClient()
+            if (INSTANCE == null) INSTANCE = Builder()
+                    .connectTimeout(5,TimeUnit.SECONDS)
+                    .readTimeout(5,TimeUnit.SECONDS)
+                    .build()
             return INSTANCE as OkHttpClient
         }
         fun setInstance(client: OkHttpClient){

@@ -31,8 +31,10 @@ class EquipmentRecyclerViewAdapter(private val fragment: EquipmentRecyclerViewFr
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.item =  equipment.get(position)
         holder.nameView.text = holder.item?.name
+        val filepath = openFile(holder.item?.photoUrl)
+        val image : Any = if (filepath?.exists() == true) filepath else baseUrl + holder.item?.photoUrl
         Glide.with(fragment)
-                .load(openFile(holder.item?.photoUrl))
+                .load(image)
                 .apply(RequestOptions()
                         .centerCrop())
                 .transition(DrawableTransitionOptions.withCrossFade())

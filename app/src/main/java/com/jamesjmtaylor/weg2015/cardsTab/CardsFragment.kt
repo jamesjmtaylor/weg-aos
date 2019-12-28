@@ -20,6 +20,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.jamesjmtaylor.weg2015.App
 import com.jamesjmtaylor.weg2015.R
+import com.jamesjmtaylor.weg2015.baseUrl
 import com.jamesjmtaylor.weg2015.utils.Analytics
 import com.jamesjmtaylor.weg2015.utils.openFile
 import kotlinx.android.synthetic.main.activity_nav.*
@@ -54,8 +55,11 @@ class CardsFragment : Fragment(), LifecycleOwner {
         if (cVM?.difficulty?.equals(Difficulty.EASY) ?: true) {
             timeRemainingTextView.visibility = View.GONE
         }
+
+        val filepath = openFile(cVM?.correctCard?.photoUrl)
+        val image : Any = if (filepath?.exists() == true) filepath else baseUrl +cVM?.correctCard?.photoUrl
         Glide.with(this)
-                .load(openFile(cVM?.correctCard?.photoUrl))
+                .load(image)
                 .apply(RequestOptions()
                         .centerInside())
                 .into(equipmentImageView)
@@ -120,7 +124,7 @@ class CardsFragment : Fragment(), LifecycleOwner {
                             ?: -1)
                     val pref = App.instance.getSharedPreferences(App.instance.getString(R.string.bundle_id), Context.MODE_PRIVATE)
                     val previouslyPrompted = pref.getBoolean(RATING_PROMPT_KEY, false)
-                    if (percentage > 90 && !previouslyPrompted) {
+                    if (percentage > 70 && !previouslyPrompted) {
                         showRequestRatingDialogue(percentage)
                     } else {
                         showQuizCompleteDialogue(percentage)

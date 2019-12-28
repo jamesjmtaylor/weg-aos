@@ -12,6 +12,7 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.jamesjmtaylor.weg2015.R
+import com.jamesjmtaylor.weg2015.baseUrl
 import com.jamesjmtaylor.weg2015.models.Equipment
 import com.jamesjmtaylor.weg2015.models.deParcelizeEquipment
 import com.jamesjmtaylor.weg2015.models.entities.Air
@@ -227,8 +228,10 @@ class EquipmentActivityFragment : Fragment() {
 
     private fun setImage(imageView: ImageView?, imageUrl: String?) {
         val view = imageView ?: return
+        val filepath = openFile(imageUrl)
+        val image : Any = if (filepath?.exists() == true) filepath else baseUrl + imageUrl
         Glide.with(this)
-                .load(openFile(imageUrl))
+                .load(image)
                 .apply(RequestOptions()
                         .fitCenter())
                 .into(view)

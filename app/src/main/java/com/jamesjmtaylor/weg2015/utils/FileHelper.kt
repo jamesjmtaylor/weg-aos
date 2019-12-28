@@ -14,7 +14,7 @@ import java.io.File
 import java.io.IOException
 
 fun saveUrlToFile(imgUrl: String?, format: Bitmap.CompressFormat? = Bitmap.CompressFormat.PNG) {
-    imgUrl?.let { name ->
+      imgUrl?.let { name ->
         val imgRequest = Request.Builder()
                 .url(baseUrl + name)
                 .get()
@@ -32,6 +32,7 @@ fun saveUrlToFile(imgUrl: String?, format: Bitmap.CompressFormat? = Bitmap.Compr
                 val context = App.instance.applicationContext
                 context.openFileOutput(name.removePathSeperators(), Context.MODE_PRIVATE).use {
                     bm.compress(format, 100, it)
+                    Timber.d("Saving file to ${name.removePathSeperators()}")
                 }
             }
         })
@@ -40,18 +41,19 @@ fun saveUrlToFile(imgUrl: String?, format: Bitmap.CompressFormat? = Bitmap.Compr
 
 
 fun openFile(imageName: String?): File? {
-    val TAG = "FILES"
     val context = App.instance.applicationContext
+    Timber.d("Retrieving file ${imageName ?: ""}")
     try {
         val directory = context.filesDir
         val file = File(directory, imageName?.removePathSeperators())
+        Timber.d("Retrieved file ${imageName?.removePathSeperators()}")
         return file
     } catch (e: Exception) {
         Timber.e(e, "Could not open file")
         return null
     }
-
 }
+
 
 private fun String.removePathSeperators(): String {
     return this.replace("/", "-")

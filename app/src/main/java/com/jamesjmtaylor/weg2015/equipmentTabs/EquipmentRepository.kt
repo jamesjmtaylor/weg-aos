@@ -9,6 +9,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.AsyncTask
 import android.util.Log
+import android.widget.Toast
 import com.jamesjmtaylor.weg2015.App
 import com.jamesjmtaylor.weg2015.R
 import com.jamesjmtaylor.weg2015.getAll
@@ -25,6 +26,7 @@ import okhttp3.Request
 import java.lang.Thread.sleep
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.concurrent.thread
 
 
 /**
@@ -114,13 +116,7 @@ class EquipmentRepository {
                 val responseBody = response.body()?.string() ?: ""
                 if (response.isSuccessful) {
                     val fetchedCombinedList = parseEquipmentResponseString(responseBody)
-
-                    //Doesn't come from API with type, assign here.
-                    fetchedCombinedList.guns.map { it.type = EquipmentType.GUN }
-                    fetchedCombinedList.land.map { it.type = EquipmentType.LAND }
-                    fetchedCombinedList.sea.map { it.type = EquipmentType.SEA }
-                    fetchedCombinedList.air.map { it.type = EquipmentType.AIR }
-
+                    assignTypeToEquipment(fetchedCombinedList)
                     saveImages(fetchedCombinedList)
 
                     db.GunDao().insertGuns(fetchedCombinedList.guns)
@@ -142,10 +138,18 @@ class EquipmentRepository {
                     Log.e(TAG, "$code: $error")
                 }
             } catch (e: Exception) {
+                //TODO: Convert to LCE (Loading, Content, Error) live data format.
                 Log.e(TAG, "Equipment Repository", e.cause)
             }
             isLoading.postValue(false)
             return null
+        }
+
+        private fun assignTypeToEquipment(fetchedCombinedList: CombinedList) {
+            fetchedCombinedList.guns.map { it.type = EquipmentType.GUN }
+            fetchedCombinedList.land.map { it.type = EquipmentType.LAND }
+            fetchedCombinedList.sea.map { it.type = EquipmentType.SEA }
+            fetchedCombinedList.air.map { it.type = EquipmentType.AIR }
         }
 
         private fun saveImages(fetchedCombinedList: CombinedList) {
@@ -171,16 +175,6 @@ class EquipmentRepository {
                 }
                 saveUrlToFile(e.photoUrl, Bitmap.CompressFormat.JPEG)
             }
-            val d = App.appWebClient.dispatcher()
-            var attempts = 0
-            //TODO: Talk to Adam about a more elegant way to do this.
-            while (d.queuedCallsCount() + d.runningCallsCount() > 0 || attempts < 20) {
-                try {
-                    sleep(500)
-                } catch (e: Exception) {
-                }
-                attempts++
-            }
         }
     }
 }
@@ -190,7 +184,7 @@ private fun shouldFetch(): Boolean {
     val app = App.instance
     val pref = app.getSharedPreferences(app.getString(R.string.bundle_id), Context.MODE_PRIVATE)
     val dateLastFetched = pref.getLong(DATE_FETCHED_KEY, 0)
-    return dateLastFetched + (7 * 24 * 60 * 60 * 1000) < Date().time
+    return dateLastFetched + (365L * 24 * 60 * 60 * 1000) < Date().time
 }
 
 private fun saveFetchDate() {
