@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
@@ -12,7 +10,7 @@
         android:layout_width="@dimen/column_width"
         android:layout_height="125dp"
         android:layout_weight="1"
-        app:srcCompat="@color/clear"/>
+        app:srcCompat="@color/clear" />
 
     <TextView
         android:id="@+id/nameTextView"
@@ -29,5 +27,5 @@
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@+id/photoImageView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-</android.support.constraint.ConstraintLayout>
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

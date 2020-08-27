@@ -1,10 +1,10 @@
 package com.jamesjmtaylor.weg2015.cardsTab
 
 import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.LifecycleObserver
-import android.arch.lifecycle.MediatorLiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import com.jamesjmtaylor.weg2015.equipmentTabs.EquipmentRepository
 import com.jamesjmtaylor.weg2015.models.Equipment
 import com.jamesjmtaylor.weg2015.models.EquipmentType

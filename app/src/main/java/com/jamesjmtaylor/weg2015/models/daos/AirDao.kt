@@ -1,8 +1,10 @@
 package com.jamesjmtaylor.weg2015.models.daos
 
-import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.*
-import android.arch.persistence.room.OnConflictStrategy.REPLACE
+import androidx.lifecycle.LiveData
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy.REPLACE
+import androidx.room.Query
 import com.jamesjmtaylor.weg2015.models.entities.Air
 
 
@@ -23,7 +25,8 @@ interface AirDao {
 
     @Query("select * from Air")
     fun getAllAir(): List<Air>
-//
+
+    //
 //    @Query("select * from Gun where id = :p0")
 //    fun findGunById(id: Long): LiveData<Gun>
 //

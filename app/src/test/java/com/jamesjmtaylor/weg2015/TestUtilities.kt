@@ -1,10 +1,8 @@
 package com.jamesjmtaylor.weg2015
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 import okhttp3.*
 import java.io.InputStream
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 
 fun setOfflineWebMock(json: String, app: App) {
     val mWeb = OkHttpClient.Builder()

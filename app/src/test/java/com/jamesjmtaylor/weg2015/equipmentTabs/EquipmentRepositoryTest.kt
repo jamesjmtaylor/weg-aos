@@ -1,16 +1,11 @@
 package com.jamesjmtaylor.weg2015.equipmentTabs
 
-import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.Room
-import android.content.Context
-import android.os.Parcelable
-import com.google.common.io.Resources.getResource
+import androidx.lifecycle.LiveData
+import androidx.room.Room
 import com.jamesjmtaylor.weg2015.*
-import org.junit.Test
-
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.internal.Classes.getClass
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
@@ -20,7 +15,8 @@ import org.robolectric.shadows.ShadowApplication
 @RunWith(RobolectricTestRunner::class)
 @Config(packageName = "com.jamesjmtaylor.weg2015")
 class EquipmentRepositoryTest {
-    private var app : App? = null
+    private var app: App? = null
+
     @Before
     fun createDB() {
         val context = RuntimeEnvironment.application.applicationContext
@@ -28,11 +24,12 @@ class EquipmentRepositoryTest {
         app = RuntimeEnvironment.application as? App
         app?.setAppDb(db)
     }
+
     @Test
     fun getGun() {
         val inputStream = javaClass.getResourceAsStream("getAllResponse.json")
         val json = getJsonFromInputStream(inputStream)
-        setOfflineWebMock(json,app!!)//Crash immediately on null, this is a test after all...
+        setOfflineWebMock(json, app!!)//Crash immediately on null, this is a test after all...
         val gunLiveData = EquipmentRepository().getGun()
         ShadowApplication.runBackgroundTasks()
 

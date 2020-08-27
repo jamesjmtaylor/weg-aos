@@ -1,30 +1,32 @@
 package com.jamesjmtaylor.weg2015.cardsTab
 
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.jamesjmtaylor.weg2015.R
 import com.jamesjmtaylor.weg2015.models.Equipment
 import com.jamesjmtaylor.weg2015.models.EquipmentType
-import kotlinx.android.synthetic.main.activity_nav.*
+import kotlinx.android.synthetic.main.activity_equipment.*
 import kotlinx.android.synthetic.main.fragment_cards_setup.*
 
 /**
  * Created by jtaylor on 3/17/18.
  */
-class CardsSetupFragment: Fragment(),LifecycleOwner {
+class CardsSetupFragment : Fragment(), LifecycleOwner {
     val TAG = "cardSetupFragment"
+
     //<editor-fold desc="Lifecycle Methods">
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initVM()
     }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_cards_setup, container, false)
         return view
@@ -69,6 +71,7 @@ class CardsSetupFragment: Fragment(),LifecycleOwner {
             this@CardsSetupFragment.qtyTextView.text = "${progress} Cards"
         }
     }
+
     private fun setCardFilters() {
         val f = this@CardsSetupFragment
         when (f.radioGroup.checkedRadioButtonId) {
@@ -87,12 +90,13 @@ class CardsSetupFragment: Fragment(),LifecycleOwner {
     //</editor-fold>
 
     //<editor-fold desc="VM Methods">
-    private var cVM : CardsViewModel? = null
-    fun initVM(){
+    private var cVM: CardsViewModel? = null
+    fun initVM() {
         cVM = activity?.let { ViewModelProviders.of(it).get(CardsViewModel::class.java) }
         cVM?.let { lifecycle.addObserver(it) }
         cVM?.equipment?.observe(this, cardsObserver)
     }
+
     private val cardsObserver = Observer<List<Equipment>> { newEquipment ->
         setCardFilters()
     }

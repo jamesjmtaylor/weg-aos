@@ -1,8 +1,10 @@
 package com.jamesjmtaylor.weg2015.models.daos
 
-import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.*
-import android.arch.persistence.room.OnConflictStrategy.REPLACE
+import androidx.lifecycle.LiveData
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy.REPLACE
+import androidx.room.Query
 import com.jamesjmtaylor.weg2015.models.entities.Land
 
 
@@ -23,7 +25,8 @@ interface LandDao {
 
     @Query("select * from land")
     fun getAllLand(): List<Land>
-//
+
+    //
 //    @Query("select * from Land where id = :p0")
 //    fun findLandById(id: Long): LiveData<Land>
 //

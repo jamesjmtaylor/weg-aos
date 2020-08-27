@@ -1,12 +1,11 @@
-<ScrollView
-    android:id="@+id/cardsSetupFragment"
+<ScrollView android:id="@+id/cardsSetupFragment"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -24,7 +23,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/cardCountTextView"
@@ -35,7 +34,7 @@
             android:text="@string/choose_set_difficulty"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"/>
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
         <TextView
             android:id="@+id/textView4"
@@ -45,7 +44,7 @@
             android:text="@string/choose_set_type"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/timeRemainingTextView"
-            app:layout_constraintTop_toBottomOf="@+id/qtyTextView"/>
+            app:layout_constraintTop_toBottomOf="@+id/qtyTextView" />
 
         <TextView
             android:id="@+id/timeRemainingTextView"
@@ -55,7 +54,7 @@
             android:text="@string/choose_set_quantity"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/radioGroup"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroup"/>
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
         <RadioGroup
             android:id="@+id/radioGroup"
@@ -76,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:paddingEnd="16dp"
                 android:paddingStart="8dp"
-                android:text="@string/easy"/>
+                android:text="@string/easy" />
 
             <RadioButton
                 android:id="@+id/mediumRadioButton"
@@ -84,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:paddingEnd="16dp"
                 android:paddingStart="8dp"
-                android:text="@string/medium"/>
+                android:text="@string/medium" />
 
             <RadioButton
                 android:id="@+id/hardRadioButton"
@@ -92,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:paddingEnd="16dp"
                 android:paddingStart="8dp"
-                android:text="@string/hard"/>
+                android:text="@string/hard" />
 
         </RadioGroup>
 
@@ -106,7 +105,7 @@
             android:progress="10"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/qtyTextView"
-            app:layout_constraintTop_toTopOf="@+id/qtyTextView"/>
+            app:layout_constraintTop_toTopOf="@+id/qtyTextView" />
 
         <TextView
             android:id="@+id/qtyTextView"
@@ -116,7 +115,7 @@
             android:layout_marginTop="8dp"
             android:text="@string/placeholder_card_qty"
             app:layout_constraintStart_toStartOf="@+id/timeRemainingTextView"
-            app:layout_constraintTop_toBottomOf="@+id/timeRemainingTextView"/>
+            app:layout_constraintTop_toBottomOf="@+id/timeRemainingTextView" />
 
         <ToggleButton
             android:id="@+id/airToggleButton"
@@ -126,7 +125,7 @@
             android:textOn="@string/title_air"
             app:layout_constraintEnd_toEndOf="@+id/landToggleButton"
             app:layout_constraintStart_toEndOf="@+id/seaToggleButton"
-            app:layout_constraintTop_toTopOf="@+id/seaToggleButton"/>
+            app:layout_constraintTop_toTopOf="@+id/seaToggleButton" />
 
         <ToggleButton
             android:id="@+id/seaToggleButton"
@@ -136,7 +135,7 @@
             android:textOn="@string/title_sea"
             app:layout_constraintEnd_toStartOf="@+id/airToggleButton"
             app:layout_constraintStart_toStartOf="@+id/gunsToggleButton"
-            app:layout_constraintTop_toBottomOf="@+id/gunsToggleButton"/>
+            app:layout_constraintTop_toBottomOf="@+id/gunsToggleButton" />
 
         <ToggleButton
             android:id="@+id/landToggleButton"
@@ -146,7 +145,7 @@
             android:textOn="@string/title_land"
             app:layout_constraintEnd_toEndOf="@+id/qtySeekBar"
             app:layout_constraintStart_toEndOf="@+id/gunsToggleButton"
-            app:layout_constraintTop_toTopOf="@+id/gunsToggleButton"/>
+            app:layout_constraintTop_toTopOf="@+id/gunsToggleButton" />
 
         <ToggleButton
             android:id="@+id/gunsToggleButton"
@@ -159,8 +158,7 @@
             app:layout_constraintEnd_toStartOf="@+id/landToggleButton"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="@+id/textView4"
-            app:layout_constraintTop_toBottomOf="@+id/textView4"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
         <Button
             android:id="@+id/startButton"
@@ -178,6 +176,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/seaToggleButton"
-            app:layout_constraintVertical_bias="1.0"/>
-    </android.support.constraint.ConstraintLayout>
+            app:layout_constraintVertical_bias="1.0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

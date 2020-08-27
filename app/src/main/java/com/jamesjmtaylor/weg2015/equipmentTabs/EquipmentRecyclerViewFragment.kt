@@ -1,17 +1,17 @@
 package com.jamesjmtaylor.weg2015.equipmentTabs
 
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SearchView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.jamesjmtaylor.weg2015.App
 import com.jamesjmtaylor.weg2015.R
 import com.jamesjmtaylor.weg2015.models.Equipment
@@ -20,6 +20,8 @@ import com.jamesjmtaylor.weg2015.utils.Analytics
 import com.jamesjmtaylor.weg2015.utils.NpaGridLayoutManager
 import kotlinx.android.synthetic.main.fragment_equipment_list.*
 import kotlinx.android.synthetic.main.fragment_equipment_list.view.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
     val TAG = "equipmentRecyclerFrag"
@@ -30,6 +32,7 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
     var adapter: EquipmentRecyclerViewAdapter? = null
     private var recyclerView: RecyclerView? = null
     private var lastSearch: String? = null
+
     //MARK: Lifecycle Methods
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -117,7 +120,7 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
 
         private fun filterEquipment(query: String) {
             val filteredEquipment = eVM?.equipment?.value?.filter {
-                it.name.toLowerCase().contains(query.toLowerCase()) == true
+                it.name.toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT))
             } ?: ArrayList<Land>()
             eVM?.filterResults = filteredEquipment as ArrayList<Equipment>
             adapter?.updateAdapterWithNewList(filteredEquipment)

@@ -1,9 +1,8 @@
 package com.jamesjmtaylor.weg2015.equipmentTabs
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.jamesjmtaylor.weg2015.R
-
 import kotlinx.android.synthetic.main.activity_equipment.*
 
 class EquipmentActivity : AppCompatActivity() {
@@ -18,7 +17,7 @@ class EquipmentActivity : AppCompatActivity() {
         equipmentActivityFragment.arguments = intent.extras
         supportFragmentManager
                 .beginTransaction()
-                .add(R.id.fragmentFrameLayout,equipmentActivityFragment)
+                .add(R.id.fragmentFrameLayout, equipmentActivityFragment)
                 .commit()
     }
 

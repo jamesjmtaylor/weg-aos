@@ -2,14 +2,13 @@ package com.jamesjmtaylor.weg2015.equipmentTabs
 
 
 import android.annotation.SuppressLint
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.AsyncTask
 import android.util.Log
-import android.widget.Toast
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.jamesjmtaylor.weg2015.App
 import com.jamesjmtaylor.weg2015.R
 import com.jamesjmtaylor.weg2015.getAll
@@ -23,10 +22,8 @@ import com.jamesjmtaylor.weg2015.models.entities.Sea
 import com.jamesjmtaylor.weg2015.models.parseEquipmentResponseString
 import com.jamesjmtaylor.weg2015.utils.saveUrlToFile
 import okhttp3.Request
-import java.lang.Thread.sleep
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.concurrent.thread
 
 
 /**

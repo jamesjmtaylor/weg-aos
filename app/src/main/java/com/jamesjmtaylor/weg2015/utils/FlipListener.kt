@@ -1,10 +1,10 @@
 package com.jamesjmtaylor.weg2015.utils
 
-import android.support.v4.view.ViewCompat.setScaleY
-import android.support.v4.view.ViewCompat.setScaleX
-import android.support.v4.view.ViewCompat.setRotationY
 import android.animation.ValueAnimator
 import android.view.View
+import androidx.core.view.ViewCompat.setRotationY
+import androidx.core.view.ViewCompat.setScaleX
+import androidx.core.view.ViewCompat.setScaleY
 
 
 /**

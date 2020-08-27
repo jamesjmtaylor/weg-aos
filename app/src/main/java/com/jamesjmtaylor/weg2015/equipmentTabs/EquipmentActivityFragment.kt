@@ -3,12 +3,12 @@ package com.jamesjmtaylor.weg2015.equipmentTabs
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.jamesjmtaylor.weg2015.R
@@ -229,7 +229,7 @@ class EquipmentActivityFragment : Fragment() {
     private fun setImage(imageView: ImageView?, imageUrl: String?) {
         val view = imageView ?: return
         val filepath = openFile(imageUrl)
-        val image : Any = if (filepath?.exists() == true) filepath else baseUrl + imageUrl
+        val image: Any = if (filepath?.exists() == true) filepath else baseUrl + imageUrl
         Glide.with(this)
                 .load(image)
                 .apply(RequestOptions()

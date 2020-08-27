@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    android:id="@+id/equipmentActivityFragment"
+<ScrollView android:id="@+id/equipmentActivityFragment"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,7 +9,7 @@
     tools:showIn="@layout/activity_equipment"
     android:background="@color/gray">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -27,7 +26,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/photoImageView"
@@ -40,7 +39,7 @@
             android:src="@drawable/q"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/titleTextView"/>
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
         <ImageView
             android:id="@+id/individualImageView"
@@ -53,7 +52,7 @@
             android:src="@drawable/q"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/groupImageView"
-            app:layout_constraintTop_toBottomOf="@+id/photoImageView"/>
+            app:layout_constraintTop_toBottomOf="@+id/photoImageView" />
 
         <ImageView
             android:id="@+id/groupImageView"
@@ -66,7 +65,7 @@
             android:src="@drawable/q"
             app:layout_constraintEnd_toStartOf="@+id/individualImageView"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/photoImageView"/>
+            app:layout_constraintTop_toBottomOf="@+id/photoImageView" />
 
         <LinearLayout
             android:id="@+id/detailLinearLayout"
@@ -76,8 +75,7 @@
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/individualImageView">
-        </LinearLayout>
+            app:layout_constraintTop_toBottomOf="@+id/individualImageView"></LinearLayout>
 
         <TextView
             android:id="@+id/descriptionTextView"
@@ -92,7 +90,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detailLinearLayout"/>
+            app:layout_constraintTop_toBottomOf="@+id/detailLinearLayout" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

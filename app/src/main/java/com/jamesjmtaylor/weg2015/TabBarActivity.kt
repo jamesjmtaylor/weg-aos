@@ -1,14 +1,14 @@
 package com.jamesjmtaylor.weg2015
 
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.SearchView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.jamesjmtaylor.weg2015.cardsTab.CardsSetupFragment
 import com.jamesjmtaylor.weg2015.equipmentTabs.EquipmentActivity
 import com.jamesjmtaylor.weg2015.equipmentTabs.EquipmentRecyclerViewFragment
@@ -24,6 +24,7 @@ class TabBarActivity : AppCompatActivity(),
         LifecycleOwner,
         EquipmentRecyclerViewFragment.OnListFragmentInteractionListener {
     var equipmentRecyclerViewFragment: EquipmentRecyclerViewFragment? = null
+
     //MARK: - Lifecycle methods
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
