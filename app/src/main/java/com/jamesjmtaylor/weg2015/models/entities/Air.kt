@@ -25,12 +25,13 @@ data class Air(override @PrimaryKey val id: Long = 0,
                @Embedded(prefix = "asm") var asm: Gun? = null,
 
                val speed: Int? = null, var auto: Int? = null, var ceiling: Int? = null,
-               val weight: Int? = null): Equipment, Parcelable {
-    @Ignore override var type = EquipmentType.AIR
+               val weight: Int? = null) : Equipment, Parcelable {
+    @Ignore
+    override var type = EquipmentType.AIR
 
     constructor(parcel: Parcel) : this(
             parcel.readLong(),
-            parcel.readString(),
+            parcel.readString() ?: "",
             parcel.readString(),
             parcel.readString(),
             parcel.readString(),
@@ -49,6 +50,7 @@ data class Air(override @PrimaryKey val id: Long = 0,
         val e = other as? Equipment
         return id == e?.id && e.type == EquipmentType.AIR
     }
+
     class AirList : ArrayList<Air>()//Used for GSON deserialization
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -82,6 +84,7 @@ data class Air(override @PrimaryKey val id: Long = 0,
         }
     }
 }
+
 fun deserializeAirResponseString(response: String): List<Air> {
     val gson = GsonBuilder().create()
     val guns = gson.fromJson<List<Air>>(response, Air.AirList::class.java)

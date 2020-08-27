@@ -1,6 +1,9 @@
 package com.jamesjmtaylor.weg2015.models.entities
 
-import android.arch.persistence.room.*
+import android.arch.persistence.room.Embedded
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Ignore
+import android.arch.persistence.room.PrimaryKey
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.GsonBuilder
@@ -21,12 +24,13 @@ data class Sea(override @PrimaryKey val id: Long = 0,
                @Embedded(prefix = "torpedo") val torpedo: Gun? = null,
 
                val transports: String? = null, val qty: Int? = null, val dive: Int? = null,
-               val speed: Int? = null, val auto: Int? = null, val tonnage: Int? = null):Equipment, Parcelable {
-    @Ignore override var type = EquipmentType.SEA
+               val speed: Int? = null, val auto: Int? = null, val tonnage: Int? = null) : Equipment, Parcelable {
+    @Ignore
+    override var type = EquipmentType.SEA
 
     constructor(parcel: Parcel) : this(
             parcel.readLong(),
-            parcel.readString(),
+            parcel.readString() ?: "",
             parcel.readString(),
             parcel.readString(),
             parcel.readString(),
@@ -46,6 +50,7 @@ data class Sea(override @PrimaryKey val id: Long = 0,
         val e = other as? Equipment
         return id == e?.id && e.type == EquipmentType.SEA
     }
+
     class SeaList : ArrayList<Sea>()//Used for GSON deserialization
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -80,6 +85,7 @@ data class Sea(override @PrimaryKey val id: Long = 0,
         }
     }
 }
+
 fun parseSeaResponseString(response: String): List<Sea> {
     val gson = GsonBuilder().create()
     val sea = gson.fromJson<List<Sea>>(response, Sea.SeaList::class.java)

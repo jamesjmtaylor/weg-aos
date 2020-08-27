@@ -3,8 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Github-weg-aos.iml" filepath="$PROJECT_DIR$/Github-weg-aos.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/weg-aos.iml" filepath="$PROJECT_DIR$/weg-aos.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="weg-aos/app" />
+      <module fileurl="file://$PROJECT_DIR$/weg-aos.iml" filepath="$PROJECT_DIR$/weg-aos.iml" group="weg-aos" />
       <module fileurl="file://$PROJECT_DIR$/app/weg-aos-app.iml" filepath="$PROJECT_DIR$/app/weg-aos-app.iml" />
     </modules>
   </component>

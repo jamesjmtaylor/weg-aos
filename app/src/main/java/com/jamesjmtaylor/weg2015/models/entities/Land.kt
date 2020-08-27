@@ -1,6 +1,9 @@
 package com.jamesjmtaylor.weg2015.models.entities
 
-import android.arch.persistence.room.*
+import android.arch.persistence.room.Embedded
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Ignore
+import android.arch.persistence.room.PrimaryKey
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.GsonBuilder
@@ -21,12 +24,13 @@ data class Land(override @PrimaryKey val id: Long = 0,
                 @Embedded(prefix = "atgm") val atgm: Gun? = null,
 
                 val armor: Int? = null, val speed: Int? = null, val auto: Int? = null,
-                val weight: Int? = null): Equipment, Parcelable {
-    @Ignore override var type = EquipmentType.LAND
+                val weight: Int? = null) : Equipment, Parcelable {
+    @Ignore
+    override var type = EquipmentType.LAND
 
     constructor(parcel: Parcel) : this(
             parcel.readLong(),
-            parcel.readString(),
+            parcel.readString() ?: "",
             parcel.readString(),
             parcel.readString(),
             parcel.readString(),
@@ -44,6 +48,7 @@ data class Land(override @PrimaryKey val id: Long = 0,
         val e = other as? Equipment
         return id == e?.id && e.type == EquipmentType.LAND
     }
+
     class LandList : ArrayList<Land>()//Used for GSON deserialization
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -76,6 +81,7 @@ data class Land(override @PrimaryKey val id: Long = 0,
         }
     }
 }
+
 fun parseLandResponseString(response: String): List<Land> {
     val gson = GsonBuilder().create()
     val land = gson.fromJson<List<Land>>(response, Land.LandList::class.java)

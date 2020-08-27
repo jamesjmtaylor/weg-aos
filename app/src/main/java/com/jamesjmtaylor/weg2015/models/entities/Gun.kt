@@ -21,12 +21,13 @@ data class Gun(override @PrimaryKey val id: Long = 0,
                val penetration: Int? = null,
                val altitude: Int? = null,
                override val photoUrl: String? = null,
-               val range: Int? = null): Equipment, Parcelable {
-    @Ignore override var type = EquipmentType.GUN
+               val range: Int? = null) : Equipment, Parcelable {
+    @Ignore
+    override var type = EquipmentType.GUN
 
     constructor(parcel: Parcel) : this(
             parcel.readLong(),
-            parcel.readString(),
+            parcel.readString() ?: "",
             parcel.readString(),
             parcel.readString(),
             parcel.readString(),
@@ -35,6 +36,7 @@ data class Gun(override @PrimaryKey val id: Long = 0,
             parcel.readString(),
             parcel.readValue(Int::class.java.classLoader) as? Int) {
     }
+
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeLong(id)
         parcel.writeString(name)
@@ -46,9 +48,11 @@ data class Gun(override @PrimaryKey val id: Long = 0,
         parcel.writeString(photoUrl)
         parcel.writeValue(range)
     }
+
     override fun describeContents(): Int {
         return 0
     }
+
     companion object CREATOR : Parcelable.Creator<Gun> {
         override fun createFromParcel(parcel: Parcel): Gun {
             return Gun(parcel)
@@ -58,12 +62,15 @@ data class Gun(override @PrimaryKey val id: Long = 0,
             return arrayOfNulls(size)
         }
     }
+
     override fun equals(other: Any?): Boolean { //needed for DiffUtil
         val e = other as? Equipment
         return id == e?.id && e.type == EquipmentType.GUN
     }
+
     class GunList : ArrayList<Gun>()//Used for GSON deserialization
 }
+
 fun parseGunResponseString(response: String): List<Gun> {
     val gson = GsonBuilder().create()
     val guns = gson.fromJson<List<Gun>>(response, Gun.GunList::class.java)

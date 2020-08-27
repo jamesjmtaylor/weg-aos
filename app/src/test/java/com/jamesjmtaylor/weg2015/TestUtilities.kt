@@ -6,29 +6,14 @@ import java.io.InputStream
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
-val NO_DATA = "No data present"
-fun setOfflineWebMock(json: String, app: App){
+fun setOfflineWebMock(json: String, app: App) {
     val mWeb = OkHttpClient.Builder()
             .addInterceptor(OfflineMockInterceptor(json))
             .build()
     app.setAppWebClient(mWeb)
 }
 
-fun getJsonFromInputStream(input: InputStream?):String{
-    if (input == null){return ""}
-    val sb = StringBuilder()
-    try {
-        System.out.println("Total file size to read (in bytes) : " + input.available())
-        var content = input.read()
-        while (content != -1) {
-            sb.append(content.toChar())
-            content = input.read()
-        }
-    } catch (e: Exception) {e.printStackTrace()
-    } finally { input.close()}
-    return sb.toString()
-}
-
+val NO_DATA = "No data"
 val <T> LiveData<T>.blockingValue: T?
     get() {
         var value: T? = null
@@ -37,9 +22,29 @@ val <T> LiveData<T>.blockingValue: T?
             value = it
             latch.countDown()
         }
-        if (latch.await(2, TimeUnit.SECONDS)) return value
+        if (latch.await(20, TimeUnit.SECONDS)) return value
         else throw Exception("LiveData value was not set within 2 seconds")
     }
+
+fun getJsonFromInputStream(input: InputStream?): String {
+    if (input == null) {
+        return ""
+    }
+    val sb = StringBuilder()
+    try {
+        System.out.println("Total file size to read (in bytes) : " + input.available())
+        var content = input.read()
+        while (content != -1) {
+            sb.append(content.toChar())
+            content = input.read()
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    } finally {
+        input.close()
+    }
+    return sb.toString()
+}
 
 class OfflineMockInterceptor(private val json: String) : Interceptor {
     @Throws(Exception::class)
@@ -52,5 +57,6 @@ class OfflineMockInterceptor(private val json: String) : Interceptor {
                 .code(200)
                 .build()
     }
+
     val MEDIA_JSON = MediaType.parse("application/json")
 }
