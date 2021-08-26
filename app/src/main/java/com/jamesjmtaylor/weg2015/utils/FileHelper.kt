@@ -22,12 +22,12 @@ fun saveUrlToFile(imgUrl: String?, format: Bitmap.CompressFormat? = Bitmap.Compr
                 .build()
         val call = App.appWebClient.newCall(imgRequest)
         call.enqueue(object : Callback {
-            override fun onFailure(call: Call, throwable: IOException) {
-                Timber.e(throwable, "OkHttp failed to obtain result")
+            override fun onFailure(call: Call, e: IOException) {
+                Timber.e(e, "OkHttp failed to obtain result")
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val inputStream = response.body()?.byteStream()
+                val inputStream = response.body?.byteStream()
                 val bm = BitmapFactory.decodeStream(inputStream) ?: return
                 val context = App.instance.applicationContext
                 context.openFileOutput(name.removePathSeperators(), Context.MODE_PRIVATE).use {

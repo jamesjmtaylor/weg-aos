@@ -110,7 +110,7 @@ class EquipmentRepository {
             try {
                 val db = App.appDatabase
                 val response = App.appWebClient.newCall(request).execute()
-                val responseBody = response.body()?.string() ?: ""
+                val responseBody = response.body?.string() ?: ""
                 if (response.isSuccessful) {
                     val fetchedCombinedList = parseEquipmentResponseString(responseBody)
                     assignTypeToEquipment(fetchedCombinedList)
@@ -130,8 +130,8 @@ class EquipmentRepository {
                         EquipmentType.ALL -> postAll(gun, land, sea, air, mutable)
                     }
                 } else {
-                    val code = response.code().toString()
-                    val error = response.message() ?: "No error provided"
+                    val code = response.code.toString()
+                    val error = response.message
                     Log.e(TAG, "$code: $error")
                 }
             } catch (e: Exception) {
