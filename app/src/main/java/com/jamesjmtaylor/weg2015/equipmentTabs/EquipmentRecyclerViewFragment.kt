@@ -34,13 +34,13 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
     private var lastSearch: String? = null
 
     //MARK: Lifecycle Methods
-//    override fun onAttach(context: Context?) {
-//        super.onAttach(context)
-//        if (context is OnListFragmentInteractionListener) {
-//            listener = context
-//            adapter = EquipmentRecyclerViewAdapter(this, listener)
-//        }
-//    }
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnListFragmentInteractionListener) {
+            listener = context
+            adapter = EquipmentRecyclerViewAdapter(this, listener)
+        }
+    }
 
     fun calculateNoOfColumns(context: Context?): Int {
         val displayMetrics = context?.getResources()?.getDisplayMetrics()
