@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/weg-aos.iml" filepath="$PROJECT_DIR$/.idea/weg-aos.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/weg-aos.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/weg-aos.app.iml" />
     </modules>
   </component>
 </project>
