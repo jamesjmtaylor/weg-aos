@@ -25,7 +25,7 @@ import okhttp3.Request
 import java.util.*
 import kotlin.collections.ArrayList
 
-
+//TODO: Replace async tasks and update roboelectric tests.
 /**
  * Created by jtaylor on 2/13/18.
  */
@@ -78,6 +78,7 @@ class EquipmentRepository {
                                             var air: List<Air>?,
                                             var mutable: MutableLiveData<List<Equipment>>,
                                             var type: EquipmentType) : AsyncTask<Void, Void, Void?>() {
+        @Deprecated("Previously used for roboelectric compatibility, update needed")
         @SuppressLint("LogNotTimber")
         override fun doInBackground(vararg voids: Void): Void? {
             val db = App.appDatabase
@@ -100,6 +101,7 @@ class EquipmentRepository {
                            var isLoading: MutableLiveData<Boolean>,
                            var type: EquipmentType)
         : AsyncTask<Void, Void, Void?>() {
+        @Deprecated("Previously used for roboelectric compatibility, update needed")
         @SuppressLint("LogNotTimber")
         override fun doInBackground(vararg voids: Void): Void? {
             val request = Request.Builder()

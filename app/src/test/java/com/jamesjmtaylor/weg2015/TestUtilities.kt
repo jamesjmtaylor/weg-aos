@@ -2,7 +2,10 @@ package com.jamesjmtaylor.weg2015
 
 import androidx.lifecycle.LiveData
 import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import java.io.InputStream
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 fun setOfflineWebMock(json: String, app: App) {
     val mWeb = OkHttpClient.Builder()
@@ -56,5 +59,5 @@ class OfflineMockInterceptor(private val json: String) : Interceptor {
                 .build()
     }
 
-    val MEDIA_JSON = MediaType.parse("application/json")
+    val MEDIA_JSON = "application/json".toMediaTypeOrNull()
 }

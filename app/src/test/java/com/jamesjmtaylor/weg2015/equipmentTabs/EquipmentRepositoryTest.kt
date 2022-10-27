@@ -1,5 +1,6 @@
 package com.jamesjmtaylor.weg2015.equipmentTabs
 
+import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.room.Room
 import com.jamesjmtaylor.weg2015.*
@@ -9,6 +10,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import org.robolectric.Shadows
 import org.robolectric.annotation.Config
 import org.robolectric.shadows.ShadowApplication
 
@@ -31,7 +33,6 @@ class EquipmentRepositoryTest {
         val json = getJsonFromInputStream(inputStream)
         setOfflineWebMock(json, app!!)//Crash immediately on null, this is a test after all...
         val gunLiveData = EquipmentRepository().getGun()
-        ShadowApplication.runBackgroundTasks()
 
         val actual = gunLiveData.value
         val expected = "2B14; 82mm"
