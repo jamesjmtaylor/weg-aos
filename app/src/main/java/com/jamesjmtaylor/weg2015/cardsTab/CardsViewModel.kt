@@ -8,6 +8,8 @@ import androidx.lifecycle.MutableLiveData
 import com.jamesjmtaylor.weg2015.equipmentTabs.EquipmentRepository
 import com.jamesjmtaylor.weg2015.models.Equipment
 import com.jamesjmtaylor.weg2015.models.EquipmentType
+import java.lang.Integer.max
+import java.lang.Integer.min
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.collections.ArrayList
@@ -20,9 +22,8 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
     val equipment = MediatorLiveData<List<Equipment>>()
     var selectedTypes = ArrayList<EquipmentType>()
     private val repo = EquipmentRepository()
-    private var cards = ArrayList<Equipment>()
-    var correctCard: Equipment? = null
-    var choices = ArrayList<String>()
+    private var cards = listOf<Equipment>()
+    var choices = listOf<String>()
     private var correctChoiceIndex = 0
     var deckSize = 10
     private var currentDeckIndex = -1
@@ -39,40 +40,30 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
         }
     }
 
-    fun getCurrentCardNumber(): Int {
-        return currentDeckIndex + 1
-        //return totalGuesses - incorrectGuesses + 1
-    }
+    fun getCurrentCardNumber(): Int = currentDeckIndex + 1
 
     private fun generateCards() {
         val possibleCards = equipment.value?.filter {
             selectedTypes.contains(it.type)
-        }?.toMutableList()
-        if (deckSize > possibleCards?.size ?: 0) {
-            cards.addAll(0, possibleCards as? Collection<Equipment> ?: return)
+        }?.toMutableList()?.shuffled()?.toList() ?: emptyList()
+        if (deckSize > possibleCards.size) { //More cards for the set than cards available
+            cards = possibleCards
             deckSize = possibleCards.size
         } else {
-            possibleCards?.shuffle()
-            for (i in 0 until deckSize) {
-                val card = possibleCards?.get(i)
-                cards.add(card ?: return)
-            }
+            cards = possibleCards.subList(0, deckSize - 1)
         }
     }
 
-    private fun generateChoices(correctCard: Equipment?) {
-        val possibleCards = (equipment.value ?: ArrayList()).toMutableList()
-        possibleCards.shuffle()
-        var i = -1
-        choices.removeAll { true }
-        while (choices.size < difficulty.choices && i < possibleCards.lastIndex) {
-            i++
-            if (possibleCards[i].name == correctCard?.name) continue //Don't add correct answer yet
-            if (possibleCards[i].type != correctCard?.type) continue //Only add cards that have the same type
-            choices.add(shorten(possibleCards[i].name))
+    private fun generateChoicesAndSetCorrectChoiceIndex(correctCard: Equipment): List<String> {
+        val possibleCards = equipment.value?.toMutableList()?.shuffled()?.toList() ?: return emptyList()
+        val wrongChoices = possibleCards.filter {
+            it.name != correctCard.name && it.type == correctCard.type
         }
-        correctChoiceIndex = (0..difficulty.choices).random()
-        choices[correctChoiceIndex] = (shorten(correctCard?.name ?: "")) //choices fully generated
+        val possibleChoices = wrongChoices.map { shorten(it.name) }
+            .subList(0, min(wrongChoices.size, difficulty.choices - 1))
+            .plus(correctCard.name).shuffled()
+        correctChoiceIndex = possibleChoices.indexOf(correctCard.name)
+        return possibleChoices
     }
 
     fun checkGuessAndIncrementTotal(selectedAnswer: String): Boolean {
@@ -85,15 +76,14 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
     fun setNextCardGetChoicesResetTimer() {
         currentDeckIndex++
         if (currentDeckIndex >= cards.size) return
-        correctCard = cards[currentDeckIndex]
-        generateChoices(correctCard)
+        choices = generateChoicesAndSetCorrectChoiceIndex(cards[currentDeckIndex])
         resetTimer()
     }
 
-    fun isEnd(): Boolean {
-        return (currentDeckIndex >= cards.lastIndex)
+    fun isEnd(): Boolean = currentDeckIndex >= cards.lastIndex
+    fun getCorrectCardPhotoUrl(): String? {
+        return cards[currentDeckIndex].photoUrl
     }
-
     fun calculateCorrectPercentage(): Int {
         return (((totalGuesses - incorrectGuesses).toDouble()) / (totalGuesses.toDouble()) * 100).toInt()
     }
@@ -108,23 +98,21 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
     }
 
     private var timer = Timer()
-    fun stopTimer() {
-        timer.cancel()
-    }
-
+    fun stopTimer() = timer.cancel()
     private fun resetTimer() {
-        setTimeToDifficulty()
+        timeRemaining = getTimeForDifficulty()
         timer.cancel()
         timer = Timer() //Chuck the old-timer & old task
         val task = timerTask {
-            timeRemaining--; if (timeRemaining < 0) setTimeToDifficulty()
+            timeRemaining--
+            if (timeRemaining < 0) timeRemaining = getTimeForDifficulty()
             timeRemainingData.postValue(timeRemaining)
         }
         timer.schedule(task, 0, 1000)
     }
 
-    private fun setTimeToDifficulty() {
-        timeRemaining = when (difficulty) {
+    private fun getTimeForDifficulty(): Int {
+        return when (difficulty) {
             Difficulty.EASY -> 999
             Difficulty.MEDIUM -> 11
             Difficulty.HARD -> 6
@@ -133,14 +121,10 @@ class CardsViewModel(application: Application) : AndroidViewModel(application), 
 
     // A helper method to take the string returned by toString and shorten it
     private fun shorten(longName: String): String {
-        val descriptionStart = longName.indexOf(";")
-        return if (descriptionStart > 0) {
-            longName.substring(0, descriptionStart)
-        } else {
-            longName
-        }
+        val descriptionStart = max(longName.indexOf(";"),0)// max prevents StringIndexOutOfBoundsException below if not found
+        val shortName = longName.substring(0, descriptionStart)
+        return if (shortName.isNotEmpty()) shortName else longName
     }
-
 }
 
 fun ClosedRange<Int>.random() = ThreadLocalRandom.current().nextInt(endInclusive - start) + start

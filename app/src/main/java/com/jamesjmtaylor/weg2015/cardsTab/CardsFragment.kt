@@ -52,12 +52,12 @@ class CardsFragment : Fragment(), LifecycleOwner {
     private fun updateUi() {
         val totalCards = if ((cVM?.deckSize ?: 0) > 0) cVM?.deckSize else 1
         cardCountTextView.text = "${cVM?.getCurrentCardNumber()} of $totalCards"
-        if (cVM?.difficulty?.equals(Difficulty.EASY) ?: true) {
+        if (cVM?.difficulty?.equals(Difficulty.EASY) != false) {
             timeRemainingTextView.visibility = View.GONE
         }
 
-        val filepath = openFile(cVM?.correctCard?.photoUrl)
-        val image: Any = if (filepath?.exists() == true) filepath else baseUrl + cVM?.correctCard?.photoUrl
+        val filepath = openFile(cVM?.getCorrectCardPhotoUrl())
+        val image: Any = if (filepath?.exists() == true) filepath else baseUrl + cVM?.getCorrectCardPhotoUrl()
         Glide.with(this)
                 .load(image)
                 .apply(RequestOptions()
@@ -81,23 +81,13 @@ class CardsFragment : Fragment(), LifecycleOwner {
     }
 
     private fun populateGuessButtons() {
-        try {
-            for (row in 0 until guessLinearLayout.childCount) {
-                val rowLayout = guessLinearLayout.getChildAt(row) as LinearLayout
-                for (column in 0 until rowLayout.childCount) {
-                    val button = rowLayout.getChildAt(column) as Button
-                    button.text = cVM?.choices?.get(column + row * 3)
-                }
-            }
-        } catch (e: Exception) {
-            Toast.makeText(this.context, getString(R.string.no_flashcards_error), Toast.LENGTH_LONG).show()
-            fragmentFrameLayout?.id?.let {
-                val cardsSetupFragment = CardsSetupFragment()
-                val transaction = activity?.supportFragmentManager
-                transaction?.beginTransaction()?.replace(it, cardsSetupFragment, cardsSetupFragment.TAG)?.commit()
+        for (row in 0 until guessLinearLayout.childCount) {
+            val rowLayout = guessLinearLayout.getChildAt(row) as LinearLayout
+            for (column in 0 until rowLayout.childCount) {
+                val button = rowLayout.getChildAt(column) as Button
+                button.text = cVM?.choices?.get(column + row * 3)
             }
         }
-
     }
 
     fun reactivateGuessButtons() {
@@ -118,10 +108,12 @@ class CardsFragment : Fragment(), LifecycleOwner {
                 reactivateGuessButtons()
                 if (cVM?.isEnd() == true) { //Last answer
                     cVM?.stopTimer()
-                    val percentage = cVM?.calculateCorrectPercentage() ?: 0
 
-                    Analytics.saveQuizResults(cVM?.selectedTypes.toString(), percentage, cVM?.difficulty?.ordinal
-                            ?: -1)
+                    val selectedTypesString = cVM?.selectedTypes.toString()
+                    val percentage = cVM?.calculateCorrectPercentage() ?: 0
+                    val difficulty = cVM?.difficulty?.ordinal ?: -1
+                    Analytics.saveQuizResults(selectedTypesString, percentage, difficulty)
+
                     val pref = App.instance.getSharedPreferences(App.instance.getString(R.string.bundle_id), Context.MODE_PRIVATE)
                     val previouslyPrompted = pref.getBoolean(RATING_PROMPT_KEY, false)
                     if (percentage > 70 && !previouslyPrompted) {
