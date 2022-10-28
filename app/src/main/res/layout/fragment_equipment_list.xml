@@ -5,10 +5,9 @@
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray"
-    android:focusableInTouchMode="true">
+    android:background="@color/gray">
 
-    <androidx.appcompat.widget.SearchView
+    <SearchView
         android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,9 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:queryHint="@string/search_hint" />
 
-    <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerList"
         android:name="com.jamesjmtaylor.weg2017.EquipmentFragment"
         android:layout_width="match_parent"
@@ -33,5 +30,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchView"
         tools:context=".equipmentTabs.EquipmentRecyclerViewFragment"
-        tools:listitem="@layout/cell_equipment"></androidx.recyclerview.widget.RecyclerView>
+        tools:listitem="@layout/cell_equipment"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
