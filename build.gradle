@@ -4,7 +4,7 @@ buildscript {
     ext.nav_version = "1.0.0"
     ext.kotlin_version = '1.7.10'
     repositories {
-        jcenter()
+        mavenCentral()
         maven { url 'https://maven.google.com' }
         google()
     }
@@ -22,7 +22,7 @@ allprojects {
     repositories {
         maven { url 'https://maven.google.com' }
         maven { url 'https://maven.fabric.io/public' }
-        jcenter()
+        mavenCentral()
         google()
     }
 }
