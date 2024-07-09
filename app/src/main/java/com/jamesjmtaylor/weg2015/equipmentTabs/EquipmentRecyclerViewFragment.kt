@@ -45,9 +45,9 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
 
     fun calculateNoOfColumns(context: Context?): Int {
         val displayMetrics = context?.resources?.displayMetrics
-        val dpWidth = (displayMetrics?.widthPixels ?: 0) / (displayMetrics?.density ?: return 0).toInt()
-        val columnWidth = context.resources?.getDimension(R.dimen.column_width) ?: return 0
-        val noOfColumns = dpWidth / columnWidth + 1
+        val width = displayMetrics?.widthPixels ?: 0
+        val columnWidth = context?.resources?.getDimension(R.dimen.column_width) ?: return 0
+        val noOfColumns = width / columnWidth
         return noOfColumns.roundToInt()
     }
 
