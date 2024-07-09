@@ -13,7 +13,7 @@ import timber.log.Timber
 import java.io.File
 import java.io.IOException
 
-fun saveUrlToFile(imgUrl: String?, format: Bitmap.CompressFormat? = Bitmap.CompressFormat.PNG) {
+fun saveUrlToFile(imgUrl: String?, format: Bitmap.CompressFormat = Bitmap.CompressFormat.PNG) {
       imgUrl?.let { name ->
         val imgRequest = Request.Builder()
                 .url(baseUrl + name)

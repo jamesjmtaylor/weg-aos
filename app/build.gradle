@@ -6,12 +6,12 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
 android {
-    compileSdkVersion 33
     testOptions.unitTests.includeAndroidResources = true
     defaultConfig {
         applicationId "com.jamesjmtaylor.weg2015"
         minSdkVersion 21
-        targetSdkVersion 33
+        compileSdk 35
+        targetSdkVersion 35
         versionCode 20
         versionName "1.3.7"
         vectorDrawables.useSupportLibrary = true
@@ -26,6 +26,7 @@ android {
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
+    namespace 'com.jamesjmtaylor.weg2015'
     testOptions {
         unitTests {
             includeAndroidResources = true

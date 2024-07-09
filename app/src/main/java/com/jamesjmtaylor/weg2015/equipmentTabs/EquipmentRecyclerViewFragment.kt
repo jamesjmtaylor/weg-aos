@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.fragment_equipment_list.*
 import kotlinx.android.synthetic.main.fragment_equipment_list.view.*
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.roundToInt
 
 class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
     val TAG = "equipmentRecyclerFrag"
@@ -43,12 +44,11 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
     }
 
     fun calculateNoOfColumns(context: Context?): Int {
-        val displayMetrics = context?.getResources()?.getDisplayMetrics()
-        val dpWidth = displayMetrics?.widthPixels ?: 0 / (displayMetrics?.density
-                ?: return 0).toInt()
-        val columnWidth = context?.resources?.getDimension(R.dimen.column_width) ?: return 0
+        val displayMetrics = context?.resources?.displayMetrics
+        val dpWidth = (displayMetrics?.widthPixels ?: 0) / (displayMetrics?.density ?: return 0).toInt()
+        val columnWidth = context.resources?.getDimension(R.dimen.column_width) ?: return 0
         val noOfColumns = dpWidth / columnWidth + 1
-        return noOfColumns.toInt()
+        return noOfColumns.roundToInt()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,8 +61,8 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
         val view = inflater.inflate(R.layout.fragment_equipment_list, container, false)
         recyclerView = view.recyclerList
         if (recyclerView is RecyclerView) { // Set the adapter
-            val context = view.getContext()
-            val params = GridLayoutManager.LayoutParams(GridLayoutManager.LayoutParams.MATCH_PARENT, GridLayoutManager.LayoutParams.MATCH_PARENT)
+            val context = view.context
+            GridLayoutManager.LayoutParams(GridLayoutManager.LayoutParams.MATCH_PARENT, GridLayoutManager.LayoutParams.MATCH_PARENT)
             recyclerView?.layoutManager = NpaGridLayoutManager(context, columnCount)
             recyclerView?.adapter = adapter
         }
@@ -92,14 +92,14 @@ class EquipmentRecyclerViewFragment : Fragment(), LifecycleOwner {
 
     //MARK: ViewModel Methods
     private fun initVM() {
-        eVM = activity?.let { ViewModelProviders.of(it).get(EquipmentViewModel::class.java) }
+        eVM = activity?.let { ViewModelProviders.of(it)[EquipmentViewModel::class.java] }
         eVM?.let { lifecycle.addObserver(it) } //Add ViewModel as an observer of this fragment's lifecycle
         eVM?.equipment?.observe(this, equipmentObserver)
     }
 
 
     //MARK: - Observers
-    val equipmentObserver = Observer<List<Equipment>> { newEquipment ->
+    private val equipmentObserver = Observer<List<Equipment>> { newEquipment ->
         adapter?.updateAdapterWithNewList(newEquipment)
         newEquipment ?: return@Observer
     }
